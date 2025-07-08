@@ -1,10 +1,10 @@
 import { createHeroQueryOptions, createHeroStatsQueryOptions } from "@/queryOptions/createHeroQueryOptions"
 import { useQuery } from "@tanstack/react-query"
-import { View, Image, Text, Button, FlatList } from "react-native"
+import { View, Image, Text, FlatList } from "react-native"
 import * as Progress from 'react-native-progress';
 import { useState } from "react";
 import { StyleSheet } from "react-native-unistyles";
-import { appThemes } from "@/unistyles";
+
 
 export const HeroList = () => {
     const [sort, setSort] = useState('popular')
@@ -60,29 +60,29 @@ export const HeroList = () => {
 
    
     return (
-        <View style={{}}>
-        {sort === 'winrate' ? 
-        <Button onPress={()=> setSort('popular')} title={"sort by popularity"}></Button> :
-        <Button  onPress={()=> setSort('winrate')} title={"sort by winrate"}></Button>}
+        <View style={styles.secondaryView}>
+        {sort == 'winrate' ? 
+        <Text suppressHighlighting style={styles.sortButton} onPress={()=> setSort('popular')}>sort by popularity</Text> :
+        <Text suppressHighlighting style={styles.sortButton} onPress={()=> setSort('winrate')}>sort by winrate</Text>}
         <FlatList data={sorted} renderItem={({item}) => 
         <View
         style={styles.heroListItem}
       >
       <Image
         source={{ uri: item.images.minimap_image }}
-        style={{ width: 20, height: 30,  alignSelf: "center" }}
+        style={{ width: 30, height: 30,  alignSelf: "center" }}
       />
       <Text style={styles.heroText}>{item.name}</Text>
       <View style={{ flex: 1 }} /> 
 
       {sort == 'winrate' ? (
         <View style={{height: 10, alignSelf: "center"}}>
-        <Progress.Bar progress={item.winRate/100} width={100} color="#94b0da" />
+        <Progress.Bar progress={item.winRate/100} width={100} color={(theme) => {theme.color.linkBlue}}/>
         <Text style={styles.percentText}>{item.winRate}%</Text>
        </View>
       ) : (
         <View style={{height: 10, alignSelf: "center"}}>
-            <Progress.Bar progress={(item.matches/ (totalHeroPicks / 12))} width={100} color="#94b0da"  />
+        <Progress.Bar progress={(item.matches/ (totalHeroPicks / 12))} width={100} color={(theme) => {theme.color.linkBlue}}/>
         <Text style={styles.percentText}>{((item.matches / (totalHeroPicks /12)) * 100).toFixed(2)}%</Text>
         </View>
       )}
@@ -96,16 +96,16 @@ export const HeroList = () => {
  )  
 }
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create(theme => ({
     percentText:{
       alignSelf: 'center',
-      color: appThemes.light.colors.font,
+      color: theme.colors.font,
       fontSize:10
     },
     heroListItem:{
       alignSelf: 'center',
           flexDirection: "row",
-          backgroundColor: appThemes.light.colors.primary,
+          backgroundColor: theme.colors.primary,
           borderRadius: 4,
           width: 300,
           height: 40,           
@@ -113,6 +113,20 @@ const styles = StyleSheet.create({
           marginVertical: 1
     },
     heroText:{
-      color: appThemes.light.colors.font, paddingLeft: 7, fontSize: 13, alignSelf: "center" 
+      color: theme.colors.font, paddingLeft: 7, fontSize: 13, alignSelf: "center" 
+    },
+    sortButton:{
+      color: theme.colors.link, alignSelf: "center", margin: 10
+    },
+    primaryView:{
+      backgroundColor: theme.colors.primary
+    },
+    secondaryView:{
+      backgroundColor: theme.colors.secondary
+    },
+    linkBlue:{
+      color: theme.colors.link,
+      borderColor: theme.colors.font
     }
-})
+
+}))
