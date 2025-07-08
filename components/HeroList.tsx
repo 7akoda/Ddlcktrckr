@@ -4,10 +4,12 @@ import { View, Image, Text, FlatList } from "react-native"
 import * as Progress from 'react-native-progress';
 import { useState } from "react";
 import { StyleSheet } from "react-native-unistyles";
-
+import { useUnistyles } from "react-native-unistyles";
 
 export const HeroList = () => {
     const [sort, setSort] = useState('popular')
+    const { theme } = useUnistyles()
+
 
     const {
         data: heroStats,
@@ -77,12 +79,12 @@ export const HeroList = () => {
 
       {sort == 'winrate' ? (
         <View style={{height: 10, alignSelf: "center"}}>
-        <Progress.Bar progress={item.winRate/100} width={100} color={(theme) => {theme.color.linkBlue}}/>
+        <Progress.Bar progress={item.winRate/100} width={100} color={theme.colors.link} />
         <Text style={styles.percentText}>{item.winRate}%</Text>
        </View>
       ) : (
         <View style={{height: 10, alignSelf: "center"}}>
-        <Progress.Bar progress={(item.matches/ (totalHeroPicks / 12))} width={100} color={(theme) => {theme.color.linkBlue}}/>
+        <Progress.Bar progress={(item.matches/ (totalHeroPicks / 12))} width={100} color={theme.colors.link}/>
         <Text style={styles.percentText}>{((item.matches / (totalHeroPicks /12)) * 100).toFixed(2)}%</Text>
         </View>
       )}
@@ -113,10 +115,15 @@ const styles = StyleSheet.create(theme => ({
           marginVertical: 1
     },
     heroText:{
-      color: theme.colors.font, paddingLeft: 7, fontSize: 13, alignSelf: "center" 
+      color: theme.colors.font,
+      paddingLeft: 7,
+      fontSize: 13,
+      alignSelf: "center" 
     },
     sortButton:{
-      color: theme.colors.link, alignSelf: "center", margin: 10
+      color: theme.colors.link,
+      alignSelf: "center",
+      margin: 10
     },
     primaryView:{
       backgroundColor: theme.colors.primary
@@ -124,9 +131,4 @@ const styles = StyleSheet.create(theme => ({
     secondaryView:{
       backgroundColor: theme.colors.secondary
     },
-    linkBlue:{
-      color: theme.colors.link,
-      borderColor: theme.colors.font
-    }
-
 }))
