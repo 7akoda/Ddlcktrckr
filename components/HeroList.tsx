@@ -48,15 +48,13 @@ export const HeroList = () => {
       const sortedWinrate = heroes.slice().sort((a, b) => b.winRate - a.winRate )
       const sortedPopular = heroes.slice().sort((a, b) => b.matches - a.matches )
 
-
       if(sort === 'winrate'){
         sorted = sortedWinrate
     }
         else if(sort === 'popular') {
         sorted = sortedPopular
     }
-    
-
+  
    const totalHeroPicks = sorted.reduce((sum, hero) => sum + hero.matches, 0);
 
 
@@ -129,6 +127,7 @@ const styles = StyleSheet.create(theme => ({
       backgroundColor: theme.colors.primary
     },
     secondaryView:{
-      backgroundColor: theme.colors.secondary
+      backgroundColor: theme.colors.secondary,
+      paddingBottom: 50
     },
 }))
