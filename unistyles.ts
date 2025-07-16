@@ -22,9 +22,9 @@ const breakpoints = {
 const lightTheme = {
   colors: {
       primary: '#dadcd6',
-      secondary: '#b9bbb4',
+      background: '#b9bbb4',
       font: '#13100e',
-      link: '#754043',
+      accent: '#754043',
       
 
       // any nesting, spreading, arrays, etc.
@@ -35,10 +35,12 @@ const lightTheme = {
 
 const darkTheme = {
   colors: {
-      primary: '#596157',
+    //primary: '#4A4F46',    
+    //background: '#2F332D',
+    primary: '#3F4140',     
+    background: '#1F2120',  
       font: '#C2C5BB',
-      secondary: '#42483F',
-      link: '#94b0da',
+  accent: '#8A585B'
   },
   gap: (v: number) => v * 8
 }
@@ -52,5 +54,5 @@ StyleSheet.configure({
   themes: appThemes,
   breakpoints,
   settings: {
-    initialTheme: 'light',
+    initialTheme: 'dark',
 },})
