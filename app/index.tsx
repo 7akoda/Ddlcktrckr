@@ -9,8 +9,9 @@ export default function Index() {
 const kodaNum = "76561198053289095"
  
   return (
-    <>
+    <> 
       <HeroPlayerProfile id={kodaNum}/>
+     
       </>
   );
 }
