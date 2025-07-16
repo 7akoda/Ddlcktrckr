@@ -60,7 +60,7 @@ export const HeroList = () => {
 
    
     return (
-        <View style={styles.secondaryView}>
+        <View style={styles.primaryView}>
         {sort == 'winrate' ? 
         <Text suppressHighlighting style={styles.sortButton} onPress={()=> setSort('popular')}>sort by popularity</Text> :
         <Text suppressHighlighting style={styles.sortButton} onPress={()=> setSort('winrate')}>sort by winrate</Text>}
@@ -69,20 +69,20 @@ export const HeroList = () => {
         style={styles.heroListItem}
       >
       <Image
-        source={{ uri: item.images.minimap_image }}
-        style={{ width: 30, height: 30,  alignSelf: "center" }}
+        source={{ uri: item.images.icon_hero_card_webp }}
+        style={{ width: 30, height: 30,  alignSelf: "center", borderRadius: 4, borderWidth:2, borderColor: theme.colors.accent}}
       />
       <Text style={styles.heroText}>{item.name}</Text>
       <View style={{ flex: 1 }} /> 
 
       {sort == 'winrate' ? (
         <View style={{height: 10, alignSelf: "center"}}>
-        <Progress.Bar progress={item.winRate/100} width={100} color={theme.colors.link} />
+        <Progress.Bar progress={item.winRate/100} width={100} color={theme.colors.accent} />
         <Text style={styles.percentText}>{item.winRate}%</Text>
        </View>
       ) : (
         <View style={{height: 10, alignSelf: "center"}}>
-        <Progress.Bar progress={(item.matches/ (totalHeroPicks / 12))} width={100} color={theme.colors.link}/>
+        <Progress.Bar progress={(item.matches/ (totalHeroPicks / 12))} width={100} color={theme.colors.accent}/>
         <Text style={styles.percentText}>{((item.matches / (totalHeroPicks /12)) * 100).toFixed(2)}%</Text>
         </View>
       )}
@@ -119,15 +119,12 @@ const styles = StyleSheet.create(theme => ({
       alignSelf: "center" 
     },
     sortButton:{
-      color: theme.colors.link,
+      color: theme.colors.accent,
       alignSelf: "center",
       margin: 10
     },
     primaryView:{
-      backgroundColor: theme.colors.primary
-    },
-    secondaryView:{
-      backgroundColor: theme.colors.secondary,
+      backgroundColor: theme.colors.background,
       paddingBottom: 50
     },
 }))
