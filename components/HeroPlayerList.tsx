@@ -10,9 +10,10 @@ import { useState } from "react";
 
 type Props = {
     id: string
+    onInspect: (id: number) => void;
 }
 
-export const HeroPlayerProfile = ({id}: Props) => {
+export const HeroPlayerProfile = ({id, onInspect}: Props) => {
 const [sort, setSort] = useState('winRate')
     
 const { theme } = useUnistyles()
@@ -43,6 +44,7 @@ const { theme } = useUnistyles()
         (sum: number, player: PlayerHeroStats) => sum + player.matches_played, 
         0
       );
+      console.log(totalMatches)
       
       
       const heroes = playerStats.map((player: PlayerHeroStats) => {
@@ -83,16 +85,18 @@ const { theme } = useUnistyles()
              source={{ uri: item.profilePicture }}
              style={{ width: 30, height: 30,  alignSelf: "center", borderRadius: 4, borderWidth:2, borderColor: theme.colors.accent}}
            />
-           <Text style={styles.heroText}>{item.name}</Text>
+           <Text onPress={ () => onInspect(item.hero_id)} style={styles.heroText}>{item.name}</Text>
            <View style={{ flex: 1 }} /> 
      
            {sort == 'winRate' ? (
-             <View style={{height: 10, alignSelf: "center"}}>
+             <View style={{ alignSelf: "center",}}>
+            <Text style={styles.infoText}>W{item.wins} - L{item.matches_played - item.wins}</Text>
              <Progress.Bar progress={item.winRate/100} width={100} color={theme.colors.accent} />
              <Text style={styles.percentText}>{item.winRate}%</Text>
             </View>
            ) : (
-             <View style={{height: 10, alignSelf: "center"}}>
+             <View style={{ alignSelf:"center"}}>
+                <Text style={styles.infoText}>Matches played: {item.matches_played}</Text>
              <Progress.Bar progress={item.matches_played/totalMatches} width={100} color={theme.colors.accent}/>
              <Text style={styles.percentText}>{item.pickRate}%</Text>
              </View>
@@ -111,8 +115,15 @@ const { theme } = useUnistyles()
          percentText:{
            alignSelf: 'center',
            color: theme.colors.font,
-           fontSize:10
+           fontSize:10,
+           padding:2
          },
+         infoText:{
+            alignSelf: 'center',
+            color: theme.colors.font,
+            fontSize:8,
+            padding:2
+          },
          heroListItem:{
            alignSelf: 'center',
                flexDirection: "row",
