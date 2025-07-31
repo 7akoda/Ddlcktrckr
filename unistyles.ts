@@ -54,6 +54,6 @@ StyleSheet.configure({
 	themes: appThemes,
 	breakpoints,
 	settings: {
-		initialTheme: "light",
+		initialTheme: "dark",
 	},
 });
