@@ -89,7 +89,12 @@ export const HeroPlayerList = ({ id }: Props) => {
 
 	return (
 		<View style={styles.backgroundView}>
-			<Header back={true} sortList={() => setSort(!sort)} />
+			<Header
+				back={false}
+				sortable={true}
+				sortList={() => setSort(!sort)}
+				sortText={sort ? "Sorted by Winrate" : "Sorted by Popularity"}
+			/>
 			<FlatList
 				data={sorted}
 				renderItem={({ item }) => (
