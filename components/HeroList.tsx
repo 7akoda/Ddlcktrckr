@@ -35,6 +35,7 @@ export const HeroList = () => {
 	let sorted: any[] = [];
 
 	const heroList = Array.isArray(heroStats) ? heroStats : [];
+
 	const totalHeroPicks = heroList.reduce((sum, hero) => sum + hero.matches, 0);
 
 	const sortedWinrate = heroList.slice().sort((a, b) => b.winRate - a.winRate);
