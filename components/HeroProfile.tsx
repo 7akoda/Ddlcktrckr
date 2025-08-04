@@ -4,6 +4,7 @@ import {
 	createItemDataByIdQueryOptions,
 } from "@/queryOptions/createHeroQueryOptions";
 import { useQuery } from "@tanstack/react-query";
+import { heroWeapons } from "../data/weapons";
 import { Link } from "expo-router";
 import {
 	View,
@@ -20,6 +21,7 @@ import { SvgUri } from "react-native-svg";
 import { SvgComponent } from "./DDLKSvg";
 import { Header } from "./Header";
 import { getHeroData } from "@/api/getHeroData";
+import { useState } from "react";
 type Props = {
 	id: number;
 };
@@ -27,6 +29,7 @@ type Props = {
 export const HeroProfile = ({ id }: Props) => {
 	const { theme } = useUnistyles();
 	const screenHeight = Dimensions.get("window").height;
+	const [textLines, setTextLines] = useState(true);
 
 	const {
 		data: heroStats,
@@ -60,15 +63,16 @@ export const HeroProfile = ({ id }: Props) => {
 
 		return <Text>Failed to load player stats.</Text>;
 	}
+	let lines: number;
 
-	const heroList = Array.isArray(heroStats) ? heroStats : [];
-
-	const heroIdMatch = heroList?.find((hero: any) => {
-		return hero.id === id;
-	});
-	console.log(heroIdMatch);
-	console.log(itemDataById);
-
+	if (textLines ? (lines = 6) : (lines = 100)) console.log(textLines);
+	const heroMoves = [
+		heroDataById.items.signature1,
+		heroDataById.items.signature2,
+		heroDataById.items.signature3,
+		heroDataById.items.signature4,
+	];
+	console.log(id);
 	return (
 		<View style={styles.backgroundView}>
 			<Header back={true} sortable={false} />
@@ -87,7 +91,6 @@ export const HeroProfile = ({ id }: Props) => {
 			<View
 				style={{
 					flexDirection: "row",
-
 					width: "100%",
 				}}>
 				<Image
@@ -103,7 +106,39 @@ export const HeroProfile = ({ id }: Props) => {
 						marginLeft: 12,
 					}}
 				/>
+
 				<Text style={styles.heroTextBanner}>{heroDataById.name}</Text>
+				{heroDataById.id == 27 ? (
+					//yamato's stupid ass weapon is bigger
+					<Image
+						style={{
+							height: 70,
+							width: 140,
+							position: "absolute",
+							top: 0,
+							left: 235,
+							borderRadius: 4,
+							borderWidth: 2,
+							borderColor: "transparent",
+							zIndex: 4,
+						}}
+						source={heroWeapons[id].weaponImage}
+					/>
+				) : (
+					<Image
+						style={{
+							height: 70,
+							width: 100,
+							position: "absolute",
+							borderRadius: 4,
+							borderWidth: 2,
+							borderColor: "transparent",
+							left: 275,
+							zIndex: 4,
+						}}
+						source={heroWeapons[id].weaponImage}
+					/>
+				)}
 			</View>
 			<View
 				style={{
@@ -114,31 +149,64 @@ export const HeroProfile = ({ id }: Props) => {
 					height: screenHeight,
 					zIndex: 1,
 				}}>
-				{/* <SvgComponent></SvgComponent> */}
+				<SvgComponent></SvgComponent>
 			</View>
-			<View style={{ alignItems: "center", top: 20 }}>
-				<Text style={{ color: theme.colors.font }}>Abilities</Text>
-			</View>
+
 			<View style={styles.itemView}>
-				{itemDataById.map((itemData: any, index: number) => {
-					if (index > 0)
-						return (
-							<Image
-								style={{
-									flexDirection: "row",
-									width: 50,
-									height: 50,
-									zIndex: 2,
-									backgroundColor: theme.colors.background,
-									tintColor: theme.colors.accent,
-									borderRadius: 4,
-									borderWidth: 2,
-									borderColor: theme.colors.primary,
-								}}
-								source={{ uri: itemData.image_webp }}
-							/>
-						);
+				{heroMoves.map((moves, index) => {
+					const matchedItem = itemDataById.find(
+						(item: any) => item.class_name === moves
+					);
+					return (
+						<>
+							<View style={{ flexDirection: "column" }}>
+								<Image
+									key={index}
+									style={{
+										flexDirection: "row",
+										width: 60,
+										height: 60,
+										zIndex: 2,
+										backgroundColor: theme.colors.background,
+										tintColor: theme.colors.accent,
+										borderRadius: 4,
+										borderWidth: 2,
+										borderColor: theme.colors.primary,
+									}}
+									source={{ uri: matchedItem.image_webp }}
+								/>
+
+								<Text style={styles.abilityText}>{matchedItem.name}</Text>
+							</View>
+						</>
+					);
 				})}
+			</View>
+
+			<View
+				style={{
+					position: "relative",
+					top: 40,
+					maxWidth: "95%",
+					zIndex: 2,
+					alignSelf: "center",
+					backgroundColor: theme.colors.background,
+					borderRadius: 4,
+					borderWidth: 2,
+					borderColor: theme.colors.accent,
+				}}>
+				{textLines ? (
+					<Text
+						numberOfLines={lines}
+						onPress={() => setTextLines(false)}
+						style={styles.loreText}>
+						{heroDataById.description.lore}
+					</Text>
+				) : (
+					<Text numberOfLines={lines} style={styles.loreText}>
+						{heroDataById.description.lore}
+					</Text>
+				)}
 			</View>
 		</View>
 	);
@@ -154,6 +222,22 @@ const styles = StyleSheet.create((theme) => ({
 		paddingLeft: 7,
 		fontSize: 13,
 		alignSelf: "center",
+		zIndex: 2,
+	},
+	abilityText: {
+		color: theme.colors.font,
+		fontSize: 8,
+		alignSelf: "center",
+		width: 60,
+		textAlign: "center",
+		zIndex: 2,
+	},
+	loreText: {
+		color: theme.colors.font,
+		padding: 4,
+		fontSize: 8,
+		alignSelf: "center",
+		textAlign: "center",
 		zIndex: 2,
 	},
 	heroTextBanner: {
