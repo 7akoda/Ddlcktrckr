@@ -29,7 +29,7 @@ type Props = {
 export const HeroProfile = ({ id }: Props) => {
 	const { theme } = useUnistyles();
 	const screenHeight = Dimensions.get("window").height;
-	const [textLines, setTextLines] = useState(true);
+	const [lineLimit, setLineLimit] = useState(true);
 
 	const {
 		data: heroStats,
@@ -65,7 +65,7 @@ export const HeroProfile = ({ id }: Props) => {
 	}
 	let lines: number;
 
-	if (textLines ? (lines = 6) : (lines = 100)) console.log(textLines);
+	lineLimit ? (lines = 6) : (lines = 100);
 	const heroMoves = [
 		heroDataById.items.signature1,
 		heroDataById.items.signature2,
@@ -195,10 +195,10 @@ export const HeroProfile = ({ id }: Props) => {
 					borderWidth: 2,
 					borderColor: theme.colors.accent,
 				}}>
-				{textLines ? (
+				{lineLimit ? (
 					<Text
 						numberOfLines={lines}
-						onPress={() => setTextLines(false)}
+						onPress={() => setLineLimit(false)}
 						style={styles.loreText}>
 						{heroDataById.description.lore}
 					</Text>
