@@ -4,13 +4,14 @@ import {
 	createHeroStatsQueryOptions,
 } from "@/queryOptions/createHeroQueryOptions";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { View, Image, Text, FlatList, Pressable } from "react-native";
+import { View, Image, FlatList, Pressable, Text } from "react-native";
 import * as Progress from "react-native-progress";
 import { useState } from "react";
 import { StyleSheet } from "react-native-unistyles";
 import { useUnistyles } from "react-native-unistyles";
 import { Link } from "expo-router";
 import { Header } from "./Header";
+import { CustomText } from "./CustomText";
 
 export const HeroList = () => {
 	const [sort, setSort] = useState(true);
@@ -23,13 +24,19 @@ export const HeroList = () => {
 	} = useQuery(createEnrichedHeroQueryOptions());
 
 	if (heroStatsLoading) {
-		return <Text style={{ color: "#EADEDA" }}>Loading heroes...</Text>;
+		return (
+			<CustomText style={{ color: "#EADEDA" }}>Loading heroes...</CustomText>
+		);
 	}
 
 	if (heroStatsIsError) {
 		console.error("Hero stats error:", heroStatsError);
 
-		return <Text style={{ color: "#EADEDA" }}>Failed to load hero data.</Text>;
+		return (
+			<CustomText style={{ color: "#EADEDA" }}>
+				Failed to load hero data.
+			</CustomText>
+		);
 	}
 
 	let sorted: any[] = [];
@@ -79,10 +86,10 @@ export const HeroList = () => {
 							asChild>
 							<Pressable style={{ justifyContent: "center" }}>
 								{({ pressed }) => (
-									<Text
+									<CustomText
 										style={[styles.heroText, pressed && styles.heroTextFade]}>
 										{item.name}
-									</Text>
+									</CustomText>
 								)}
 							</Pressable>
 						</Link>
@@ -95,7 +102,9 @@ export const HeroList = () => {
 									width={100}
 									color={theme.colors.accent}
 								/>
-								<Text style={styles.percentText}>{item.winRate}%</Text>
+								<CustomText style={styles.percentText}>
+									{item.winRate}%
+								</CustomText>
 							</View>
 						) : (
 							<View style={{ height: 10, alignSelf: "center" }}>
@@ -104,7 +113,9 @@ export const HeroList = () => {
 									width={100}
 									color={theme.colors.accent}
 								/>
-								<Text style={styles.percentText}>{item.popularity}%</Text>
+								<CustomText style={styles.percentText}>
+									{item.popularity}%
+								</CustomText>
 							</View>
 						)}
 					</View>
@@ -115,9 +126,10 @@ export const HeroList = () => {
 
 const styles = StyleSheet.create((theme) => ({
 	percentText: {
+		marginTop: 1,
 		alignSelf: "center",
 		color: theme.colors.font,
-		fontSize: 10,
+		fontSize: 9,
 	},
 	heroListItem: {
 		alignSelf: "center",
@@ -132,13 +144,13 @@ const styles = StyleSheet.create((theme) => ({
 	heroText: {
 		color: theme.colors.font,
 		paddingLeft: 7,
-		fontSize: 13,
+		fontSize: 12,
 		alignSelf: "center",
 	},
 	heroTextFade: {
 		color: theme.colors.font,
 		paddingLeft: 7,
-		fontSize: 13,
+		fontSize: 12,
 		alignSelf: "center",
 		opacity: 0.6,
 	},
