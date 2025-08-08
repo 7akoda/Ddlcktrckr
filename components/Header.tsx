@@ -10,10 +10,11 @@ import {
 	Settings,
 	ArrowDownWideNarrow,
 } from "lucide-react-native";
-import { Pressable, View, Text } from "react-native";
+import { Pressable, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { StyleSheet } from "react-native-unistyles";
 import { useUnistyles } from "react-native-unistyles";
+import { CustomText } from "./CustomText";
 
 type SortableHeader = {
 	back: boolean;
@@ -53,21 +54,21 @@ export const Header = (props: HeaderProps) => {
 			)}
 			<View style={{ flex: 1 }}></View>
 			{props.sortable && (
-				<Text
+				<CustomText
 					style={{
 						color: theme.colors.font,
 						textAlign: "center",
-						paddingTop: 4,
-						fontSize: 8,
+						paddingTop: 3,
+						fontSize: 7,
 						alignSelf: "center",
 						width: 40,
-						height: 20,
+						height: 18,
 						borderRadius: 4,
 						borderColor: theme.colors.accent,
 						borderWidth: 1,
 					}}>
 					{props.sortText}
-				</Text>
+				</CustomText>
 			)}
 			{props.sortable && (
 				<ArrowDownWideNarrow
