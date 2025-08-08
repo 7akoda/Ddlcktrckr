@@ -14,6 +14,7 @@ import {
 	Button,
 	Pressable,
 	Dimensions,
+	ScrollView,
 } from "react-native";
 import { StyleSheet } from "react-native-unistyles";
 import { useUnistyles } from "react-native-unistyles";
@@ -21,7 +22,13 @@ import { SvgUri } from "react-native-svg";
 import { SvgComponent } from "./DDLKSvg";
 import { Header } from "./Header";
 import { getHeroData } from "@/api/getHeroData";
-import { useState } from "react";
+import { useCallback, useState } from "react";
+import { CustomText } from "./CustomText";
+import Animated, {
+	useAnimatedStyle,
+	useSharedValue,
+} from "react-native-reanimated";
+
 type Props = {
 	id: number;
 };
@@ -29,7 +36,18 @@ type Props = {
 export const HeroProfile = ({ id }: Props) => {
 	const { theme } = useUnistyles();
 	const screenHeight = Dimensions.get("window").height;
-	const [lineLimit, setLineLimit] = useState(true);
+	const [isLoreExpanded, setIsLoreExpanded] = useState(false);
+	const [abilityPressed, setAbilityPressed] = useState(false);
+
+	const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+	const opacity = useSharedValue(0);
+	const animatedStyle = useAnimatedStyle(() => ({
+		opacity: opacity.value,
+	}));
+
+	const handleShade = () => {
+		abilityPressed ? (opacity.value = 0.6) : (opacity.value = 0);
+	};
 
 	const {
 		data: heroStats,
@@ -53,7 +71,7 @@ export const HeroProfile = ({ id }: Props) => {
 	} = useQuery(createItemDataByIdQueryOptions(id));
 
 	if (heroDataByIdIsLoading || heroStatsLoading || itemDataByIdIsLoading) {
-		return <Text>Loading...</Text>;
+		return <CustomText>Loading...</CustomText>;
 	}
 
 	if (heroDataByIdIsError || heroStatsIsError || itemDataByIdIsError) {
@@ -61,11 +79,12 @@ export const HeroProfile = ({ id }: Props) => {
 		console.error(heroStatsError);
 		console.error(itemDataByIdError);
 
-		return <Text>Failed to load player stats.</Text>;
+		return <CustomText>Failed to load player stats.</CustomText>;
 	}
-	let lines: number;
+	const toggleLoreExpansion = () => {
+		setIsLoreExpanded(!isLoreExpanded);
+	};
 
-	lineLimit ? (lines = 6) : (lines = 100);
 	const heroMoves = [
 		heroDataById.items.signature1,
 		heroDataById.items.signature2,
@@ -74,7 +93,27 @@ export const HeroProfile = ({ id }: Props) => {
 	];
 	console.log(id);
 	return (
-		<View style={styles.backgroundView}>
+		<ScrollView
+			style={{
+				backgroundColor: theme.colors.background,
+				height: screenHeight,
+			}}>
+			{abilityPressed ? (
+				<AnimatedPressable
+					onPress={() => {
+						setAbilityPressed(false);
+					}}
+					style={[
+						{
+							position: "absolute",
+							backgroundColor: theme.colors.background,
+							width: "100%",
+							height: screenHeight,
+							zIndex: 4,
+						},
+						animatedStyle,
+					]}></AnimatedPressable>
+			) : null}
 			<Header back={true} sortable={false} />
 			<Image
 				style={{
@@ -106,39 +145,23 @@ export const HeroProfile = ({ id }: Props) => {
 						marginLeft: 12,
 					}}
 				/>
-
-				<Text style={styles.heroTextBanner}>{heroDataById.name}</Text>
-				{heroDataById.id == 27 ? (
-					//yamato's stupid ass weapon is bigger
-					<Image
-						style={{
-							height: 70,
-							width: 140,
-							position: "absolute",
-							top: 0,
-							left: 235,
-							borderRadius: 4,
-							borderWidth: 2,
-							borderColor: "transparent",
-							zIndex: 4,
-						}}
-						source={heroWeapons[id].weaponImage}
-					/>
-				) : (
-					<Image
-						style={{
-							height: 70,
-							width: 100,
-							position: "absolute",
-							borderRadius: 4,
-							borderWidth: 2,
-							borderColor: "transparent",
-							left: 275,
-							zIndex: 4,
-						}}
-						source={heroWeapons[id].weaponImage}
-					/>
-				)}
+				<CustomText style={styles.heroTextBanner}>
+					{heroDataById.name}
+				</CustomText>
+				<Image
+					style={{
+						height: 70,
+						width: 140,
+						position: "absolute",
+						top: 0,
+						left: 235,
+						borderRadius: 4,
+						borderWidth: 2,
+						borderColor: "transparent",
+						zIndex: 2,
+					}}
+					source={heroWeapons[id].weaponImage}
+				/>
 			</View>
 			<View
 				style={{
@@ -158,10 +181,12 @@ export const HeroProfile = ({ id }: Props) => {
 						(item: any) => item.class_name === moves
 					);
 					return (
-						<>
-							<View style={{ flexDirection: "column" }}>
+						<View key={index} style={{ flexDirection: "column" }}>
+							<Pressable
+								onPress={() => {
+									setAbilityPressed(true);
+								}}>
 								<Image
-									key={index}
 									style={{
 										flexDirection: "row",
 										width: 60,
@@ -175,55 +200,46 @@ export const HeroProfile = ({ id }: Props) => {
 									}}
 									source={{ uri: matchedItem.image_webp }}
 								/>
-
-								<Text style={styles.abilityText}>{matchedItem.name}</Text>
-							</View>
-						</>
+							</Pressable>
+							<CustomText style={styles.abilityText}>
+								{matchedItem.name}
+							</CustomText>
+						</View>
 					);
 				})}
 			</View>
 
-			<View
-				style={{
-					position: "relative",
-					top: 40,
-					maxWidth: "95%",
-					zIndex: 2,
-					alignSelf: "center",
-					backgroundColor: theme.colors.background,
-					borderRadius: 4,
-					borderWidth: 2,
-					borderColor: theme.colors.accent,
-				}}>
-				{lineLimit ? (
-					<Text
-						numberOfLines={lines}
-						onPress={() => setLineLimit(false)}
-						style={styles.loreText}>
+			{heroDataById.description?.lore && (
+				<View
+					style={[
+						styles.loreContainer,
+						{
+							backgroundColor: theme.colors.background,
+							borderColor: theme.colors.accent,
+						},
+					]}>
+					<CustomText
+						numberOfLines={isLoreExpanded ? undefined : 6}
+						suppressHighlighting
+						style={[styles.loreText, { color: theme.colors.font }]}>
 						{heroDataById.description.lore}
-					</Text>
-				) : (
-					<Text numberOfLines={lines} style={styles.loreText}>
-						{heroDataById.description.lore}
-					</Text>
-				)}
-			</View>
-		</View>
+					</CustomText>
+
+					<Pressable
+						onPress={toggleLoreExpansion}
+						style={styles.expandIndicator}>
+						<CustomText
+							style={[styles.expandText, { color: theme.colors.accent }]}>
+							{isLoreExpanded ? "▲ Collapse" : "▼ Read More"}
+						</CustomText>
+					</Pressable>
+				</View>
+			)}
+		</ScrollView>
 	);
 };
 
 const styles = StyleSheet.create((theme) => ({
-	backgroundView: {
-		backgroundColor: theme.colors.background,
-		flex: 1,
-	},
-	heroText: {
-		color: theme.colors.font,
-		paddingLeft: 7,
-		fontSize: 13,
-		alignSelf: "center",
-		zIndex: 2,
-	},
 	abilityText: {
 		color: theme.colors.font,
 		fontSize: 8,
@@ -234,25 +250,17 @@ const styles = StyleSheet.create((theme) => ({
 	},
 	loreText: {
 		color: theme.colors.font,
-		padding: 4,
-		fontSize: 8,
+		padding: 12,
+		fontSize: 10,
 		alignSelf: "center",
 		textAlign: "center",
-		zIndex: 2,
 	},
 	heroTextBanner: {
 		color: theme.colors.bannerFont,
-		fontSize: 13,
+		fontSize: 12,
 		marginLeft: 8,
 		zIndex: 2,
 		marginTop: 26.25,
-	},
-	heroTextFade: {
-		color: theme.colors.font,
-		paddingLeft: 7,
-		fontSize: 13,
-		opacity: 0.6,
-		zIndex: 2,
 	},
 	itemView: {
 		top: 30,
@@ -261,5 +269,23 @@ const styles = StyleSheet.create((theme) => ({
 		position: "relative",
 		zIndex: 2,
 		justifyContent: "space-evenly",
+	},
+	loreContainer: {
+		marginTop: 40,
+		marginHorizontal: 10,
+		zIndex: 2,
+		borderRadius: 4,
+		borderWidth: 2,
+		overflow: "hidden",
+	},
+	expandIndicator: {
+		alignItems: "center",
+		paddingVertical: 8,
+		borderTopWidth: 1,
+		borderTopColor: theme.colors.primary,
+	},
+	expandText: {
+		fontSize: 9,
+		fontWeight: "600",
 	},
 }));
