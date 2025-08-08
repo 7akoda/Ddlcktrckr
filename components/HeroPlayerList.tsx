@@ -18,6 +18,7 @@ import * as Progress from "react-native-progress";
 import { useState } from "react";
 import { Link } from "expo-router";
 import { Header } from "@/components/Header";
+import { CustomText } from "./CustomText";
 
 type Props = {
 	id: string;
@@ -42,12 +43,12 @@ export const HeroPlayerList = ({ id }: Props) => {
 	} = useQuery(createHeroQueryOptions());
 
 	if (playerStatsLoading) {
-		return <Text>Loading...</Text>;
+		return <CustomText>Loading...</CustomText>;
 	}
 
 	if (playerStatsIsError) {
 		console.error(playerStatsError);
-		return <Text>Failed to load player stats.</Text>;
+		return <CustomText>Failed to load player stats.</CustomText>;
 	}
 
 	const totalMatches = playerStats.reduce(
@@ -120,10 +121,10 @@ export const HeroPlayerList = ({ id }: Props) => {
 							asChild>
 							<Pressable style={{ justifyContent: "center" }}>
 								{({ pressed }) => (
-									<Text
+									<CustomText
 										style={[styles.heroText, pressed && styles.heroTextFade]}>
 										{item.name}
-									</Text>
+									</CustomText>
 								)}
 							</Pressable>
 						</Link>
@@ -132,27 +133,31 @@ export const HeroPlayerList = ({ id }: Props) => {
 
 						{sort == true ? (
 							<View style={{ alignSelf: "center" }}>
-								<Text style={styles.infoText}>
+								<CustomText style={styles.infoText}>
 									W{item.wins} - L{item.matches_played - item.wins}
-								</Text>
+								</CustomText>
 								<Progress.Bar
 									progress={item.winRate / 100}
 									width={100}
 									color={theme.colors.accent}
 								/>
-								<Text style={styles.percentText}>{item.winRate}%</Text>
+								<CustomText style={styles.percentText}>
+									{item.winRate}%
+								</CustomText>
 							</View>
 						) : (
 							<View style={{ alignSelf: "center" }}>
-								<Text style={styles.infoText}>
+								<CustomText style={styles.infoText}>
 									Matches played: {item.matches_played}
-								</Text>
+								</CustomText>
 								<Progress.Bar
 									progress={item.matches_played / totalMatches}
 									width={100}
 									color={theme.colors.accent}
 								/>
-								<Text style={styles.percentText}>{item.pickRate}%</Text>
+								<CustomText style={styles.percentText}>
+									{item.pickRate}%
+								</CustomText>
 							</View>
 						)}
 					</View>
