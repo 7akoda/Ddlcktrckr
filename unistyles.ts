@@ -19,6 +19,7 @@ const breakpoints = {
 };
 
 const lightTheme = {
+	fontFamily: "Rye_400Regular",
 	colors: {
 		primary: "#dadcd6",
 		background: "#b9bbb4",
@@ -33,9 +34,8 @@ const lightTheme = {
 };
 
 const darkTheme = {
+	fontFamily: "Rye_400Regular",
 	colors: {
-		//primary: '#4A4F46',
-		//background: '#2F332D',
 		primary: "#3F4140",
 		background: "#1F2120",
 		font: "#C2C5BB",
