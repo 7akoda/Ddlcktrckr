@@ -46,7 +46,11 @@ export const HeroProfile = ({ id }: Props) => {
 	}));
 
 	const handleShade = () => {
-		abilityPressed ? (opacity.value = 0.6) : (opacity.value = 0);
+		setAbilityPressed((prev) => {
+			const newVal = !prev;
+			opacity.value = newVal ? 0.6 : 0;
+			return newVal;
+		});
 	};
 
 	const {
@@ -84,24 +88,146 @@ export const HeroProfile = ({ id }: Props) => {
 	const toggleLoreExpansion = () => {
 		setIsLoreExpanded(!isLoreExpanded);
 	};
-
+	console.log(abilityPressed);
 	const heroMoves = [
 		heroDataById.items.signature1,
 		heroDataById.items.signature2,
 		heroDataById.items.signature3,
 		heroDataById.items.signature4,
 	];
-	console.log(id);
 	return (
-		<ScrollView
-			style={{
-				backgroundColor: theme.colors.background,
-				height: screenHeight,
-			}}>
+		<View>
+			<ScrollView
+				style={{
+					backgroundColor: theme.colors.background,
+					height: screenHeight,
+				}}>
+				<Header back={true} sortable={false} />
+				<Image
+					style={{
+						width: "100%",
+						borderRadius: 4,
+						height: 70,
+						borderWidth: 2,
+						borderColor: theme.colors.primary,
+						zIndex: 2,
+						position: "absolute",
+						top: 48,
+					}}
+					source={require("../images/Background_Buildings.png")}></Image>
+				<View
+					style={{
+						flexDirection: "row",
+						width: "100%",
+					}}>
+					<Image
+						source={{ uri: heroDataById.images.icon_hero_card_webp }}
+						style={{
+							width: 35,
+							height: 35,
+							borderRadius: 4,
+							borderWidth: 2,
+							borderColor: theme.colors.primary,
+							marginTop: 17.5,
+							zIndex: 2,
+							marginLeft: 12,
+						}}
+					/>
+					<CustomText style={styles.heroTextBanner}>
+						{heroDataById.name}
+					</CustomText>
+					<Image
+						style={{
+							height: 70,
+							width: 140,
+							position: "absolute",
+							top: 0,
+							left: 235,
+							borderRadius: 4,
+							borderWidth: 2,
+							borderColor: "transparent",
+							zIndex: 2,
+						}}
+						source={heroWeapons[id].weaponImage}
+					/>
+				</View>
+				<View
+					style={{
+						position: "absolute",
+						alignSelf: "center",
+						justifyContent: "center",
+						width: "100%",
+						height: screenHeight,
+						zIndex: 1,
+					}}>
+					<SvgComponent></SvgComponent>
+				</View>
+
+				<View style={styles.itemView}>
+					{heroMoves.map((moves, index) => {
+						const matchedItem = itemDataById.find(
+							(item: any) => item.class_name === moves
+						);
+						return (
+							<View key={index} style={{ flexDirection: "column" }}>
+								<Pressable
+									onPress={() => {
+										handleShade();
+									}}>
+									<Image
+										style={{
+											flexDirection: "row",
+											width: 60,
+											height: 60,
+											zIndex: 2,
+											backgroundColor: theme.colors.background,
+											tintColor: theme.colors.accent,
+											borderRadius: 4,
+											borderWidth: 2,
+											borderColor: theme.colors.primary,
+										}}
+										source={{ uri: matchedItem.image_webp }}
+									/>
+								</Pressable>
+								<CustomText style={styles.abilityText}>
+									{matchedItem.name}
+								</CustomText>
+							</View>
+						);
+					})}
+				</View>
+
+				{heroDataById.description?.lore && (
+					<View
+						style={[
+							styles.loreContainer,
+							{
+								backgroundColor: theme.colors.background,
+								borderColor: theme.colors.accent,
+							},
+						]}>
+						<CustomText
+							numberOfLines={isLoreExpanded ? undefined : 6}
+							suppressHighlighting
+							style={[styles.loreText, { color: theme.colors.font }]}>
+							{heroDataById.description.lore}
+						</CustomText>
+
+						<Pressable
+							onPress={toggleLoreExpansion}
+							style={styles.expandIndicator}>
+							<CustomText
+								style={[styles.expandText, { color: theme.colors.accent }]}>
+								{isLoreExpanded ? "▲ Collapse" : "▼ Read More"}
+							</CustomText>
+						</Pressable>
+					</View>
+				)}
+			</ScrollView>
 			{abilityPressed ? (
 				<AnimatedPressable
 					onPress={() => {
-						setAbilityPressed(false);
+						handleShade();
 					}}
 					style={[
 						{
@@ -114,128 +240,7 @@ export const HeroProfile = ({ id }: Props) => {
 						animatedStyle,
 					]}></AnimatedPressable>
 			) : null}
-			<Header back={true} sortable={false} />
-			<Image
-				style={{
-					width: "100%",
-					borderRadius: 4,
-					height: 70,
-					borderWidth: 2,
-					borderColor: theme.colors.primary,
-					zIndex: 2,
-					position: "absolute",
-					top: 48,
-				}}
-				source={require("../images/Background_Buildings.png")}></Image>
-			<View
-				style={{
-					flexDirection: "row",
-					width: "100%",
-				}}>
-				<Image
-					source={{ uri: heroDataById.images.icon_hero_card_webp }}
-					style={{
-						width: 35,
-						height: 35,
-						borderRadius: 4,
-						borderWidth: 2,
-						borderColor: theme.colors.primary,
-						marginTop: 17.5,
-						zIndex: 2,
-						marginLeft: 12,
-					}}
-				/>
-				<CustomText style={styles.heroTextBanner}>
-					{heroDataById.name}
-				</CustomText>
-				<Image
-					style={{
-						height: 70,
-						width: 140,
-						position: "absolute",
-						top: 0,
-						left: 235,
-						borderRadius: 4,
-						borderWidth: 2,
-						borderColor: "transparent",
-						zIndex: 2,
-					}}
-					source={heroWeapons[id].weaponImage}
-				/>
-			</View>
-			<View
-				style={{
-					position: "absolute",
-					alignSelf: "center",
-					justifyContent: "center",
-					width: "100%",
-					height: screenHeight,
-					zIndex: 1,
-				}}>
-				<SvgComponent></SvgComponent>
-			</View>
-
-			<View style={styles.itemView}>
-				{heroMoves.map((moves, index) => {
-					const matchedItem = itemDataById.find(
-						(item: any) => item.class_name === moves
-					);
-					return (
-						<View key={index} style={{ flexDirection: "column" }}>
-							<Pressable
-								onPress={() => {
-									setAbilityPressed(true);
-								}}>
-								<Image
-									style={{
-										flexDirection: "row",
-										width: 60,
-										height: 60,
-										zIndex: 2,
-										backgroundColor: theme.colors.background,
-										tintColor: theme.colors.accent,
-										borderRadius: 4,
-										borderWidth: 2,
-										borderColor: theme.colors.primary,
-									}}
-									source={{ uri: matchedItem.image_webp }}
-								/>
-							</Pressable>
-							<CustomText style={styles.abilityText}>
-								{matchedItem.name}
-							</CustomText>
-						</View>
-					);
-				})}
-			</View>
-
-			{heroDataById.description?.lore && (
-				<View
-					style={[
-						styles.loreContainer,
-						{
-							backgroundColor: theme.colors.background,
-							borderColor: theme.colors.accent,
-						},
-					]}>
-					<CustomText
-						numberOfLines={isLoreExpanded ? undefined : 6}
-						suppressHighlighting
-						style={[styles.loreText, { color: theme.colors.font }]}>
-						{heroDataById.description.lore}
-					</CustomText>
-
-					<Pressable
-						onPress={toggleLoreExpansion}
-						style={styles.expandIndicator}>
-						<CustomText
-							style={[styles.expandText, { color: theme.colors.accent }]}>
-							{isLoreExpanded ? "▲ Collapse" : "▼ Read More"}
-						</CustomText>
-					</Pressable>
-				</View>
-			)}
-		</ScrollView>
+		</View>
 	);
 };
 
