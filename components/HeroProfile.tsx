@@ -38,6 +38,7 @@ export const HeroProfile = ({ id }: Props) => {
 	const screenHeight = Dimensions.get("window").height;
 	const [isLoreExpanded, setIsLoreExpanded] = useState(false);
 	const [abilityPressed, setAbilityPressed] = useState(false);
+	const [isOverflowing, setIsOverflowing] = useState(false);
 
 	const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 	const opacity = useSharedValue(0);
@@ -48,7 +49,7 @@ export const HeroProfile = ({ id }: Props) => {
 	const handleShade = () => {
 		setAbilityPressed((prev) => {
 			const newVal = !prev;
-			opacity.value = newVal ? 0.6 : 0;
+			opacity.value = newVal ? 0.8 : 0;
 			return newVal;
 		});
 	};
@@ -208,19 +209,29 @@ export const HeroProfile = ({ id }: Props) => {
 						]}>
 						<CustomText
 							numberOfLines={isLoreExpanded ? undefined : 6}
+							onLayout={(e) => {
+								const { height } = e.nativeEvent.layout;
+								if (height >= 99) {
+									setIsOverflowing(true);
+								} else {
+									setIsOverflowing(false);
+								}
+							}}
 							suppressHighlighting
 							style={[styles.loreText, { color: theme.colors.font }]}>
 							{heroDataById.description.lore}
 						</CustomText>
 
-						<Pressable
-							onPress={toggleLoreExpansion}
-							style={styles.expandIndicator}>
-							<CustomText
-								style={[styles.expandText, { color: theme.colors.accent }]}>
-								{isLoreExpanded ? "▲ Collapse" : "▼ Read More"}
-							</CustomText>
-						</Pressable>
+						{isOverflowing && (
+							<Pressable
+								onPress={toggleLoreExpansion}
+								style={styles.expandIndicator}>
+								<CustomText
+									style={[styles.expandText, { color: theme.colors.accent }]}>
+									{isLoreExpanded ? "▲ Collapse" : "▼ Read More"}
+								</CustomText>
+							</Pressable>
+						)}
 					</View>
 				)}
 			</ScrollView>
