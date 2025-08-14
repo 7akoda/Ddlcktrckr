@@ -5,7 +5,6 @@ import { useUnistyles } from "react-native-unistyles";
 
 export const SvgComponent = () => {
 	const { theme } = useUnistyles();
-	const screenHeight = Dimensions.get("window").height;
 
 	return (
 		<Svg id="Layer_1" viewBox="0 0 963.69 963.69">
