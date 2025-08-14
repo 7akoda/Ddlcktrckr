@@ -24,10 +24,12 @@ import { Header } from "./Header";
 import { getHeroData } from "@/api/getHeroData";
 import { useCallback, useState } from "react";
 import { CustomText } from "./CustomText";
+import { useHeroData } from "@/hooks/useHeroData";
 import Animated, {
 	useAnimatedStyle,
 	useSharedValue,
 } from "react-native-reanimated";
+import { LoadingIcon } from "./LoadingIcon";
 
 type Props = {
 	id: number;
@@ -53,42 +55,15 @@ export const HeroProfile = ({ id }: Props) => {
 			return newVal;
 		});
 	};
+	let { heroDataById, itemDataById, isError, isLoading } = useHeroData(id);
+	isLoading = true;
+	if (isLoading) return <LoadingIcon />;
+	if (isError) return <CustomText>Error loading data</CustomText>;
 
-	const {
-		data: heroStats,
-		error: heroStatsError,
-		isLoading: heroStatsLoading,
-		isError: heroStatsIsError,
-	} = useQuery(createEnrichedHeroQueryOptions());
-
-	const {
-		data: heroDataById,
-		error: heroDataByIdError,
-		isLoading: heroDataByIdIsLoading,
-		isError: heroDataByIdIsError,
-	} = useQuery(createHeroDataByIdQueryOptions(id));
-
-	const {
-		data: itemDataById,
-		error: itemDataByIdError,
-		isLoading: itemDataByIdIsLoading,
-		isError: itemDataByIdIsError,
-	} = useQuery(createItemDataByIdQueryOptions(id));
-
-	if (heroDataByIdIsLoading || heroStatsLoading || itemDataByIdIsLoading) {
-		return <CustomText>Loading...</CustomText>;
-	}
-
-	if (heroDataByIdIsError || heroStatsIsError || itemDataByIdIsError) {
-		console.error(heroDataByIdError);
-		console.error(heroStatsError);
-		console.error(itemDataByIdError);
-
-		return <CustomText>Failed to load player stats.</CustomText>;
-	}
 	const toggleLoreExpansion = () => {
 		setIsLoreExpanded(!isLoreExpanded);
 	};
+
 	console.log(abilityPressed);
 	const heroMoves = [
 		heroDataById.items.signature1,
@@ -293,6 +268,7 @@ const styles = StyleSheet.create((theme) => ({
 		borderRadius: 4,
 		borderWidth: 2,
 		overflow: "hidden",
+		marginBottom: 30,
 	},
 	expandIndicator: {
 		alignItems: "center",
