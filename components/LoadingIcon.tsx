@@ -43,8 +43,8 @@ export const LoadingIcon = () => {
 			setTimeout(() => {
 				opacity.value = withRepeat(
 					withSequence(
-						withTiming(1, { duration: 100 }),
-						withTiming(0.3, { duration: 700 })
+						withTiming(1, { duration: 0 }),
+						withTiming(0.3, { duration: 800 })
 					),
 					-1,
 					false
