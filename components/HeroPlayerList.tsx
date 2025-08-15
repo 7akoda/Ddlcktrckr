@@ -1,5 +1,5 @@
 import {
-	createHeroQueryOptions,
+	createEnrichedHeroQueryOptions,
 	createPlayerHeroStatsQueryOptions,
 } from "@/queryOptions/createHeroQueryOptions";
 import { useQuery } from "@tanstack/react-query";
@@ -19,6 +19,10 @@ import { useState } from "react";
 import { Link } from "expo-router";
 import { Header } from "@/components/Header";
 import { CustomText } from "./CustomText";
+import { LoadingIcon } from "./LoadingIcon";
+import { useHeroDataById } from "@/hooks/useHeroDataById";
+import { useHeroData } from "@/hooks/useHeroData";
+import { usePlayerHeroData } from "@/hooks/usePlayerHeroData";
 
 type Props = {
 	id: string;
@@ -26,29 +30,20 @@ type Props = {
 
 export const HeroPlayerList = ({ id }: Props) => {
 	const [sort, setSort] = useState(true);
-
 	const { theme } = useUnistyles();
-	const {
-		data: playerStats,
-		error: playerStatsError,
-		isLoading: playerStatsLoading,
-		isError: playerStatsIsError,
-	} = useQuery(createPlayerHeroStatsQueryOptions(id));
 
-	const {
-		data: heroData,
-		error: heroDataError,
-		isLoading: heroDataLoading,
-		isError: heroDataIsError,
-	} = useQuery(createHeroQueryOptions());
+	const { playerStats, isIdError, isIdLoading, idError } =
+		usePlayerHeroData(id);
 
-	if (playerStatsLoading) {
-		return <CustomText>Loading...</CustomText>;
+	const { heroData, isError, error, isLoading } = useHeroData();
+
+	if (isLoading || isIdLoading) {
+		return <LoadingIcon />;
 	}
 
-	if (playerStatsIsError) {
-		console.error(playerStatsError);
-		return <CustomText>Failed to load player stats.</CustomText>;
+	if (isError || isIdError) {
+		console.error(error || idError);
+		return <CustomText>{isError ? String(error) : String(idError)}</CustomText>;
 	}
 
 	const totalMatches = playerStats.reduce(
@@ -94,7 +89,7 @@ export const HeroPlayerList = ({ id }: Props) => {
 				back={false}
 				sortable={true}
 				sortList={() => setSort(!sort)}
-				sortText={sort ? "Sorted by Winrate" : "Sorted by Popularity"}
+				sortText={sort ? "Winrate" : "Pickrate"}
 			/>
 			<FlatList
 				data={sorted}
