@@ -16,8 +16,8 @@ export default function Index() {
 	return (
 		<>
 			<SafeAreaView style={{ flex: 1 }}>
-				{/* <HeroPlayerList id={kodaNum} /> */}
-				<HeroList />
+				<HeroPlayerList id={kodaNum} />
+				{/* <HeroList /> */}
 			</SafeAreaView>
 		</>
 	);
