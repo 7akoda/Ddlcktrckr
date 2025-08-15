@@ -5,13 +5,6 @@ import { getPlayerHeroStats } from "@/api/getPlayerHeroStats";
 import { getHeroDataById } from "@/api/getHeroDataById";
 import { getItemById } from "@/api/getItemById";
 
-export const createHeroQueryOptions = () => {
-	return queryOptions({
-		queryKey: ["heroData"],
-		queryFn: getHeroData,
-	});
-};
-
 export const createHeroStatsQueryOptions = () => {
 	return queryOptions({
 		queryKey: ["heroStats"],
@@ -43,7 +36,7 @@ export const createItemDataByIdQueryOptions = (id: number) => ({
 	},
 });
 
-export function createEnrichedHeroQueryOptions() {
+export const createEnrichedHeroQueryOptions = () => {
 	return {
 		queryKey: ["enriched-heroes"],
 		queryFn: async ({}) => {
@@ -71,10 +64,10 @@ export function createEnrichedHeroQueryOptions() {
 					(hero.matches / (totalHeroPicks / 12)) *
 					100
 				).toFixed(2);
-				return { ...hero, popularity };
+				return { ...hero, totalHeroPicks, popularity };
 			});
 
 			return heroes;
 		},
 	};
-}
+};
