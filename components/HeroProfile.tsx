@@ -24,7 +24,7 @@ import { Header } from "./Header";
 import { getHeroData } from "@/api/getHeroData";
 import { useCallback, useState } from "react";
 import { CustomText } from "./CustomText";
-import { useHeroData } from "@/hooks/useHeroData";
+import { useHeroDataById } from "@/hooks/useHeroDataById";
 import Animated, {
 	useAnimatedStyle,
 	useSharedValue,
@@ -55,16 +55,17 @@ export const HeroProfile = ({ id }: Props) => {
 			return newVal;
 		});
 	};
-	let { heroDataById, itemDataById, isError, isLoading } = useHeroData(id);
-	isLoading = true;
-	if (isLoading) return <LoadingIcon />;
-	if (isError) return <CustomText>Error loading data</CustomText>;
+	const { heroDataById, itemDataById, isIdError, isIdLoading, idError } =
+		useHeroDataById(id);
+
+	if (isIdLoading) return <LoadingIcon />;
+
+	if (isIdError) return <CustomText>{String(idError)}</CustomText>;
 
 	const toggleLoreExpansion = () => {
 		setIsLoreExpanded(!isLoreExpanded);
 	};
 
-	console.log(abilityPressed);
 	const heroMoves = [
 		heroDataById.items.signature1,
 		heroDataById.items.signature2,
@@ -74,6 +75,7 @@ export const HeroProfile = ({ id }: Props) => {
 	return (
 		<View>
 			<ScrollView
+				showsVerticalScrollIndicator={false}
 				style={{
 					backgroundColor: theme.colors.background,
 					height: screenHeight,
