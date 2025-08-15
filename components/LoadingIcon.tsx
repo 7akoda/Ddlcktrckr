@@ -39,12 +39,12 @@ export const LoadingIcon = () => {
 
 	useEffect(() => {
 		opacities.forEach((opacity, index) => {
-			const delay = index * 100; // 100ms stagger
+			const delay = index * 150;
 			setTimeout(() => {
 				opacity.value = withRepeat(
 					withSequence(
-						withTiming(1, { duration: 0 }),
-						withTiming(0.3, { duration: 800 })
+						withTiming(1, { duration: 600 }),
+						withTiming(0.3, { duration: 600 })
 					),
 					-1,
 					false
@@ -57,7 +57,7 @@ export const LoadingIcon = () => {
 		<Animated.View style={[styles.background, { height: screenHeight }]}>
 			<Svg
 				id="Layer_1"
-				viewBox="0 0 963.69 963.69"
+				viewBox="0 -28 963.69 963.69"
 				width="100%"
 				height="100%"
 				preserveAspectRatio="xMidYMid meet">
