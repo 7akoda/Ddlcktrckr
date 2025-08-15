@@ -1,8 +1,3 @@
-import {
-	createEnrichedHeroQueryOptions,
-	createHeroQueryOptions,
-	createHeroStatsQueryOptions,
-} from "@/queryOptions/createHeroQueryOptions";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { View, Image, FlatList, Pressable, Text } from "react-native";
 import * as Progress from "react-native-progress";
@@ -12,26 +7,21 @@ import { useUnistyles } from "react-native-unistyles";
 import { Link } from "expo-router";
 import { Header } from "./Header";
 import { CustomText } from "./CustomText";
+import { LoadingIcon } from "./LoadingIcon";
+import { useHeroData } from "@/hooks/useHeroData";
 
 export const HeroList = () => {
 	const [sort, setSort] = useState(true);
 	const { theme } = useUnistyles();
-	const {
-		data: heroStats,
-		error: heroStatsError,
-		isLoading: heroStatsLoading,
-		isError: heroStatsIsError,
-	} = useQuery(createEnrichedHeroQueryOptions());
 
-	if (heroStatsLoading) {
-		return (
-			<CustomText style={{ color: "#EADEDA" }}>Loading heroes...</CustomText>
-		);
+	const { heroData, error, isLoading, isError } = useHeroData();
+
+	if (isLoading) {
+		return <LoadingIcon />;
 	}
 
-	if (heroStatsIsError) {
-		console.error("Hero stats error:", heroStatsError);
-
+	if (isError) {
+		console.error("Hero stats error:", error);
 		return (
 			<CustomText style={{ color: "#EADEDA" }}>
 				Failed to load hero data.
@@ -41,7 +31,7 @@ export const HeroList = () => {
 
 	let sorted: any[] = [];
 
-	const heroList = Array.isArray(heroStats) ? heroStats : [];
+	const heroList = Array.isArray(heroData) ? heroData : [];
 
 	const totalHeroPicks = heroList.reduce((sum, hero) => sum + hero.matches, 0);
 
