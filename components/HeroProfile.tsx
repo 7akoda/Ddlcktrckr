@@ -185,10 +185,11 @@ export const HeroProfile = ({ id }: Props) => {
 							},
 						]}>
 						<CustomText
-							numberOfLines={isLoreExpanded ? undefined : 6}
+							ellipsizeMode="clip"
+							numberOfLines={isLoreExpanded ? undefined : 5}
 							onLayout={(e) => {
 								const { height } = e.nativeEvent.layout;
-								if (height >= 99) {
+								if (height >= 86.5) {
 									setIsOverflowing(true);
 								} else {
 									setIsOverflowing(false);
