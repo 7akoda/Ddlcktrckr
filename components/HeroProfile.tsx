@@ -1,35 +1,18 @@
-import {
-	createEnrichedHeroQueryOptions,
-	createHeroDataByIdQueryOptions,
-	createItemDataByIdQueryOptions,
-} from "@/queryOptions/createHeroQueryOptions";
-import { useQuery } from "@tanstack/react-query";
-import { heroWeapons } from "../data/weapons";
-import { Link } from "expo-router";
-import {
-	View,
-	Image,
-	Text,
-	FlatList,
-	Button,
-	Pressable,
-	Dimensions,
-	ScrollView,
-} from "react-native";
-import { StyleSheet } from "react-native-unistyles";
+import { View, Image, Pressable, Dimensions, ScrollView } from "react-native";
 import { useUnistyles } from "react-native-unistyles";
-import { SvgUri } from "react-native-svg";
-import { SvgComponent } from "./DDLKSvg";
+import { SvgComponent } from "./svgComponents/DDLKSvg";
 import { Header } from "./Header";
-import { getHeroData } from "@/api/getHeroData";
-import { useCallback, useState } from "react";
-import { CustomText } from "./CustomText";
-import { useHeroDataById } from "@/hooks/useHeroDataById";
+import { useState } from "react";
+
 import Animated, {
 	useAnimatedStyle,
 	useSharedValue,
+	withTiming,
 } from "react-native-reanimated";
-import { LoadingIcon } from "./LoadingIcon";
+import { HeroAbilities } from "./HeroProfile/HeroAbilities";
+import { HeroProfileBar } from "./HeroProfile/HeroProfileBar";
+import { HeroLore } from "./HeroProfile/HeroLore";
+import { HeroAbilitiesInspect } from "./HeroProfile/HeroAbilitiesInspect";
 
 type Props = {
 	id: number;
@@ -38,12 +21,9 @@ type Props = {
 export const HeroProfile = ({ id }: Props) => {
 	const { theme } = useUnistyles();
 	const screenHeight = Dimensions.get("window").height;
-	const [isLoreExpanded, setIsLoreExpanded] = useState(false);
 	const [abilityPressed, setAbilityPressed] = useState(false);
-	const [isOverflowing, setIsOverflowing] = useState(false);
-
-	const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 	const opacity = useSharedValue(0);
+	const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 	const animatedStyle = useAnimatedStyle(() => ({
 		opacity: opacity.value,
 	}));
@@ -51,27 +31,13 @@ export const HeroProfile = ({ id }: Props) => {
 	const handleShade = () => {
 		setAbilityPressed((prev) => {
 			const newVal = !prev;
-			opacity.value = newVal ? 0.8 : 0;
+			requestAnimationFrame(() => {
+				opacity.value = withTiming(newVal ? 0.8 : 0);
+			});
 			return newVal;
 		});
 	};
-	const { heroDataById, itemDataById, isIdError, isIdLoading, idError } =
-		useHeroDataById(id);
 
-	if (isIdLoading) return <LoadingIcon />;
-
-	if (isIdError) return <CustomText>{String(idError)}</CustomText>;
-
-	const toggleLoreExpansion = () => {
-		setIsLoreExpanded(!isLoreExpanded);
-	};
-
-	const heroMoves = [
-		heroDataById.items.signature1,
-		heroDataById.items.signature2,
-		heroDataById.items.signature3,
-		heroDataById.items.signature4,
-	];
 	return (
 		<View>
 			<ScrollView
@@ -81,54 +47,7 @@ export const HeroProfile = ({ id }: Props) => {
 					height: screenHeight,
 				}}>
 				<Header back={true} sortable={false} />
-				<Image
-					style={{
-						width: "100%",
-						borderRadius: 4,
-						height: 70,
-						borderWidth: 2,
-						borderColor: theme.colors.primary,
-						zIndex: 2,
-						position: "absolute",
-						top: 48,
-					}}
-					source={require("../images/Background_Buildings.png")}></Image>
-				<View
-					style={{
-						flexDirection: "row",
-						width: "100%",
-					}}>
-					<Image
-						source={{ uri: heroDataById.images.icon_hero_card_webp }}
-						style={{
-							width: 35,
-							height: 35,
-							borderRadius: 4,
-							borderWidth: 2,
-							borderColor: theme.colors.primary,
-							marginTop: 17.5,
-							zIndex: 2,
-							marginLeft: 12,
-						}}
-					/>
-					<CustomText style={styles.heroTextBanner}>
-						{heroDataById.name}
-					</CustomText>
-					<Image
-						style={{
-							height: 70,
-							width: 140,
-							position: "absolute",
-							top: 0,
-							left: 235,
-							borderRadius: 4,
-							borderWidth: 2,
-							borderColor: "transparent",
-							zIndex: 2,
-						}}
-						source={heroWeapons[id].weaponImage}
-					/>
-				</View>
+				<HeroProfileBar id={id} />
 				<View
 					style={{
 						position: "absolute",
@@ -140,147 +59,29 @@ export const HeroProfile = ({ id }: Props) => {
 					}}>
 					<SvgComponent></SvgComponent>
 				</View>
-
-				<View style={styles.itemView}>
-					{heroMoves.map((moves, index) => {
-						const matchedItem = itemDataById.find(
-							(item: any) => item.class_name === moves
-						);
-						return (
-							<View key={index} style={{ flexDirection: "column" }}>
-								<Pressable
-									onPress={() => {
-										handleShade();
-									}}>
-									<Image
-										style={{
-											flexDirection: "row",
-											width: 60,
-											height: 60,
-											zIndex: 2,
-											backgroundColor: theme.colors.background,
-											tintColor: theme.colors.accent,
-											borderRadius: 4,
-											borderWidth: 2,
-											borderColor: theme.colors.primary,
-										}}
-										source={{ uri: matchedItem.image_webp }}
-									/>
-								</Pressable>
-								<CustomText style={styles.abilityText}>
-									{matchedItem.name}
-								</CustomText>
-							</View>
-						);
-					})}
-				</View>
-
-				{heroDataById.description?.lore && (
-					<View
-						style={[
-							styles.loreContainer,
-							{
-								backgroundColor: theme.colors.background,
-								borderColor: theme.colors.accent,
-							},
-						]}>
-						<CustomText
-							ellipsizeMode="clip"
-							numberOfLines={isLoreExpanded ? undefined : 5}
-							onLayout={(e) => {
-								const { height } = e.nativeEvent.layout;
-								if (height >= 86.5) {
-									setIsOverflowing(true);
-								} else {
-									setIsOverflowing(false);
-								}
-							}}
-							suppressHighlighting
-							style={[styles.loreText, { color: theme.colors.font }]}>
-							{heroDataById.description.lore}
-						</CustomText>
-
-						{isOverflowing && (
-							<Pressable
-								onPress={toggleLoreExpansion}
-								style={styles.expandIndicator}>
-								<CustomText
-									style={[styles.expandText, { color: theme.colors.accent }]}>
-									{isLoreExpanded ? "▲ Collapse" : "▼ Read More"}
-								</CustomText>
-							</Pressable>
-						)}
-					</View>
-				)}
+				<HeroAbilities id={id} handleShade={handleShade} />
+				<HeroLore id={id} />
 			</ScrollView>
 			{abilityPressed ? (
-				<AnimatedPressable
-					onPress={() => {
-						handleShade();
-					}}
-					style={[
-						{
-							position: "absolute",
-							backgroundColor: theme.colors.background,
-							width: "100%",
-							height: screenHeight,
-							zIndex: 4,
-						},
-						animatedStyle,
-					]}></AnimatedPressable>
-			) : null}
+				<>
+					<AnimatedPressable
+						onPress={() => {
+							handleShade();
+						}}
+						style={[
+							{
+								position: "absolute",
+								backgroundColor: theme.colors.background,
+								width: "100%",
+								height: screenHeight,
+								zIndex: 4,
+							},
+							animatedStyle,
+						]}></AnimatedPressable>
+				</>
+			) : (
+				<HeroAbilitiesInspect id={id} />
+			)}
 		</View>
 	);
 };
-
-const styles = StyleSheet.create((theme) => ({
-	abilityText: {
-		color: theme.colors.font,
-		fontSize: 8,
-		alignSelf: "center",
-		width: 60,
-		textAlign: "center",
-		zIndex: 2,
-	},
-	loreText: {
-		color: theme.colors.font,
-		padding: 12,
-		fontSize: 10,
-		alignSelf: "center",
-		textAlign: "center",
-	},
-	heroTextBanner: {
-		color: theme.colors.bannerFont,
-		fontSize: 12,
-		marginLeft: 8,
-		zIndex: 2,
-		marginTop: 26.25,
-	},
-	itemView: {
-		top: 30,
-		width: "100%",
-		flexDirection: "row",
-		position: "relative",
-		zIndex: 2,
-		justifyContent: "space-evenly",
-	},
-	loreContainer: {
-		marginTop: 40,
-		marginHorizontal: 10,
-		zIndex: 2,
-		borderRadius: 4,
-		borderWidth: 2,
-		overflow: "hidden",
-		marginBottom: 30,
-	},
-	expandIndicator: {
-		alignItems: "center",
-		paddingVertical: 8,
-		borderTopWidth: 1,
-		borderTopColor: theme.colors.primary,
-	},
-	expandText: {
-		fontSize: 9,
-		fontWeight: "600",
-	},
-}));
