@@ -75,6 +75,5 @@ const styles = StyleSheet.create((theme) => ({
 		borderColor: theme.colors.primary,
 		zIndex: 2,
 		position: "absolute",
-		top: 48,
 	},
 }));
