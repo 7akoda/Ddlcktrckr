@@ -21,10 +21,7 @@ export const HeroAbilitiesInspect = ({ id }: Props) => {
 					alignSelf: "center",
 					color: theme.colors.font,
 					fontSize: 80,
-				}}>
-				Medic!
-			</CustomText>
-			;
+				}}></CustomText>
 		</View>
 	);
 };
