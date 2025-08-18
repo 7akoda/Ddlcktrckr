@@ -39,14 +39,15 @@ export const HeroProfile = ({ id }: Props) => {
 	};
 
 	return (
-		<View>
+		<View style={{ backgroundColor: theme.colors.background }}>
+			<Header back={true} sortable={false} />
+
 			<ScrollView
 				showsVerticalScrollIndicator={false}
 				style={{
 					backgroundColor: theme.colors.background,
 					height: screenHeight,
 				}}>
-				<Header back={true} sortable={false} />
 				<HeroProfileBar id={id} />
 				<View
 					style={{
