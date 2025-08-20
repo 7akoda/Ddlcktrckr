@@ -163,4 +163,16 @@ export const heroWeapons: { [key: string]: Hero } = {
 		weaponName: "Magic Wand",
 		weaponImage: require("../images/weapons/320px-Sinclair_Weapon.png"),
 	},
+	"63": {
+		id: 63,
+		name: "Mina",
+		weaponName: "New Money",
+		weaponImage: require("../images/weapons/320px-Placeholder_Weapon.png"),
+	},
+	"72": {
+		id: 72,
+		name: "Billy",
+		weaponName: "Biquette",
+		weaponImage: require("../images/weapons/320px-Placeholder_Weapon.png"),
+	},
 };
