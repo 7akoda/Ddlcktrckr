@@ -80,7 +80,7 @@ const styles = StyleSheet.create((theme) => ({
 		borderRadius: 4,
 		borderWidth: 2,
 		overflow: "hidden",
-		marginBottom: 30,
+		marginBottom: 100,
 	},
 	expandIndicator: {
 		alignItems: "center",
