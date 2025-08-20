@@ -42,7 +42,7 @@ export const Header = (props: HeaderProps) => {
 				height: 40,
 				paddingTop: 8,
 				marginBottom: 8,
-				zIndex: 2,
+				zIndex: 3,
 			}}>
 			{props.back && (
 				<ArrowLeft
