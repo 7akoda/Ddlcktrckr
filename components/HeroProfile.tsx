@@ -57,7 +57,6 @@ export const HeroProfile = ({ id }: Props) => {
 		heroDataById.items.signature3,
 		heroDataById.items.signature4,
 	];
-
 	return (
 		<View style={{ backgroundColor: theme.colors.background }}>
 			<Header back={true} sortable={false} />
