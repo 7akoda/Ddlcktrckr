@@ -3,8 +3,7 @@ import { LoadingIcon } from "../LoadingIcon";
 import { CustomText } from "../CustomText";
 import { Dimensions, View } from "react-native";
 import { useUnistyles } from "react-native-unistyles";
-import { useEvent } from "expo";
-import { useVideoPlayer, VideoView } from "expo-video";
+import { heroMoves } from "../../data/moves";
 type Props = {
 	id: number;
 	match: any;
@@ -15,7 +14,6 @@ export const HeroAbilitiesInspect = ({ id, match }: Props) => {
 	const { itemDataById, isIdError, isIdLoading, idError } = useHeroDataById(id);
 	if (isIdLoading) return <LoadingIcon />;
 	if (isIdError) return <CustomText>{String(idError)}</CustomText>;
-	console.log(match);
 	const stripHtml = (html: string) => {
 		return html
 			.replace(/<[^>]*>/g, "")
@@ -28,13 +26,8 @@ export const HeroAbilitiesInspect = ({ id, match }: Props) => {
 			.trim();
 	};
 
-	const player = useVideoPlayer(match.video.webm, (player) => {
-		player.loop = true;
-		player.play();
-	});
-
-	const { isPlaying } = useEvent(player, "playingChange", {
-		isPlaying: player.playing,
+	const matchedHero = heroMoves.find((hero) => {
+		return hero.id == id;
 	});
 
 	return (
@@ -63,19 +56,25 @@ export const HeroAbilitiesInspect = ({ id, match }: Props) => {
 				}}>
 				{stripHtml(match.description?.desc) || "No description available"}
 			</CustomText>
-			<VideoView
-				player={player}
-				allowsFullscreen
-				allowsPictureInPicture
-				style={{
-					zIndex: 6,
-
-					padding: 8,
-					margin: 12,
-					borderWidth: 2,
-					borderRadius: 4,
-					borderColor: theme.colors.accent,
-				}}></VideoView>
+			{matchedHero?.signature1.upgrades.map((upgrades) => {
+				return (
+					<CustomText
+						key={id}
+						style={{
+							zIndex: 6,
+							textAlign: "center",
+							color: theme.colors.font,
+							fontSize: 8,
+							padding: 8,
+							margin: 12,
+							borderWidth: 2,
+							borderRadius: 4,
+							borderColor: theme.colors.accent,
+						}}>
+						{upgrades}
+					</CustomText>
+				);
+			})}
 		</View>
 	);
 };
