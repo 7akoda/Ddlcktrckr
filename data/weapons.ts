@@ -169,6 +169,30 @@ export const heroWeapons: { [key: string]: Hero } = {
 		weaponName: "New Money",
 		weaponImage: require("../images/weapons/320px-Placeholder_Weapon.png"),
 	},
+	"64": {
+		id: 64,
+		name: "Drifter",
+		weaponName: "Crimson Grasp",
+		weaponImage: require("../images/weapons/320px-Placeholder_Weapon.png"),
+	},
+	"66": {
+		id: 66,
+		name: "Victor",
+		weaponName: "Memento Mori",
+		weaponImage: require("../images/weapons/320px-Placeholder_Weapon.png"),
+	},
+	"67": {
+		id: 67,
+		name: "Paige",
+		weaponName: "Chapter's End",
+		weaponImage: require("../images/weapons/320px-Placeholder_Weapon.png"),
+	},
+	"69": {
+		id: 69,
+		name: "Doorman",
+		weaponName: "Service With A Smile",
+		weaponImage: require("../images/weapons/320px-Placeholder_Weapon.png"),
+	},
 	"72": {
 		id: 72,
 		name: "Billy",
