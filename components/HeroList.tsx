@@ -43,7 +43,6 @@ export const HeroList = () => {
 	} else if (sort === false) {
 		sorted = sortedPopular;
 	}
-
 	return (
 		<View style={styles.primaryView}>
 			<Header
