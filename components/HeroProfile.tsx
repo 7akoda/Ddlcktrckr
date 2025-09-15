@@ -51,12 +51,30 @@ export const HeroProfile = ({ id }: Props) => {
 	if (isIdLoading) return <LoadingIcon />;
 
 	if (isIdError) return <CustomText>{String(idError)}</CustomText>;
+
 	const heroMoves = [
 		heroDataById.items.signature1,
 		heroDataById.items.signature2,
 		heroDataById.items.signature3,
 		heroDataById.items.signature4,
 	];
+
+	let abilityInspect = 0;
+
+	heroMoves.map((moves, index) => {
+		const matchedItem = itemDataById.find(
+			(item: any) => item.class_name === moves
+		);
+
+		if (
+			selectedAbilityIndex &&
+			selectedAbilityIndex.class_name == matchedItem.class_name
+		) {
+			abilityInspect = index;
+			return abilityInspect;
+		}
+	});
+
 	return (
 		<View style={{ backgroundColor: theme.colors.background }}>
 			<Header back={true} sortable={false} />
@@ -102,7 +120,11 @@ export const HeroProfile = ({ id }: Props) => {
 						height: screenHeight,
 					}}>
 					<Animated.View style={[{ zIndex: 4 }, animatedContentStyle]}>
-						<HeroAbilitiesInspect match={selectedAbilityIndex} id={id} />
+						<HeroAbilitiesInspect
+							abilityInspect={abilityInspect}
+							match={selectedAbilityIndex}
+							id={id}
+						/>
 					</Animated.View>
 					<AnimatedPressable
 						onPress={() => {
