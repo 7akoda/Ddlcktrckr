@@ -802,7 +802,195 @@ export const heroMoves: Hero[] = [
 			upgrades: [
 				"+15% Fire Rate",
 				"+4m Move Speed",
-				"+3.0s Duration+20% Bullet Resist+20% Spirit Resist",
+				"+3.0s Duration +20% Bullet Resist +20% Spirit Resist",
+			],
+		},
+	},
+	{
+		id: 63,
+		name: "Mina",
+		signature1: {
+			upgrades: [
+				"+20 Heal Per Kill",
+				"+60 Damage",
+				"+6% Missing Health as Damage",
+			],
+		},
+		signature2: {
+			upgrades: [
+				"+3m Cast Range",
+				"On Cast: Gain +30% Fire Rate & add 8 bullets",
+				"-12s Cooldown",
+			],
+		},
+		signature3: {
+			upgrades: [
+				"On Proc: +160 m/s Move Speed for 3s",
+				"+4 Damage, +55 Bonus Damage",
+				"On Proc: -1 Stamina and 30% Slow for 3s",
+			],
+		},
+		signature4: {
+			upgrades: [
+				"+2 Damage",
+				"+40s Cooldown",
+				"On Hit: Deal +1% Current Health as Damage",
+			],
+		},
+	},
+	{
+		id: 64,
+		name: "Drifter",
+		signature1: {
+			upgrades: [
+				"+35 Bonus Damage",
+				"-7s Cooldown",
+				"Gain 45% Bullet Lifesteal against affected enemies for 4s",
+			],
+		},
+		signature2: {
+			upgrades: [
+				"+1%/sec Bleed Damage",
+				"+25% Fire Rate for 6s after ambushing",
+				"Enable 2 Ability Charges",
+			],
+		},
+		signature3: {
+			upgrades: [
+				"+2m/s Move Speed when around an isolated enemy hero",
+				"On isolated kill: reduces the cooldown of all your abilities by 15s and restores 3 stamina",
+				"+10% Amplified Damage",
+			],
+		},
+		signature4: {
+			upgrades: [
+				"+7 Spirit Damage Proc",
+				"-30s Cooldown and +3m/s Sprint Speed",
+				"+2s Duration and +1 Max Targets",
+			],
+		},
+	},
+	{
+		id: 66,
+		name: "Victor",
+		signature1: {
+			upgrades: [
+				"+40 Damage",
+				"On Hit: Apply 40% Slow for 2s",
+				"On Hero Hit: Heal for 20% of your missing health",
+			],
+		},
+		signature2: {
+			upgrades: [
+				"+1.5m Move Speed",
+				"+50 Total HP Regen",
+				"-4s Cooldown, On Cast: Purge non-ultimate debuffs",
+			],
+		},
+		signature3: {
+			upgrades: [
+				"Enemies receive 30% Slow",
+				"+10 Min DPS and +50 Max DPS",
+				"Enemies take +13% Damage",
+			],
+		},
+		signature4: {
+			upgrades: [
+				"On Revive: Gain 25% Fire Rate and 10 Spirit Damage per Bullet",
+				"+40% Rebirth Health",
+				"+200 Damage and 3m Radius",
+			],
+		},
+	},
+	{
+		id: 67,
+		name: "Paige",
+		signature1: {
+			upgrades: ["-5s Cooldown", "+2s Trail Duration", "+115 Damage & +30 DPS"],
+		},
+		signature2: {
+			upgrades: [
+				"+50 Barrier",
+				"On Barrier: +25% Fire Rate",
+				"Up to 2 additional allies gain 75% Barrier",
+			],
+		},
+		signature3: {
+			upgrades: [
+				"-6s Cooldown",
+				"+0.75s Immobilize Duration",
+				"On Hit: Reduce Spirit Resist by -18% for 6s",
+			],
+		},
+		signature4: {
+			upgrades: [
+				"+150 Heal Amount",
+				"Increase Width by +4 Steeds",
+				"+150 Damage and +0.5s Stun Duration",
+			],
+		},
+	},
+	{
+		id: 69,
+		name: "Doorman",
+		signature1: {
+			upgrades: [
+				"+2m Radius",
+				"+30 Impact Damage +50 Explosion Damage",
+				"Impacts cause half radius explosions",
+			],
+		},
+		signature2: {
+			upgrades: [
+				"+10s Duration",
+				"Grants a Barrier first time traveling through doors",
+				"+50m Doorway Distance +30m Cast Range",
+			],
+		},
+		signature3: {
+			upgrades: [
+				"-8s Cooldown",
+				"+15m Cast Range",
+				"+50 Cart Damage and deal 130 Damage and 1.2s stun on wall impact",
+			],
+		},
+		signature4: {
+			upgrades: [
+				"+2m Cast Range",
+				"Unstoppable while channeling",
+				"-50s Cooldown",
+			],
+		},
+	},
+	{
+		id: 72,
+		name: "Billy",
+		signature1: {
+			upgrades: [
+				"-10s Cooldown",
+				"+1.3m Radius",
+				"Now deals 60% Heavy Melee Damage",
+			],
+		},
+		signature2: {
+			upgrades: [
+				"On Impact: -50% cooldown",
+				"On Impact: +25% weapon damage for 5s",
+				"On Impact: Deal 6% max health as spirit damage",
+			],
+		},
+		signature3: {
+			upgrades: [
+				"While Blasted: +1.75m/s bonus move speed",
+				"+1 Bashdown Charge on use and +7% Wrecked Bullet Amp",
+				"+50 Melee Bonus Health",
+			],
+		},
+		signature4: {
+			upgrades: [
+				"-25s Cooldown",
+				"+15% spirit resist & bullet resist",
+				"+100 spirit damage On Pull: Unstoppable for 2s",
 			],
 		},
 	},
