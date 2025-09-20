@@ -2,7 +2,6 @@ import { useQuery } from "@tanstack/react-query";
 import {
 	createHeroDataByIdQueryOptions,
 	createItemDataByIdQueryOptions,
-	createPlayerHeroStatsQueryOptions,
 } from "@/queryOptions/createHeroQueryOptions";
 
 export const useHeroDataById = (id: number) => {
