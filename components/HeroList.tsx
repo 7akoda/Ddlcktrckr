@@ -125,7 +125,7 @@ const styles = StyleSheet.create((theme) => ({
 		flexDirection: "row",
 		backgroundColor: theme.colors.primary,
 		borderRadius: 4,
-		width: 300,
+		width: 330,
 		height: 40,
 		paddingHorizontal: 8,
 		marginVertical: 1,
