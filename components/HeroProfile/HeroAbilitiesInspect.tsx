@@ -5,6 +5,7 @@ import { Dimensions, View } from "react-native";
 import { useUnistyles } from "react-native-unistyles";
 import { heroMoves } from "../../data/moves";
 import { Image } from "react-native";
+import { StyleSheet } from "react-native-unistyles";
 type Props = {
 	id: number;
 	match: any;
@@ -16,8 +17,8 @@ export const HeroAbilitiesInspect = ({ id, match, abilityInspect }: Props) => {
 	const { itemDataById, isIdError, isIdLoading, idError } = useHeroDataById(id);
 	if (isIdLoading) return <LoadingIcon />;
 	if (isIdError) return <CustomText>{String(idError)}</CustomText>;
-	const stripHtml = (html: string) => {
-		return html
+	const formatDesc = (desc: string) => {
+		return desc
 			.replace(/<[^>]*>/g, "")
 			.replace(/&nbsp;/g, " ")
 			.replace(/&amp;/g, "&")
@@ -43,6 +44,15 @@ export const HeroAbilitiesInspect = ({ id, match, abilityInspect }: Props) => {
 	});
 	const numbers = [1, 2, 5];
 
+	const signatures = [
+		"signature1",
+		"signature2",
+		"signature3",
+		"signature4",
+	] as const;
+
+	const upgrades = matchedHero?.[signatures[abilityInspect]]?.upgrades ?? [];
+
 	return (
 		<View
 			style={{
@@ -67,7 +77,7 @@ export const HeroAbilitiesInspect = ({ id, match, abilityInspect }: Props) => {
 					borderColor: theme.colors.accent,
 				}}>
 				{match.description.desc
-					? stripHtml(match.description.desc)
+					? formatDesc(match.description.desc)
 					: "No description available"}
 			</CustomText>
 			<View
@@ -111,111 +121,37 @@ export const HeroAbilitiesInspect = ({ id, match, abilityInspect }: Props) => {
 					flexDirection: "row",
 					alignSelf: "center",
 				}}>
-				{abilityInspect === 0 &&
-					matchedHero?.signature1.upgrades.map((upgrade, index) => (
-						<>
-							<View
-								style={{
-									flexDirection: "row",
-									alignSelf: "center",
-								}}>
-								<CustomText
-									key={upgrade}
-									style={{
-										zIndex: 6,
-										textAlign: "center",
-										color: theme.colors.font,
-										fontSize: 10,
-										width: 116.6,
-										minHeight: 70,
-										paddingRight: 6,
-										paddingLeft: 6,
-										paddingTop: 4,
-										paddingBottom: 4,
-										borderWidth: 1,
-										borderRadius: 4,
-										borderColor: theme.colors.primary,
-									}}>
-									{upgrade}
-								</CustomText>
-							</View>
-						</>
+				<View style={{ flexDirection: "row", alignSelf: "center" }}>
+					{upgrades.map((upgrade) => (
+						<View
+							key={upgrade}
+							style={{
+								flexDirection: "row",
+								alignSelf: "center",
+							}}>
+							<CustomText style={styles.inspectAbility}>{upgrade}</CustomText>
+						</View>
 					))}
-
-				{abilityInspect === 1 &&
-					matchedHero?.signature2.upgrades.map((upgrade, index) => (
-						<>
-							<CustomText
-								key={upgrade}
-								style={{
-									zIndex: 6,
-									textAlign: "center",
-									color: theme.colors.font,
-									fontSize: 10,
-									width: 116.6,
-									minHeight: 70,
-									paddingRight: 6,
-									paddingLeft: 6,
-									paddingTop: 4,
-									paddingBottom: 4,
-									borderWidth: 1,
-									borderRadius: 4,
-									borderColor: theme.colors.primary,
-								}}>
-								{upgrade}
-							</CustomText>
-						</>
-					))}
-				{abilityInspect === 2 &&
-					matchedHero?.signature3.upgrades.map((upgrade, index) => (
-						<>
-							<CustomText
-								key={upgrade}
-								style={{
-									zIndex: 6,
-									textAlign: "center",
-									color: theme.colors.font,
-									fontSize: 10,
-									width: 116.6,
-									minHeight: 70,
-									paddingRight: 6,
-									paddingLeft: 6,
-									paddingTop: 4,
-									paddingBottom: 4,
-									borderWidth: 1,
-									borderRadius: 4,
-									borderColor: theme.colors.primary,
-								}}>
-								{upgrade}
-							</CustomText>
-						</>
-					))}
-
-				{abilityInspect === 3 &&
-					matchedHero?.signature4.upgrades.map((upgrade, index) => (
-						<>
-							<CustomText
-								key={upgrade}
-								style={{
-									zIndex: 6,
-									textAlign: "center",
-									color: theme.colors.font,
-									fontSize: 10,
-									width: 116.6,
-									minHeight: 70,
-									paddingRight: 6,
-									paddingLeft: 6,
-									paddingTop: 4,
-									paddingBottom: 4,
-									borderWidth: 1,
-									borderRadius: 4,
-									borderColor: theme.colors.primary,
-								}}>
-								{upgrade}
-							</CustomText>
-						</>
-					))}
+				</View>
 			</View>
 		</View>
 	);
 };
+
+const styles = StyleSheet.create((theme) => ({
+	inspectAbility: {
+		zIndex: 6,
+		textAlign: "center",
+		color: theme.colors.font,
+		fontSize: 10,
+		width: 116.6,
+		minHeight: 70,
+		paddingRight: 6,
+		paddingLeft: 6,
+		paddingTop: 4,
+		paddingBottom: 4,
+		borderWidth: 1,
+		borderRadius: 4,
+		borderColor: theme.colors.primary,
+	},
+}));
