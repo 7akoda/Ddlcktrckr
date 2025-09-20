@@ -1,9 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import {
-	createHeroDataByIdQueryOptions,
-	createItemDataByIdQueryOptions,
-	createPlayerHeroStatsQueryOptions,
-} from "@/queryOptions/createHeroQueryOptions";
+import { createPlayerHeroStatsQueryOptions } from "@/queryOptions/createHeroQueryOptions";
 
 export const usePlayerHeroData = (id: string) => {
 	const playerStats = useQuery(createPlayerHeroStatsQueryOptions(id));
