@@ -88,13 +88,13 @@ export const HeroAbilitiesInspect = ({ id, match, abilityInspect }: Props) => {
 				{numbers.map((num) => {
 					return (
 						<View
+							key={num}
 							style={{
 								width: 116.6,
 								flexDirection: "row",
 								justifyContent: "center",
 							}}>
 							<Image
-								key={num}
 								source={require("../../images/20px-Ability_point.png")}
 								style={{
 									alignSelf: "center",
