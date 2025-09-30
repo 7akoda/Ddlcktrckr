@@ -1,6 +1,6 @@
 import { View, Image, Pressable, Dimensions, ScrollView } from "react-native";
 import { useUnistyles, StyleSheet } from "react-native-unistyles";
-import { SvgComponent } from "./svgComponents/DDLKSvg";
+import { DDLKSvg } from "./svgComponents/DDLKSvg";
 import { Header } from "./Header";
 import { useState } from "react";
 
@@ -84,7 +84,7 @@ export const HeroProfile = ({ id }: Props) => {
 					width: "100%",
 					height: screenHeight,
 				}}>
-				<SvgComponent></SvgComponent>
+				<DDLKSvg></DDLKSvg>
 			</View>
 			<ScrollView
 				showsVerticalScrollIndicator={false}
