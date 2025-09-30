@@ -3,7 +3,7 @@ import { Dimensions, View } from "react-native";
 import Svg, { Defs, Path } from "react-native-svg";
 import { useUnistyles } from "react-native-unistyles";
 
-export const SvgComponent = () => {
+export const DDLKSvg = () => {
 	const { theme } = useUnistyles();
 
 	return (
