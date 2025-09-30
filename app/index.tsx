@@ -8,6 +8,7 @@ import { useFonts } from "@expo-google-fonts/rye";
 import { Rye_400Regular } from "@expo-google-fonts/rye";
 import { useUnistyles } from "react-native-unistyles";
 import { ItemList } from "@/components/ItemList";
+import { ItemListTest } from "@/components/ItemListTest";
 
 export default function Index() {
 	const { theme } = useUnistyles();
@@ -19,7 +20,7 @@ export default function Index() {
 	return (
 		<SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }}>
 			{/* <HeroPlayerList id={kodaNum} /> */}
-			<ItemList />
+			<ItemListTest />
 		</SafeAreaView>
 	);
 }
