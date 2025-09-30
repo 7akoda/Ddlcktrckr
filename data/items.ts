@@ -19,23 +19,23 @@ export const ItemImages: Items = {
 	Vitality: {
 		tier1: [
 			{
-				Name: "Extra_Health",
+				Name: "Extra Health",
 				Image: require("../images/Vitality/800/Extra_Health.png"),
 			},
 			{
-				Name: "Extra_Regen",
+				Name: "Extra Regen",
 				Image: require("../images/Vitality/800/Extra_Regen.png"),
 			},
 			{
-				Name: "Extra_Stamina",
+				Name: "Extra Stamina",
 				Image: require("../images/Vitality/800/Extra_Stamina.png"),
 			},
 			{
-				Name: "Healing_Rite",
+				Name: "Healing Rite",
 				Image: require("../images/Vitality/800/Healing_Rite.png"),
 			},
 			{
-				Name: "Melee_Lifesteal",
+				Name: "Melee Lifesteal",
 				Image: require("../images/Vitality/800/Melee_Lifesteal.png"),
 			},
 			{
@@ -43,33 +43,33 @@ export const ItemImages: Items = {
 				Image: require("../images/Vitality/800/Rebuttal.png"),
 			},
 			{
-				Name: "Sprint_Boots",
+				Name: "Sprint Boots",
 				Image: require("../images/Vitality/800/Sprint_Boots.png"),
 			},
 		],
 		tier2: [
 			{
-				Name: "Battle_Vest",
+				Name: "Battle Vest",
 				Image: require("../images/Vitality/1600/Battle_Vest.png"),
 			},
 			{
-				Name: "Bullet_Lifesteal",
+				Name: "Bullet Lifesteal",
 				Image: require("../images/Vitality/1600/Bullet_Lifesteal_(item).png"),
 			},
 			{
-				Name: "Debuff_Reducer",
+				Name: "Debuff Reducer",
 				Image: require("../images/Vitality/1600/Debuff_Reducer.png"),
 			},
 			{
-				Name: "Enchanter's_Emblem",
+				Name: "Enchanter's Emblem",
 				Image: require("../images/Vitality/1600/Enchanter's_Emblem.png"),
 			},
 			{
-				Name: "Enduring_Speed",
+				Name: "Enduring Speed",
 				Image: require("../images/Vitality/1600/Enduring_Speed.png"),
 			},
 			{
-				Name: "Guardian_Ward",
+				Name: "Guardian Ward",
 				Image: require("../images/Vitality/1600/Guardian_Ward.png"),
 			},
 			{
@@ -77,37 +77,37 @@ export const ItemImages: Items = {
 				Image: require("../images/Vitality/1600/Healbane.png"),
 			},
 			{
-				Name: "Healing_Booster",
+				Name: "Healing Booster",
 				Image: require("../images/Vitality/1600/Healing_Booster.png"),
 			},
 			{
-				Name: "Reactive_Barrier",
+				Name: "Reactive Barrier",
 				Image: require("../images/Vitality/1600/Reactive_Barrier.png"),
 			},
 			{
-				Name: "Restorative_Locket",
+				Name: "Restorative Locket",
 				Image: require("../images/Vitality/1600/Restorative_Locket.png"),
 			},
 			{
-				Name: "Return_Fire",
+				Name: "Return Fire",
 				Image: require("../images/Vitality/1600/Return_Fire.png"),
 			},
 			{
-				Name: "Spirit_Lifesteal",
+				Name: "Spirit Lifesteal",
 				Image: require("../images/Vitality/1600/Spirit_Lifesteal_(item).png"),
 			},
 			{
-				Name: "Spirit_Shielding",
+				Name: "Spirit Shielding",
 				Image: require("../images/Vitality/1600/Spirit_Shielding.png"),
 			},
 			{
-				Name: "Weapon_Shielding",
+				Name: "Weapon Shielding",
 				Image: require("../images/Vitality/1600/Weapon_Shielding.png"),
 			},
 		],
 		tier3: [
 			{
-				Name: "Bullet_Resilience",
+				Name: "Bullet Resilience",
 				Image: require("../images/Vitality/3200/Bullet_Resilience.png"),
 			},
 			{
@@ -115,7 +115,7 @@ export const ItemImages: Items = {
 				Image: require("../images/Vitality/3200/Counterspell.png"),
 			},
 			{
-				Name: "Debuff_Remover",
+				Name: "Debuff Remover",
 				Image: require("../images/Vitality/3200/Debuff_Remover.png"),
 			},
 			{
@@ -123,11 +123,11 @@ export const ItemImages: Items = {
 				Image: require("../images/Vitality/3200/Fortitude.png"),
 			},
 			{
-				Name: "Fury_Trance",
+				Name: "Fury Trance",
 				Image: require("../images/Vitality/3200/Fury_Trance.png"),
 			},
 			{
-				Name: "Healing_Nova",
+				Name: "Healing Nova",
 				Image: require("../images/Vitality/3200/Healing_Nova.png"),
 			},
 			{
@@ -135,41 +135,41 @@ export const ItemImages: Items = {
 				Image: require("../images/Vitality/3200/Lifestrike.png"),
 			},
 			{
-				Name: "Majestic_Leap",
+				Name: "Majestic Leap",
 				Image: require("../images/Vitality/3200/Majestic_Leap.png"),
 			},
 			{
-				Name: "Metal_Skin",
+				Name: "Metal Skin",
 				Image: require("../images/Vitality/3200/Metal_Skin.png"),
 			},
 			{
-				Name: "Rescue_Beam",
+				Name: "Rescue Beam",
 				Image: require("../images/Vitality/3200/Rescue_Beam.png"),
 			},
 			{
-				Name: "Spirit_Resilience",
+				Name: "Spirit Resilience",
 				Image: require("../images/Vitality/3200/Spirit_Resilience.png"),
 			},
 			{
-				Name: "Stamina_Mastery",
+				Name: "Stamina Mastery",
 				Image: require("../images/Vitality/3200/Stamina_Mastery.png"),
 			},
 			{
-				Name: "Trophy_Collector",
+				Name: "Trophy Collector",
 				Image: require("../images/Vitality/3200/Trophy_Collector.png"),
 			},
 			{
-				Name: "Veil_Walker",
+				Name: "Veil Walker",
 				Image: require("../images/Vitality/3200/Veil_Walker.png"),
 			},
 			{
-				Name: "Warp_Stone",
+				Name: "Warp Stone",
 				Image: require("../images/Vitality/3200/Warp_Stone.png"),
 			},
 		],
 		tier4: [
 			{
-				Name: "Cheat_Death",
+				Name: "Cheat Death",
 				Image: require("../images/Vitality/6400/Cheat_Death.png"),
 			},
 			{
@@ -177,15 +177,15 @@ export const ItemImages: Items = {
 				Image: require("../images/Vitality/6400/Colossus.png"),
 			},
 			{
-				Name: "Divine_Barrier",
+				Name: "Divine Barrier",
 				Image: require("../images/Vitality/6400/Divine_Barrier.png"),
 			},
 			{
-				Name: "Diviner's_Kevlar",
+				Name: "Diviner's Kevlar",
 				Image: require("../images/Vitality/6400/Diviner's_Kevlar.png"),
 			},
 			{
-				Name: "Healing_Tempo",
+				Name: "Healing Tempo",
 				Image: require("../images/Vitality/6400/Healing_Tempo.png"),
 			},
 			{
@@ -205,15 +205,15 @@ export const ItemImages: Items = {
 				Image: require("../images/Vitality/6400/Leech.png"),
 			},
 			{
-				Name: "Phantom_Strike",
+				Name: "Phantom Strike",
 				Image: require("../images/Vitality/6400/Phantom_Strike.png"),
 			},
 			{
-				Name: "Plated_Armor",
+				Name: "Plated Armor",
 				Image: require("../images/Vitality/6400/Plated_Armor.png"),
 			},
 			{
-				Name: "Siphon_Bullets",
+				Name: "Siphon Bullets",
 				Image: require("../images/Vitality/6400/Siphon_Bullets.png"),
 			},
 			{
@@ -225,7 +225,7 @@ export const ItemImages: Items = {
 				Image: require("../images/Vitality/6400/Unstoppable.png"),
 			},
 			{
-				Name: "Vampiric_Burst",
+				Name: "Vampiric Burst",
 				Image: require("../images/Vitality/6400/Vampiric_Burst.png"),
 			},
 			{
@@ -238,38 +238,38 @@ export const ItemImages: Items = {
 	Weapon: {
 		tier1: [
 			{
-				Name: "Close_Quarters",
+				Name: "Close Quarters",
 				Image: require("../images/Weapon/800/Close_Quarters.png"),
 			},
 			{
-				Name: "Extended_Magazine",
+				Name: "Extended Magazine",
 				Image: require("../images/Weapon/800/Extended_Magazine.png"),
 			},
 			{
-				Name: "Headshot_Booster",
+				Name: "Headshot Booster",
 				Image: require("../images/Weapon/800/Headshot_Booster.png"),
 			},
 			{
-				Name: "High-Velocity_Rounds",
+				Name: "High-Velocity Rounds",
 				Image: require("../images/Weapon/800/High-Velocity_Rounds.png"),
 			},
 			{
-				Name: "Monster_Rounds",
+				Name: "Monster Rounds",
 				Image: require("../images/Weapon/800/Monster_Rounds.png"),
 			},
 			{
-				Name: "Rapid_Rounds",
+				Name: "Rapid Rounds",
 				Image: require("../images/Weapon/800/Rapid_Rounds.png"),
 			},
 			{
-				Name: "Restorative_Shot",
+				Name: "Restorative Shot",
 				Image: require("../images/Weapon/800/Restorative_Shot.png"),
 			},
 		],
 
 		tier2: [
 			{
-				Name: "Active_Reload",
+				Name: "Active Reload",
 				Image: require("../images/Weapon/1600/Active_Reload.png"),
 			},
 			{
@@ -281,57 +281,57 @@ export const ItemImages: Items = {
 				Image: require("../images/Weapon/1600/Fleetfoot.png"),
 			},
 			{
-				Name: "Intensifying_Magazine",
+				Name: "Intensifying Magazine",
 				Image: require("../images/Weapon/1600/Intensifying_Magazine.png"),
 			},
 			{
-				Name: "Kinetic_Dash",
+				Name: "Kinetic Dash",
 				Image: require("../images/Weapon/1600/Kinetic_Dash.png"),
 			},
 			{
-				Name: "Long_Range",
+				Name: "Long Range",
 				Image: require("../images/Weapon/1600/Long_Range.png"),
 			},
 			{
-				Name: "Melee_Charge",
+				Name: "Melee Charge",
 				Image: require("../images/Weapon/1600/Melee_Charge.png"),
 			},
 			{
-				Name: "Mystic_Shot",
+				Name: "Mystic Shot",
 				Image: require("../images/Weapon/1600/Mystic_Shot.png"),
 			},
 			{
-				Name: "Opening_Rounds",
+				Name: "Opening Rounds",
 				Image: require("../images/Weapon/1600/Opening_Rounds.png"),
 			},
 			{
-				Name: "Slowing_Bullets",
+				Name: "Slowing Bullets",
 				Image: require("../images/Weapon/1600/Slowing_Bullets.png"),
 			},
 			{
-				Name: "Spirit_Shredder_Bullets",
+				Name: "Spirit Shredder Bullets",
 				Image: require("../images/Weapon/1600/Spirit_Shredder_Bullets.png"),
 			},
 			{
-				Name: "Split_Shot",
+				Name: "Split Shot",
 				Image: require("../images/Weapon/1600/Split_Shot.png"),
 			},
 			{
-				Name: "Swift_Striker",
+				Name: "Swift Striker",
 				Image: require("../images/Weapon/1600/Swift_Striker.png"),
 			},
 			{
-				Name: "Titanic_Magazine",
+				Name: "Titanic Magazine",
 				Image: require("../images/Weapon/1600/Titanic_Magazine.png"),
 			},
 			{
-				Name: "Weakening_Headshot",
+				Name: "Weakening Headshot",
 				Image: require("../images/Weapon/1600/Weakening_Headshot.png"),
 			},
 		],
 		tier3: [
 			{
-				Name: "Alchemical_Fire",
+				Name: "Alchemical Fire",
 				Image: require("../images/Weapon/3200/Alchemical_Fire.png"),
 			},
 			{
@@ -339,23 +339,23 @@ export const ItemImages: Items = {
 				Image: require("../images/Weapon/3200/Berserker.png"),
 			},
 			{
-				Name: "Blood_Tribute",
+				Name: "Blood Tribute",
 				Image: require("../images/Weapon/3200/Blood_Tribute.png"),
 			},
 			{
-				Name: "Burst_Fire",
+				Name: "Burst Fire",
 				Image: require("../images/Weapon/3200/Burst_Fire.png"),
 			},
 			{
-				Name: "Cultist_Sacrifice",
+				Name: "Cultist Sacrifice",
 				Image: require("../images/Weapon/3200/Cultist_Sacrifice.png"),
 			},
 			{
-				Name: "Escalating_Resilience",
+				Name: "Escalating Resilience",
 				Image: require("../images/Weapon/3200/Escalating_Resilience.png"),
 			},
 			{
-				Name: "Express_Shot",
+				Name: "Express Shot",
 				Image: require("../images/Weapon/3200/Express_Shot.png"),
 			},
 			{
@@ -363,19 +363,19 @@ export const ItemImages: Items = {
 				Image: require("../images/Weapon/3200/Headhunter.png"),
 			},
 			{
-				Name: "Heroic_Aura",
+				Name: "Heroic Aura",
 				Image: require("../images/Weapon/3200/Heroic_Aura.png"),
 			},
 			{
-				Name: "Hollow_Point",
+				Name: "Hollow Point",
 				Image: require("../images/Weapon/3200/Hollow_Point.png"),
 			},
 			{
-				Name: "Hunter's_Aura",
+				Name: "Hunter's Aura",
 				Image: require("../images/Weapon/3200/Hunter's_Aura.png"),
 			},
 			{
-				Name: "Point_Blank",
+				Name: "Point Blank",
 				Image: require("../images/Weapon/3200/Point_Blank.png"),
 			},
 			{
@@ -383,26 +383,26 @@ export const ItemImages: Items = {
 				Image: require("../images/Weapon/3200/Sharpshooter.png"),
 			},
 			{
-				Name: "Spirit_Rend",
+				Name: "Spirit Rend",
 				Image: require("../images/Weapon/3200/Spirit_Rend.png"),
 			},
 			{
-				Name: "Tesla_Bullets",
+				Name: "Tesla Bullets",
 				Image: require("../images/Weapon/3200/Tesla_Bullets.png"),
 			},
 			{
-				Name: "Toxic_Bullets",
+				Name: "Toxic Bullets",
 				Image: require("../images/Weapon/3200/Toxic_Bullets.png"),
 			},
 			{
-				Name: "Weighted_Shots",
+				Name: "Weighted Shots",
 				Image: require("../images/Weapon/3200/Weighted_Shots.png"),
 			},
 		],
 
 		tier4: [
 			{
-				Name: "Armor_Piercing_Rounds",
+				Name: "Armor Piercing Rounds",
 				Image: require("../images/Weapon/6400/Armor_Piercing_Rounds.png"),
 			},
 			{
@@ -410,11 +410,11 @@ export const ItemImages: Items = {
 				Image: require("../images/Weapon/6400/Capacitor.png"),
 			},
 			{
-				Name: "Crippling_Headshot",
+				Name: "Crippling Headshot",
 				Image: require("../images/Weapon/6400/Crippling_Headshot.png"),
 			},
 			{
-				Name: "Crushing_Fists",
+				Name: "Crushing Fists",
 				Image: require("../images/Weapon/6400/Crushing_Fists.png"),
 			},
 			{
@@ -422,11 +422,11 @@ export const ItemImages: Items = {
 				Image: require("../images/Weapon/6400/Frenzy.png"),
 			},
 			{
-				Name: "Glass_Cannon",
+				Name: "Glass Cannon",
 				Image: require("../images/Weapon/6400/Glass_Cannon.png"),
 			},
 			{
-				Name: "Lucky_Shot",
+				Name: "Lucky Shot",
 				Image: require("../images/Weapon/6400/Lucky_Shot.png"),
 			},
 			{
@@ -434,7 +434,7 @@ export const ItemImages: Items = {
 				Image: require("../images/Weapon/6400/Ricochet.png"),
 			},
 			{
-				Name: "Shadow_Weave",
+				Name: "Shadow Weave",
 				Image: require("../images/Weapon/6400/Shadow_Weave.png"),
 			},
 			{
@@ -446,7 +446,7 @@ export const ItemImages: Items = {
 				Image: require("../images/Weapon/6400/Spellslinger.png"),
 			},
 			{
-				Name: "Spiritual_Overflow",
+				Name: "Spiritual Overflow",
 				Image: require("../images/Weapon/6400/Spiritual_Overflow.png"),
 			},
 		],
@@ -454,78 +454,78 @@ export const ItemImages: Items = {
 	Spirit: {
 		tier1: [
 			{
-				Name: "Extra_Charge",
+				Name: "Extra Charge",
 				Image: require("../images/Spirit/800/Extra_Charge.png"),
 			},
 			{
-				Name: "Extra_Spirit",
+				Name: "Extra Spirit",
 				Image: require("../images/Spirit/800/Extra_Spirit.png"),
 			},
 			{
-				Name: "Mystic_Burst",
+				Name: "Mystic Burst",
 				Image: require("../images/Spirit/800/Mystic_Burst.png"),
 			},
 			{
-				Name: "Mystic_Expansion",
+				Name: "Mystic Expansion",
 				Image: require("../images/Spirit/800/Mystic_Expansion.png"),
 			},
 			{
-				Name: "Mystic_Regeneration",
+				Name: "Mystic Regeneration",
 				Image: require("../images/Spirit/800/Mystic_Regeneration.png"),
 			},
 			{
-				Name: "Rusted_Barrel",
+				Name: "Rusted Barrel",
 				Image: require("../images/Spirit/800/Rusted_Barrel.png"),
 			},
 			{
-				Name: "Spirit_Strike",
+				Name: "Spirit Strike",
 				Image: require("../images/Spirit/800/Spirit_Strike.png"),
 			},
 		],
 
 		tier2: [
 			{
-				Name: "Arcane_Surge",
+				Name: "Arcane Surge",
 				Image: require("../images/Spirit/1600/Arcane_Surge.png"),
 			},
 			{
-				Name: "Bullet_Resist_Shredder",
+				Name: "Bullet Resist Shredder",
 				Image: require("../images/Spirit/1600/Bullet_Resist_Shredder.png"),
 			},
 			{
-				Name: "Cold_Front",
+				Name: "Cold Front",
 				Image: require("../images/Spirit/1600/Cold_Front.png"),
 			},
 			{
-				Name: "Compress_Cooldown",
+				Name: "Compress Cooldown",
 				Image: require("../images/Spirit/1600/Compress_Cooldown.png"),
 			},
 			{
-				Name: "Duration_Extender",
+				Name: "Duration Extender",
 				Image: require("../images/Spirit/1600/Duration_Extender.png"),
 			},
 			{
-				Name: "Improved_Spirit",
+				Name: "Improved Spirit",
 				Image: require("../images/Spirit/1600/Improved_Spirit.png"),
 			},
 			{
-				Name: "Mystic_Slow",
+				Name: "Mystic Slow",
 				Image: require("../images/Spirit/1600/Mystic_Slow.png"),
 			},
 			{
-				Name: "Mystic_Vulnerability",
+				Name: "Mystic Vulnerability",
 				Image: require("../images/Spirit/1600/Mystic_Vulnerability.png"),
 			},
 			{
-				Name: "Quicksilver_Reload",
+				Name: "Quicksilver Reload",
 				Image: require("../images/Spirit/1600/Quicksilver_Reload.png"),
 			},
 			{
-				Name: "Slowing_Hex",
+				Name: "Slowing Hex",
 				Image: require("../images/Spirit/1600/Slowing_Hex.png"),
 			},
 			{
-				Name: "Spirit_Sap",
+				Name: "Spirit Sap",
 				Image: require("../images/Spirit/1600/Spirit_Sap.png"),
 			},
 			{
@@ -540,11 +540,11 @@ export const ItemImages: Items = {
 				Image: require("../images/Spirit/3200/Decay.png"),
 			},
 			{
-				Name: "Disarming_Hex",
+				Name: "Disarming Hex",
 				Image: require("../images/Spirit/3200/Disarming_Hex.png"),
 			},
 			{
-				Name: "Greater_Expansion",
+				Name: "Greater Expansion",
 				Image: require("../images/Spirit/3200/Greater_Expansion.png"),
 			},
 			{
@@ -552,31 +552,31 @@ export const ItemImages: Items = {
 				Image: require("../images/Spirit/3200/Knockdown.png"),
 			},
 			{
-				Name: "Radiant_Regeneration",
+				Name: "Radiant Regeneration",
 				Image: require("../images/Spirit/3200/Radiant_Regeneration.png"),
 			},
 			{
-				Name: "Rapid_Recharge",
+				Name: "Rapid Recharge",
 				Image: require("../images/Spirit/3200/Rapid_Recharge.png"),
 			},
 			{
-				Name: "Silence_Wave",
+				Name: "Silence Wave",
 				Image: require("../images/Spirit/3200/Silence_Wave.png"),
 			},
 			{
-				Name: "Spirit_Snatch",
+				Name: "Spirit Snatch",
 				Image: require("../images/Spirit/3200/Spirit_Snatch.png"),
 			},
 			{
-				Name: "Superior_Cooldown",
+				Name: "Superior Cooldown",
 				Image: require("../images/Spirit/3200/Superior_Cooldown.png"),
 			},
 			{
-				Name: "Superior_Duration",
+				Name: "Superior Duration",
 				Image: require("../images/Spirit/3200/Superior_Duration.png"),
 			},
 			{
-				Name: "Surge_of_Power",
+				Name: "Surge of Power",
 				Image: require("../images/Spirit/3200/Surge_of_Power.png"),
 			},
 			{
@@ -584,17 +584,17 @@ export const ItemImages: Items = {
 				Image: require("../images/Spirit/3200/Tankbuster.png"),
 			},
 			{
-				Name: "Torment_Pulse",
+				Name: "Torment Pulse",
 				Image: require("../images/Spirit/3200/Torment_Pulse.png"),
 			},
 		],
 		tier4: [
 			{
-				Name: "Arctic_Blast",
+				Name: "Arctic Blast",
 				Image: require("../images/Spirit/6400/Arctic_Blast.png"),
 			},
 			{
-				Name: "Boundless_Spirit",
+				Name: "Boundless Spirit",
 				Image: require("../images/Spirit/6400/Boundless_Spirit.png"),
 			},
 			{
@@ -602,35 +602,35 @@ export const ItemImages: Items = {
 				Image: require("../images/Spirit/6400/Curse.png"),
 			},
 			{
-				Name: "Echo_Shard",
+				Name: "Echo Shard",
 				Image: require("../images/Spirit/6400/Echo_Shard.png"),
 			},
 			{
-				Name: "Escalating_Exposure",
+				Name: "Escalating Exposure",
 				Image: require("../images/Spirit/6400/Escalating_Exposure.png"),
 			},
 			{
-				Name: "Ethereal_Shift",
+				Name: "Ethereal Shift",
 				Image: require("../images/Spirit/6400/Ethereal_Shift.png"),
 			},
 			{
-				Name: "Focus_Lens",
+				Name: "Focus Lens",
 				Image: require("../images/Spirit/6400/Focus_Lens.png"),
 			},
 			{
-				Name: "Lightning_Scroll",
+				Name: "Lightning Scroll",
 				Image: require("../images/Spirit/6400/Lightning_Scroll.png"),
 			},
 			{
-				Name: "Magic_Carpet",
+				Name: "Magic Carpet",
 				Image: require("../images/Spirit/6400/Magic_Carpet.png"),
 			},
 			{
-				Name: "Mercurial_Magnum",
+				Name: "Mercurial Magnum",
 				Image: require("../images/Spirit/6400/Mercurial_Magnum.png"),
 			},
 			{
-				Name: "Mystic_Reverb",
+				Name: "Mystic Reverb",
 				Image: require("../images/Spirit/6400/Mystic_Reverb.png"),
 			},
 			{
@@ -642,15 +642,15 @@ export const ItemImages: Items = {
 				Image: require("../images/Spirit/6400/Scourge.png"),
 			},
 			{
-				Name: "Spirit_Burn",
+				Name: "Spirit Burn",
 				Image: require("../images/Spirit/6400/Spirit_Burn.png"),
 			},
 			{
-				Name: "Transcendent_Cooldown",
+				Name: "Transcendent Cooldown",
 				Image: require("../images/Spirit/6400/Transcendent_Cooldown.png"),
 			},
 			{
-				Name: "Vortex_Web",
+				Name: "Vortex Web",
 				Image: require("../images/Spirit/6400/Vortex_Web.png"),
 			},
 		],
