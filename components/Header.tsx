@@ -1,26 +1,22 @@
-import {
-	ExternalPathString,
-	Link,
-	RelativePathString,
-	router,
-} from "expo-router";
+import { router } from "expo-router";
 import {
 	Search,
 	ArrowLeft,
 	Settings,
 	ArrowDownWideNarrow,
 } from "lucide-react-native";
-import { Pressable, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { StyleSheet } from "react-native-unistyles";
+import { View } from "react-native";
 import { useUnistyles } from "react-native-unistyles";
 import { CustomText } from "./CustomText";
+import { Menu } from "./Menu";
 
 type SortableHeader = {
 	back: boolean;
 	sortable: true;
-	sortList: () => void;
-	sortText: string;
+	sortList: (value: string) => void;
+	sortText: string[];
+	sortAmount: number;
+	sort: string;
 };
 
 type NonSortableHeader = {
@@ -53,29 +49,54 @@ export const Header = (props: HeaderProps) => {
 				/>
 			)}
 			<View style={{ flex: 1 }}></View>
-			{props.sortable && (
-				<CustomText
-					style={{
-						color: theme.colors.font,
-						textAlign: "center",
-						paddingTop: 3,
-						fontSize: 7,
-						alignSelf: "center",
-						width: 40,
-						height: 18,
-						borderRadius: 4,
-						borderColor: theme.colors.accent,
-						borderWidth: 1,
-					}}>
-					{props.sortText}
-				</CustomText>
-			)}
-			{props.sortable && (
+			{props.sortable &&
+				Array.from({ length: props.sortAmount }, (_, i) =>
+					props.sort == props.sortText[i] ? (
+						<CustomText
+							onPress={() => props.sortList(props.sortText[i])}
+							key={i}
+							style={{
+								color: theme.colors.selected,
+								textAlign: "center",
+								paddingTop: 3,
+								marginHorizontal: 5,
+								fontSize: 7,
+								alignSelf: "center",
+								width: 35,
+								height: 18,
+								borderRadius: 4,
+								borderColor: theme.colors.accent,
+								borderWidth: 1,
+							}}>
+							{" "}
+							{props.sortText[i]}
+						</CustomText>
+					) : (
+						<CustomText
+							onPress={() => props.sortList(props.sortText[i])}
+							key={i}
+							style={{
+								color: theme.colors.font,
+								textAlign: "center",
+								paddingTop: 3,
+								marginHorizontal: 5,
+								fontSize: 7,
+								alignSelf: "center",
+								width: 35,
+								height: 18,
+								borderRadius: 4,
+								borderColor: theme.colors.accent,
+								borderWidth: 1,
+							}}>
+							{props.sortText[i]}
+						</CustomText>
+					)
+				)}
+			{props.sortable && props.sortAmount > 4 && (
 				<ArrowDownWideNarrow
 					size={20}
 					color={theme.colors.accent}
 					style={{ alignSelf: "center", paddingRight: 30 }}
-					onPress={() => props.sortList()}
 				/>
 			)}
 
