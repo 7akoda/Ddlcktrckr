@@ -25,11 +25,9 @@ const lightTheme = {
 		background: "#b9bbb4",
 		font: "#13100e",
 		accent: "#754043",
+		selected: "#8A585B",
 		bannerFont: "#dadcd6",
-
-		// any nesting, spreading, arrays, etc.
 	},
-	// functions, external imports, etc.
 	gap: (v: number) => v * 8,
 };
 
@@ -40,6 +38,7 @@ const darkTheme = {
 		background: "#1F2120",
 		font: "#C2C5BB",
 		accent: "#8A585B",
+		selected: "#F5C542",
 		bannerFont: "#C2C5BB",
 	},
 	gap: (v: number) => v * 8,
