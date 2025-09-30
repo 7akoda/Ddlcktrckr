@@ -50,6 +50,7 @@ export const HeroList = () => {
 				sortable={true}
 				sortList={() => setSort(!sort)}
 				sortText={sort ? "Winrate" : "Pickrate"}
+				sortAmount={2}
 			/>
 			<FlatList
 				data={sorted}
