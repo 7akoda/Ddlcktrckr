@@ -11,7 +11,8 @@ import { LoadingIcon } from "./LoadingIcon";
 import { useHeroData } from "@/hooks/useHeroData";
 
 export const HeroList = () => {
-	const [sort, setSort] = useState(true);
+	const [sort, setSort] = useState("Winrate");
+
 	const { theme } = useUnistyles();
 
 	const { heroData, error, isLoading, isError } = useHeroData();
@@ -38,19 +39,26 @@ export const HeroList = () => {
 	const sortedWinrate = heroList.slice().sort((a, b) => b.winRate - a.winRate);
 	const sortedPopular = heroList.slice().sort((a, b) => b.matches - a.matches);
 
-	if (sort === true) {
+	if (sort === "Winrate") {
 		sorted = sortedWinrate;
-	} else if (sort === false) {
+	} else if (sort === "Pickrate") {
 		sorted = sortedPopular;
 	}
+
+	const handleSort = (value: string) => {
+		sort == value ? setSort("") : setSort(value);
+	};
+
 	return (
 		<View style={styles.primaryView}>
 			<Header
+				sort={sort}
 				back={false}
 				sortable={true}
-				sortList={() => setSort(!sort)}
-				sortText={sort ? "Winrate" : "Pickrate"}
+				sortFunc={(value) => handleSort(value)}
+				sortText={["Pickrate", "Winrate"]}
 				sortAmount={2}
+				itemList={false}
 			/>
 			<FlatList
 				data={sorted}
@@ -85,7 +93,7 @@ export const HeroList = () => {
 						</Link>
 						<View style={{ flex: 1 }} />
 
-						{sort == true ? (
+						{sort == "Winrate" ? (
 							<View style={{ height: 10, alignSelf: "center" }}>
 								<Progress.Bar
 									progress={item.winRate / 100}

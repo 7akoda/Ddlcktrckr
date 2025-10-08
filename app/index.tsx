@@ -19,7 +19,7 @@ export default function Index() {
 	});
 	return (
 		<SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }}>
-			{/* <HeroPlayerList id={kodaNum} /> */}
+			{/* <HeroList /> */}
 			<ItemListTest />
 		</SafeAreaView>
 	);

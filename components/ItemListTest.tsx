@@ -10,34 +10,47 @@ import { ItemImages } from "@/data/items";
 
 export const ItemListTest = () => {
 	const [sort, setSort] = useState("");
+	const [itemType, setItemType] = useState("Weapon");
+
 	const { theme } = useUnistyles();
 
-	let sorted: any[] = [];
-	sort == ""
-		? (sorted = [
-				...ItemImages.Spirit.tier1,
-				...ItemImages.Spirit.tier2,
-				...ItemImages.Spirit.tier3,
-				...ItemImages.Spirit.tier4,
-		  ])
-		: sort == "800"
-		? (sorted = ItemImages.Spirit.tier1)
-		: sort == "1600"
-		? (sorted = ItemImages.Spirit.tier2)
-		: sort == "3200"
-		? (sorted = ItemImages.Spirit.tier3)
-		: (sorted = ItemImages.Spirit.tier4);
+	const itemTypeIndex = itemType as keyof typeof ItemImages;
+
+	const tiers = ["tier1", "tier2", "tier3", "tier4"] as const;
+	const types = ["Spirit", "Vitality", "Weapon"] as const;
+
+	const tierMap = {
+		"": tiers,
+		"800": ["tier1"],
+		"1600": ["tier2"],
+		"3200": ["tier3"],
+		"6400": ["tier4"],
+	} as const;
+
+	const activeTypes = itemType === "" ? types : [itemTypeIndex];
+	const activeTiers = tierMap[sort as keyof typeof tierMap] ?? [];
+
+	const sorted = activeTypes.flatMap((type) =>
+		activeTiers.flatMap((tier) => ItemImages[type][tier])
+	);
 
 	const handleSort = (value: string) => {
 		sort == value ? setSort("") : setSort(value);
 	};
 
+	const handleTypePress = (value: string) => {
+		itemType !== value ? setItemType(value) : setItemType("");
+	};
+
 	return (
 		<View style={styles.primaryView}>
 			<Header
+				itemType={itemType}
+				typeFunc={(value) => handleTypePress(value)}
+				itemList={true}
 				sort={sort}
 				sortAmount={4}
-				sortList={(value) => handleSort(value)}
+				sortFunc={(value) => handleSort(value)}
 				sortText={["800", "1600", "3200", "6400"]}
 				back={false}
 				sortable={true}
@@ -60,7 +73,7 @@ export const ItemListTest = () => {
 						<Link
 							href={{
 								pathname: `/[id]`,
-								params: { id: item.id },
+								params: { id: item.Name },
 							}}
 							push
 							asChild>
