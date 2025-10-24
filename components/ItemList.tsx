@@ -8,9 +8,9 @@ import { CustomText } from "./CustomText";
 import { LoadingIcon } from "./LoadingIcon";
 import { ItemImages } from "@/data/items";
 
-export const ItemListTest = () => {
+export const ItemList = () => {
 	const [sort, setSort] = useState("");
-	const [itemType, setItemType] = useState("Weapon");
+	const [itemType, setItemType] = useState("");
 
 	const { theme } = useUnistyles();
 

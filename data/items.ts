@@ -3,10 +3,26 @@ type Items = {
 	Spirit: Item;
 	Weapon: Item;
 };
-interface ItemData {
+interface BaseItemData {
 	Name: string;
 	Image: number;
+	Flat: string[];
+	Description: string | null;
+	Upgrades: string[];
+	Downgrades: string[];
+	Nuance: string[] | null;
 }
+interface ClockItemData extends BaseItemData {
+	Clock: true;
+	Timer: null | string;
+	Type: string;
+	ActiveDescription: null | string[];
+}
+
+interface NonClockItemData extends BaseItemData {
+	Clock: false;
+}
+type ItemData = ClockItemData | NonClockItemData;
 
 interface Item {
 	tier1: ItemData[];
@@ -21,88 +37,309 @@ export const ItemImages: Items = {
 			{
 				Name: "Extra Health",
 				Image: require("../images/Vitality/800/Extra_Health.png"),
+				Flat: ["+185 Bonus Health"],
+				Upgrades: ["Colossus", "Fortitude"],
+				Clock: false,
+				Description: null,
+				Nuance: null,
+				Downgrades: [],
 			},
 			{
 				Name: "Extra Regen",
 				Image: require("../images/Vitality/800/Extra_Regen.png"),
+				Flat: ["+3 Health Regen"],
+				Upgrades: ["Healing Booster"],
+				Clock: false,
+				Description: null,
+				Nuance: null,
+				Downgrades: [],
 			},
 			{
 				Name: "Extra Stamina",
 				Image: require("../images/Vitality/800/Extra_Stamina.png"),
+				Flat: ["+1 Stamina", "+12% Stamina Recovery"],
+				Upgrades: ["Stamina Mastery", "Kinetic Dash", "Arcane Surge"],
+				Clock: false,
+				Description: null,
+				Nuance: null,
+				Downgrades: [],
 			},
 			{
 				Name: "Healing Rite",
 				Image: require("../images/Vitality/800/Healing_Rite.png"),
+				Flat: [
+					"300 x .93 spirit power Total HP Regen",
+					"+2m/s Sprint Speed (Conditional)",
+					"20s Regen Duration",
+					"30m Cast Range",
+				],
+				Description:
+					"Grant Regen and Sprint Speed to the target. Gets dispelled if you take damage from enemy players or objectives. Can be self-cast.",
+				Clock: true,
+				Timer: "70s",
+				Upgrades: ["Rescue Beam", "Healing Nova"],
+				Type: "Active",
+				Nuance: null,
+				ActiveDescription: null,
+				Downgrades: [],
 			},
 			{
 				Name: "Melee Lifesteal",
 				Image: require("../images/Vitality/800/Melee_Lifesteal.png"),
+				Description: "Your next Melee attack heals you.",
+				Nuance: [
+					"This heal is 30% effective vs non-heroes. Cooldown is 2x as long for Light Melee hits.",
+				],
+				Flat: ["+12% Melee Damage", "100 Heal on Melee Hit"],
+				Clock: false,
+				Upgrades: ["Lifestrike"],
+				Downgrades: [],
 			},
 			{
 				Name: "Rebuttal",
 				Image: require("../images/Vitality/800/Rebuttal.png"),
+				Description:
+					"On a successful Parry against an enemy Hero, Heal yourself for the damage parried and returns that damage to the target, and temporarily gain increased damage.",
+				Flat: ["-2s Parry Cooldown", "+18% Melee Resist", "+75 Bonus Health"],
+				Clock: true,
+				Timer: null,
+				Type: "Passive",
+				Nuance: null,
+				ActiveDescription: [
+					"+30% Bonus Damage (Conditional)",
+					"6s Buff Duration",
+				],
+				Upgrades: [],
+				Downgrades: [],
 			},
 			{
 				Name: "Sprint Boots",
 				Image: require("../images/Vitality/800/Sprint_Boots.png"),
+				Flat: ["+2.25m/s Sprint Speed", "+2 Out of Combat Regen"],
+				Upgrades: ["Trophy Collector", "Enduring Speed"],
+				Clock: false,
+				Nuance: null,
+				Description: null,
+				Downgrades: [],
 			},
 		],
 		tier2: [
 			{
 				Name: "Battle Vest",
 				Image: require("../images/Vitality/1600/Battle_Vest.png"),
+				Flat: ["+18% Bullet Resist", "+3 Out of Combat Regen"],
+				Description:
+					"While you are above 65% health, gain weapon damage and bonus fire rate.",
+				Clock: true,
+				Timer: null,
+				Type: "Passive",
+				ActiveDescription: [
+					"+15% Weapon Damage (Conditional)",
+					"+8% Fire Rate (Conditional)",
+				],
+				Nuance: null,
+				Upgrades: [],
+				Downgrades: [],
 			},
 			{
 				Name: "Bullet Lifesteal",
 				Image: require("../images/Vitality/1600/Bullet_Lifesteal_(item).png"),
+				Flat: ["+16% Bullet Lifesteal", "+90 Bonus Health"],
+				Clock: false,
+				Description: null,
+				Nuance: null,
+				Upgrades: ["Leech", "Fury Trance", "Vampiric Burst"],
+				Downgrades: [],
 			},
 			{
 				Name: "Debuff Reducer",
 				Image: require("../images/Vitality/1600/Debuff_Reducer.png"),
+				Flat: ["+50 Bonus Health", "+20% Debuff Resist"],
+				Clock: false,
+				Description:
+					"Reduces the duration of all negative effects applied to you.",
+				Upgrades: ["Debuff Remover", "Unstoppable"],
+				Nuance: null,
+				Downgrades: [],
 			},
 			{
 				Name: "Enchanter's Emblem",
 				Image: require("../images/Vitality/1600/Enchanter's_Emblem.png"),
+				Flat: ["+15% Spirit Resist", "+2 Out of Combat Regen"],
+				Description:
+					"While you are above 65% health, gain bonus Spirit and Cooldown Reduction.",
+				Clock: true,
+				Timer: null,
+				Type: "Passive",
+				ActiveDescription: [
+					"+15 Spirit Power (Conditional)",
+					"+7% Ability Cooldown Reduction (Conditional)",
+				],
+				Nuance: null,
+				Upgrades: [],
+				Downgrades: [],
 			},
 			{
 				Name: "Enduring Speed",
 				Image: require("../images/Vitality/1600/Enduring_Speed.png"),
+				Flat: [
+					" +2.25m/s Move Speed",
+					"+2 Out of Combat Regen",
+					"+30% Slow Resist",
+				],
+				Description: "Reduces the effect of enemy Move Speed penalties.",
+				Clock: false,
+				Nuance: null,
+				Upgrades: ["Juggernaut"],
+				Downgrades: ["Sprint Boots"],
 			},
 			{
 				Name: "Guardian Ward",
 				Image: require("../images/Vitality/1600/Guardian_Ward.png"),
+				Downgrades: [],
+				Upgrades: ["Divine Barrier"],
+				Flat: ["+10% Ability Range"],
+				Clock: true,
+				Timer: "40s",
+				Type: "Active",
+				Description:
+					"Provide the target with a Barrier and temporary Move Speed.",
+				Nuance: [
+					"Can be self-cast.",
+					"Cooldown is reduced by half when cast on someone else.",
+				],
+				ActiveDescription: [
+					"200 Barrier (Conditional)",
+					"+3m/s Move Speed (Conditional)",
+					"6s Buff Duration",
+					"40m Cast Range",
+				],
 			},
 			{
 				Name: "Healbane",
 				Image: require("../images/Vitality/1600/Healbane.png"),
+				Flat: ["+7 Spirit Power"],
+				Clock: true,
+				Timer: null,
+				Type: "Passive",
+				ActiveDescription: [
+					"-35% Healing Reduction (Conditional)",
+					"275 Heal On Hero Kill",
+					"8s Duration",
+				],
+				Description:
+					"Your Spirit Damage applies Healing Reduction. If an enemy hero dies under this effect, you receive a large heal.",
+				Nuance: null,
+				Upgrades: [],
+				Downgrades: [],
 			},
 			{
 				Name: "Healing Booster",
 				Image: require("../images/Vitality/1600/Healing_Booster.png"),
+				Flat: ["+3 Health Regen"],
+				Description: "Increases the effectiveness of your healing by 20%.",
+				Clock: false,
+				Nuance: null,
+				Downgrades: ["Extra Regen"],
+				Upgrades: ["Healing Tempo"],
 			},
 			{
 				Name: "Reactive Barrier",
 				Image: require("../images/Vitality/1600/Reactive_Barrier.png"),
+				Clock: true,
+				Type: "Passive",
+				Timer: "24s",
+				Description:
+					"Automatically restores one stamina and gain a Barrier when you are movement locked, Stunned, Chained, Immobilized, or Slept.",
+				Flat: ["+6% Spirit Resist"],
+				ActiveDescription: ["325 x 2.1 Barrier (Conditional)", "12s Duration"],
+				Downgrades: [],
+				Upgrades: [],
+				Nuance: null,
 			},
 			{
 				Name: "Restorative Locket",
 				Image: require("../images/Vitality/1600/Restorative_Locket.png"),
+				Flat: ["+6% Spirit Resist"],
+				Clock: true,
+				Timer: "30s",
+				Type: "Active",
+				Description:
+					"When an enemy uses an ability within 30m range from you, store one Restoration Stack.",
+				ActiveDescription: ["20 x 0.4 Boons Heal per Stack", "20 Max Stacks"],
+				Nuance: [
+					"Consume all stacks to heal target ally and replenish 2 stamina points. Can be self-cast.",
+				],
+				Upgrades: [],
+				Downgrades: [],
 			},
 			{
 				Name: "Return Fire",
 				Image: require("../images/Vitality/1600/Return_Fire.png"),
+				Flat: ["+8% Bullet Resist"],
+				Description:
+					"Automatically fire a bullet towards any attacker who damages you with their abilities or weapon.",
+				Clock: true,
+				Type: "Active",
+				Timer: "25s",
+				ActiveDescription: [
+					"50% Bullet Damage Returned",
+					"25% Spirit Damage Returned",
+					"6s Duration",
+				],
+				Nuance: null,
+				Upgrades: [],
+				Downgrades: [],
 			},
 			{
 				Name: "Spirit Lifesteal",
 				Image: require("../images/Vitality/1600/Spirit_Lifesteal_(item).png"),
+				Flat: ["+16% Spirit Lifesteal", "+70 Bonus Health", "+6 Spirit Power"],
+				Upgrades: ["Leech", "Infuser"],
+				Downgrades: [],
+				Clock: false,
+				Nuance: null,
+				Description: null,
 			},
 			{
 				Name: "Spirit Shielding",
 				Image: require("../images/Vitality/1600/Spirit_Shielding.png"),
+				Flat: ["+2.5 Out of Combat Regen"],
+				Clock: true,
+				Type: "Passive",
+				Timer: "35s",
+				Description:
+					"Gain a Barrier whenever you take significant spirit damage from enemy Heroes in a small time frame.",
+				ActiveDescription: [
+					"+325 x 4 Boons Barrier (Conditional)",
+					"+1.75m/s Move Speed (Conditional)",
+					"+150 Damage Threshold",
+					"+3.5s Time Frame",
+					"+8s Barrier Duration",
+				],
+				Nuance: null,
+				Upgrades: [],
+				Downgrades: [],
 			},
 			{
 				Name: "Weapon Shielding",
 				Image: require("../images/Vitality/1600/Weapon_Shielding.png"),
+				Flat: ["+2.5 Out of Combat Regen"],
+				Clock: true,
+				Timer: "35s",
+				Type: "Passive",
+				Description:
+					"Gain a Barrier whenever you take significant weapon damage from enemy Heroes in a small time frame.",
+				ActiveDescription: [
+					"325 x 4 Boons Barrier (Conditional)",
+					"+1.75m/s Move Speed (Conditional)",
+					"150 Damage Threshold",
+					"3.5s Time Frame",
+					"8s Barrier Duration",
+				],
+				Nuance: null,
+				Upgrades: [],
+				Downgrades: [],
 			},
 		],
 		tier3: [

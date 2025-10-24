@@ -11,7 +11,7 @@ import { CustomText } from "./CustomText";
 import { SpiritSvg } from "./svgComponents/SpiritSvg";
 import { VitalitySvg } from "./svgComponents/VitalitySvg";
 import { WeaponSvg } from "./svgComponents/WeaponSvg";
-import { useState } from "react";
+import { PulsingPressable } from "./PulsingPressable";
 
 type SortableHeader = {
 	back: boolean;
@@ -63,27 +63,21 @@ export const Header = (props: HeaderProps) => {
 						justifyContent: "space-evenly",
 						width: 90,
 					}}>
-					<Pressable onPress={() => props.typeFunc("Spirit")}>
-						<SpiritSvg
-							fill={
-								props.itemType == "Spirit" ? theme.colors.selected : "#CE90FF"
-							}
-						/>
-					</Pressable>
-					<Pressable onPress={() => props.typeFunc("Vitality")}>
-						<VitalitySvg
-							fill={
-								props.itemType == "Vitality" ? theme.colors.selected : "#00FF99"
-							}
-						/>
-					</Pressable>
-					<Pressable onPress={() => props.typeFunc("Weapon")}>
-						<WeaponSvg
-							fill={
-								props.itemType == "Weapon" ? theme.colors.selected : "#FF9900"
-							}
-						/>
-					</Pressable>
+					<PulsingPressable
+						pulsing={props.itemType == "Spirit" ? true : false}
+						onPress={() => props.typeFunc("Spirit")}>
+						<SpiritSvg fill={"#CE90FF"} />
+					</PulsingPressable>
+					<PulsingPressable
+						pulsing={props.itemType == "Vitality" ? true : false}
+						onPress={() => props.typeFunc("Vitality")}>
+						<VitalitySvg fill={"#00FF99"} />
+					</PulsingPressable>
+					<PulsingPressable
+						pulsing={props.itemType == "Weapon" ? true : false}
+						onPress={() => props.typeFunc("Weapon")}>
+						<WeaponSvg fill={"#FF9900"} />
+					</PulsingPressable>
 				</View>
 			)}
 			<View style={{ flex: 1 }}></View>

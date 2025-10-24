@@ -14,7 +14,7 @@ export const VitalitySvg = ({ fill }: Props) => {
 			viewBox="8 9 112 108"
 			style={{
 				zIndex: 2,
-				width: 14,
+				width: 16,
 				height: 14,
 			}}>
 			<Defs></Defs>

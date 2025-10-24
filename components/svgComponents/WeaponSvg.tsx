@@ -11,11 +11,11 @@ export const WeaponSvg = ({ fill }: Props) => {
 	return (
 		<Svg
 			id="Layer_1"
-			viewBox="0 0 124 107"
+			viewBox="0 10 124 107"
 			style={{
 				zIndex: 2,
-				width: 14,
-				height: 14,
+				width: 16,
+				height: 16,
 			}}>
 			<Defs></Defs>
 			<Path

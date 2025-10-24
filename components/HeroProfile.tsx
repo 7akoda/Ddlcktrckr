@@ -3,7 +3,6 @@ import { useUnistyles, StyleSheet } from "react-native-unistyles";
 import { DDLKSvg } from "./svgComponents/DDLKSvg";
 import { Header } from "./Header";
 import { useState } from "react";
-
 import Animated, {
 	useAnimatedStyle,
 	useSharedValue,

@@ -13,7 +13,7 @@ export const SpiritSvg = ({ fill }: Props) => {
 		<Svg
 			id="Layer_1"
 			viewBox="1.5 3 259 252"
-			style={{ zIndex: 2, width: 14, height: 14 }}>
+			style={{ zIndex: 2, width: 16, height: 14 }}>
 			<Defs></Defs>
 
 			<Path
