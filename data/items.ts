@@ -1,6 +1,4 @@
-import { Clock } from "lucide-react-native";
-
-type Items = {
+type ItemGroups = {
 	Vitality: Item;
 	Spirit: Item;
 	Weapon: Item;
@@ -33,7 +31,7 @@ interface Item {
 	tier4: ItemData[];
 }
 
-export const ItemImages: Items = {
+export const ItemImages: ItemGroups = {
 	Vitality: {
 		tier1: [
 			{

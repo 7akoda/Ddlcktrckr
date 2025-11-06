@@ -72,8 +72,8 @@ export const ItemList = () => {
 						/>
 						<Link
 							href={{
-								pathname: `/[id]`,
-								params: { id: item.Name },
+								pathname: `/items/[itemId]`,
+								params: { itemId: item.Name },
 							}}
 							push
 							asChild>
