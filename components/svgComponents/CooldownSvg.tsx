@@ -8,8 +8,8 @@ export const CooldownSvg = () => {
 
 	return (
 		<Svg
-			width="50px"
-			height="50px"
+			width="30px"
+			height="30px"
 			style={{ alignSelf: "center" }}
 			viewBox="0 -8 40 40"
 			fill={theme.colors.background}>

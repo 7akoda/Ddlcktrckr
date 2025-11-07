@@ -27,6 +27,7 @@ const lightTheme = {
 		accent: "#754043",
 		selected: "#8A585B",
 		bannerFont: "#dadcd6",
+		souls: "#98ffde",
 	},
 	gap: (v: number) => v * 8,
 };
@@ -40,6 +41,7 @@ const darkTheme = {
 		accent: "#8A585B",
 		selected: "#F5C542",
 		bannerFont: "#C2C5BB",
+		souls: "#98ffde",
 	},
 	gap: (v: number) => v * 8,
 };
