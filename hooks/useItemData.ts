@@ -1,8 +1,8 @@
-import { createItemQueryOptions } from "@/queryOptions/createItemQueryOptions";
+import { createItemsQueryOptions } from "@/queryOptions/createItemQueryOptions";
 import { useQuery } from "@tanstack/react-query";
 
 export const useItemData = () => {
-	const itemData = useQuery(createItemQueryOptions());
+	const itemData = useQuery(createItemsQueryOptions());
 
 	const isLoading = itemData.isLoading;
 

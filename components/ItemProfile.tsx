@@ -3,20 +3,13 @@ import { useUnistyles, StyleSheet } from "react-native-unistyles";
 import { DDLKSvg } from "./svgComponents/DDLKSvg";
 import { Header } from "./Header";
 import { useState } from "react";
-import Animated, {
-	useAnimatedStyle,
-	useSharedValue,
-	withTiming,
-} from "react-native-reanimated";
-import { HeroAbilities } from "./HeroProfile/HeroAbilities";
-import { HeroProfileBar } from "./HeroProfile/HeroProfileBar";
-import { HeroLore } from "./HeroProfile/HeroLore";
-import { HeroAbilitiesInspect } from "./HeroProfile/HeroAbilitiesInspect";
-import { useHeroDataById } from "@/hooks/useHeroDataById";
 import { LoadingIcon } from "./LoadingIcon";
 import { CustomText } from "./CustomText";
 import { ItemImages } from "../data/items";
 import { Link } from "expo-router";
+import { CooldownSvg } from "./svgComponents/CooldownSvg";
+import { useItemData } from "@/hooks/useItemData";
+import { decode } from "he";
 
 type Props = {
 	itemId: string[] | string;
@@ -26,19 +19,31 @@ export const ItemProfile = ({ itemId }: Props) => {
 	const { theme } = useUnistyles();
 	const screenHeight = Dimensions.get("window").height;
 
-	const allItems = Object.values(ItemImages) // gets Vitality, Agility, etc.
-		.flatMap((category) => Object.values(category).flat()); // flattens tier arrays
-	const found = allItems.find((item) => item.Name === itemId);
+	const { itemData, isError, isLoading, error } = useItemData();
 
-	const flatStats = found.Flat.map((f: string) => {
+	if (isLoading) {
+		return <LoadingIcon />;
+	}
+
+	if (isError) {
+		console.error("Hero stats error:", error);
 		return (
-			<CustomText key={f} style={{ color: theme.colors.font }}>
-				{f}
-				<CustomText>{`\n`}</CustomText>
+			<CustomText style={{ color: "#EADEDA" }}>
+				Failed to load hero data.
 			</CustomText>
 		);
-	});
+	}
 
+	const foundItem = itemData.find((item: any) => item.name === itemId);
+	const cleanDescription = decode(
+		foundItem.description.desc.replace(/<[^>]*>/g, "")
+	);
+
+	const allItems = Object.values(ItemImages).flatMap((category) =>
+		Object.values(category).flat()
+	);
+	const foundFromData = allItems.find((item) => item.Name === itemId);
+	console.log(foundItem.id);
 	return (
 		<View style={{ backgroundColor: theme.colors.background }}>
 			<Header back={true} sortable={false} />
@@ -52,10 +57,10 @@ export const ItemProfile = ({ itemId }: Props) => {
 						borderColor: theme.colors.accent,
 						padding: 4,
 					}}>
-					{found.Name}
+					{foundItem.name}
 				</CustomText>
 				<Image
-					source={found.Image}
+					source={foundFromData.Image}
 					style={{
 						margin: 5,
 						width: 70,
@@ -73,9 +78,17 @@ export const ItemProfile = ({ itemId }: Props) => {
 						padding: 4,
 						fontSize: 12,
 					}}>
-					{flatStats}
+					{cleanDescription}
 				</CustomText>
-				{found.Clock == true ? (
+				<View
+					style={{
+						backgroundColor: theme.colors.background,
+						padding: 4,
+						height: 40,
+						alignContent: "center",
+						flexDirection: "row",
+					}}></View>
+				{/* {found.Clock == true ? (
 					<View
 						style={{
 							backgroundColor: theme.colors.background,
@@ -94,19 +107,15 @@ export const ItemProfile = ({ itemId }: Props) => {
 							{found.Type}
 						</CustomText>
 						<View style={{ flex: 1 }}></View>
-						<Image
-							source={require("../images/40px-Cooldown_Icon.png")}
+						<CooldownSvg />
+						<CustomText
 							style={{
-								backgroundColor: theme.colors.primary,
-								tintColor: theme.colors.font,
+								color: theme.colors.font,
+								fontSize: 12,
 								alignSelf: "center",
-								height: 30,
-								width: 30,
-								borderRadius: 4,
-								borderWidth: 2,
-								borderColor: theme.colors.primary,
-							}}
-						/>
+							}}>
+							{found.Timer}
+						</CustomText>
 					</View>
 				) : null}
 				{found.Upgrades.length >= 1 ? (
@@ -146,7 +155,7 @@ export const ItemProfile = ({ itemId }: Props) => {
 							))}
 						</View>
 					</View>
-				) : null}
+				) : null} */}
 			</View>
 			<ScrollView
 				showsVerticalScrollIndicator={false}
