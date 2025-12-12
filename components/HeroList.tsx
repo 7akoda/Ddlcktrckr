@@ -94,10 +94,11 @@ export const HeroList = () => {
 						<View style={{ flex: 1 }} />
 
 						{sort == "Winrate" ? (
-							<View style={{ height: 10, alignSelf: "center" }}>
+							<View style={{ height: 15, alignSelf: "center" }}>
 								<Progress.Bar
 									progress={item.winRate / 100}
 									width={100}
+									height={5}
 									color={theme.colors.accent}
 								/>
 								<CustomText style={styles.percentText}>
@@ -105,10 +106,11 @@ export const HeroList = () => {
 								</CustomText>
 							</View>
 						) : (
-							<View style={{ height: 10, alignSelf: "center" }}>
+							<View style={{ height: 15, alignSelf: "center" }}>
 								<Progress.Bar
 									progress={item.matches / (totalHeroPicks / 12)}
 									width={100}
+									height={5}
 									color={theme.colors.accent}
 								/>
 								<CustomText style={styles.percentText}>
@@ -127,7 +129,8 @@ const styles = StyleSheet.create((theme) => ({
 		marginTop: 1,
 		alignSelf: "center",
 		color: theme.colors.font,
-		fontSize: 9,
+		fontSize: 10,
+		fontFamily: theme.fontFamily.regular,
 	},
 	heroListItem: {
 		alignSelf: "center",
@@ -142,13 +145,13 @@ const styles = StyleSheet.create((theme) => ({
 	heroText: {
 		color: theme.colors.font,
 		paddingLeft: 7,
-		fontSize: 12,
+		fontSize: 14,
 		alignSelf: "center",
 	},
 	heroTextFade: {
 		color: theme.colors.font,
 		paddingLeft: 7,
-		fontSize: 12,
+		fontSize: 14,
 		alignSelf: "center",
 		opacity: 0.6,
 	},

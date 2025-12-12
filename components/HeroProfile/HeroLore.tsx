@@ -37,7 +37,7 @@ export const HeroLore = ({ id }: Props) => {
 						numberOfLines={isLoreExpanded ? undefined : 5}
 						onLayout={(e) => {
 							const { height } = e.nativeEvent.layout;
-							if (height >= 86.5) {
+							if (height >= 88) {
 								setIsOverflowing(true);
 							} else {
 								setIsOverflowing(false);
@@ -68,9 +68,10 @@ const styles = StyleSheet.create((theme) => ({
 	loreText: {
 		color: theme.colors.font,
 		padding: 12,
-		fontSize: 10,
+		fontSize: 12,
 		alignSelf: "center",
 		textAlign: "center",
+		fontFamily: theme.fontFamily.regular,
 	},
 
 	loreContainer: {

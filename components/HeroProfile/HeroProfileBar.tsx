@@ -41,10 +41,11 @@ export const HeroProfileBar = ({ id }: Props) => {
 const styles = StyleSheet.create((theme) => ({
 	heroTextBanner: {
 		color: theme.colors.bannerFont,
-		fontSize: 12,
+		fontFamily: theme.fontFamily.extraBold,
+		fontSize: 16,
 		marginLeft: 8,
 		zIndex: 2,
-		marginTop: 26.25,
+		marginTop: 25,
 	},
 	heroPortrait: {
 		width: 35,

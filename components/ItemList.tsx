@@ -117,13 +117,13 @@ const styles = StyleSheet.create((theme) => ({
 	heroText: {
 		color: theme.colors.font,
 		paddingLeft: 7,
-		fontSize: 12,
+		fontSize: 14,
 		alignSelf: "center",
 	},
 	heroTextFade: {
 		color: theme.colors.font,
 		paddingLeft: 7,
-		fontSize: 12,
+		fontSize: 14,
 		alignSelf: "center",
 		opacity: 0.6,
 	},

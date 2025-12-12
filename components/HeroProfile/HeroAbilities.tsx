@@ -37,8 +37,8 @@ export const HeroAbilities = ({
 const styles = StyleSheet.create((theme) => ({
 	abilityImage: {
 		flexDirection: "row",
-		width: 60,
-		height: 60,
+		width: 70,
+		height: 70,
 		zIndex: 4,
 		backgroundColor: theme.colors.background,
 		tintColor: theme.colors.accent,
@@ -48,7 +48,7 @@ const styles = StyleSheet.create((theme) => ({
 	},
 	abilityText: {
 		color: theme.colors.font,
-		fontSize: 8,
+		fontSize: 10,
 		alignSelf: "center",
 		width: 60,
 		textAlign: "center",
