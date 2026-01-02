@@ -10,11 +10,11 @@ import {
 	EBGaramond_600SemiBold,
 	EBGaramond_800ExtraBold,
 } from "@expo-google-fonts/eb-garamond";
-import { useUnistyles } from "react-native-unistyles";
+import { useStyles } from "react-native-unistyles";
 import { ItemList } from "@/components/ItemList";
 
 export default function Index() {
-	const { theme } = useUnistyles();
+	const { theme } = useStyles();
 	const kodaNum = "76561198053289095";
 	const [hero, setHero] = useState(0);
 	let [fontsLoaded] = useFonts({

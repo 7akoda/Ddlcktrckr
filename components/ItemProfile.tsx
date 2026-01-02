@@ -1,4 +1,5 @@
-import { View, Image, Pressable, Dimensions, ScrollView } from "react-native";
+import { View, Pressable, Dimensions, ScrollView } from "react-native";
+import { Image } from "expo-image";
 import { useUnistyles, StyleSheet } from "react-native-unistyles";
 import { Header } from "./Header";
 import { LoadingIcon } from "./LoadingIcon";
@@ -8,10 +9,13 @@ import { CooldownSvg } from "./svgComponents/CooldownSvg";
 import { useItemData } from "@/hooks/useItemData";
 import { Link } from "expo-router";
 import { BlurView } from "expo-blur";
+import { LinearGradient } from "expo-linear-gradient";
 
 type Props = {
 	itemId: string[] | string;
 };
+
+//fortitude issue
 
 export const ItemProfile = ({ itemId }: Props) => {
 	const { theme, rt } = useUnistyles();
@@ -143,13 +147,22 @@ export const ItemProfile = ({ itemId }: Props) => {
 		<View style={{ backgroundColor: theme.colors.background }}>
 			<Header back={true} sortable={false} />
 			<View style={{ position: "absolute" }}>
-				<Image
-					style={{ width: 1390, height: 900 }}
-					source={
-						rt.themeName === "dark"
-							? require("../images/Background_Buildings.png")
-							: require("../images/Background_Buildings_Light.png")
-					}></Image>
+				{rt.themeName === "dark" ? (
+					<>
+						<LinearGradient colors={["#0a0a0ab3", "#0a0a0ab3"]}>
+							<Image
+								style={{ width: 1390, height: 900 }}
+								source={require("../images/Background_Buildings.png")}></Image>
+						</LinearGradient>
+					</>
+				) : (
+					<Image
+						style={{
+							width: 1390,
+							height: 900,
+						}}
+						source={require("../images/Background_Buildings_Light.png")}></Image>
+				)}
 			</View>
 			<View style={styles.itemViewPAPA}>
 				<View style={styles.itemView}>
@@ -262,7 +275,7 @@ export const ItemProfile = ({ itemId }: Props) => {
 									color: theme.colors.font,
 									flexDirection: "column",
 									paddingHorizontal: 6,
-									marginVertical: 4,
+									marginTop: 4,
 									lineHeight: 15,
 									fontSize: 12,
 									fontFamily: theme.fontFamily.regular,
@@ -276,7 +289,7 @@ export const ItemProfile = ({ itemId }: Props) => {
 									color: theme.colors.font,
 									flexDirection: "column",
 									paddingHorizontal: 6,
-									marginVertical: 4,
+									marginBottom: 4,
 									lineHeight: 15,
 									fontSize: 12,
 									fontFamily: theme.fontFamily.regular,
@@ -371,28 +384,50 @@ export const ItemProfile = ({ itemId }: Props) => {
 								}}>
 								Upgrades to: {""}
 							</CustomText>
-							{foundItemForImages.Upgrades.map((upgrade: string) => {
+							{foundItemForImages.Upgrades.map((upgrade: string, index) => {
 								return (
-									<Link
+									<View
 										key={upgrade}
-										href={{
-											pathname: `/items/[itemId]`,
-											params: { itemId: upgrade },
-										}}
-										push
-										asChild>
-										<Pressable style={{ justifyContent: "center" }}>
-											{({ pressed }) => (
-												<CustomText
-													style={[
-														styles.heroText,
-														pressed && styles.heroTextFade,
-													]}>
-													{upgrade}
-												</CustomText>
-											)}
-										</Pressable>
-									</Link>
+										style={{ alignSelf: "center", flexDirection: "row" }}>
+										<Link
+											href={{
+												pathname: `/items/[itemId]`,
+												params: { itemId: upgrade },
+											}}
+											push
+											asChild>
+											<Pressable style={{}}>
+												{({ pressed }) => (
+													<CustomText
+														style={[
+															styles.heroText,
+															pressed && styles.heroTextFade,
+														]}>
+														{upgrade}
+													</CustomText>
+												)}
+											</Pressable>
+										</Link>
+										{index < foundItemForImages.Upgrades.length - 1 ? (
+											<CustomText
+												style={{
+													color: theme.colors.font,
+													fontSize: 12,
+													alignSelf: "center",
+												}}>
+												,{" "}
+											</CustomText>
+										) : (
+											<CustomText
+												style={{
+													color: theme.colors.font,
+													fontSize: 12,
+													alignSelf: "center",
+												}}>
+												{" "}
+											</CustomText>
+										)}
+									</View>
 								);
 							})}
 						</BlurView>
