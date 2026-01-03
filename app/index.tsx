@@ -10,11 +10,11 @@ import {
 	EBGaramond_600SemiBold,
 	EBGaramond_800ExtraBold,
 } from "@expo-google-fonts/eb-garamond";
-import { useStyles } from "react-native-unistyles";
+import { useUnistyles } from "react-native-unistyles";
 import { ItemList } from "@/components/ItemList";
 
 export default function Index() {
-	const { theme } = useStyles();
+	const { theme } = useUnistyles();
 	const kodaNum = "76561198053289095";
 	const [hero, setHero] = useState(0);
 	let [fontsLoaded] = useFonts({
@@ -22,6 +22,8 @@ export default function Index() {
 		EBGaramond_600SemiBold,
 		EBGaramond_800ExtraBold,
 	});
+	//need to install react-native-safe-area-context
+
 	return (
 		<SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }}>
 			{/* <HeroList /> */}
