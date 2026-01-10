@@ -1,4 +1,4 @@
-import { Button, SafeAreaView, ScrollView, View, Text } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { HeroList } from "@/components/HeroList";
 import { HeroPlayerList } from "@/components/HeroPlayerList";
 import { HeroProfile } from "@/components/HeroProfile";
@@ -12,6 +12,8 @@ import {
 } from "@expo-google-fonts/eb-garamond";
 import { useUnistyles } from "react-native-unistyles";
 import { ItemList } from "@/components/ItemList";
+import { SimpleShader } from "@/components/Shader";
+import { NativeModules, TurboModuleRegistry } from "react-native";
 
 export default function Index() {
 	const { theme } = useUnistyles();
@@ -22,12 +24,19 @@ export default function Index() {
 		EBGaramond_600SemiBold,
 		EBGaramond_800ExtraBold,
 	});
-	//need to install react-native-safe-area-context
+	console.log("NativeModules.RNSkiaModule:", NativeModules.RNSkiaModule);
+
+	try {
+		console.log("Turbo:", TurboModuleRegistry.getEnforcing("RNSkiaModule"));
+	} catch (e) {
+		console.error("Skia NOT registered", e);
+	}
 
 	return (
 		<SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }}>
 			{/* <HeroList /> */}
-			<ItemList />
+			{/* <ItemList /> */}
+			<SimpleShader />
 		</SafeAreaView>
 	);
 }

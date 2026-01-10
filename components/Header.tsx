@@ -12,6 +12,7 @@ import { SpiritSvg } from "./svgComponents/SpiritSvg";
 import { VitalitySvg } from "./svgComponents/VitalitySvg";
 import { WeaponSvg } from "./svgComponents/WeaponSvg";
 import { PulsingPressable } from "./PulsingPressable";
+import { BlurView } from "expo-blur";
 
 type SortableHeader = {
 	back: boolean;
@@ -38,13 +39,12 @@ export const Header = (props: HeaderProps) => {
 	return (
 		<View
 			style={{
-				flexDirection: "row",
-				width: "100%",
+				paddingHorizontal: 5,
 				backgroundColor: theme.colors.background,
+				flexDirection: "row",
 				height: 40,
-				paddingTop: 8,
-				marginBottom: 8,
 				zIndex: 3,
+				justifyContent: "center",
 			}}>
 			{props.back && (
 				<ArrowLeft
@@ -57,23 +57,42 @@ export const Header = (props: HeaderProps) => {
 			{props.sortable && props.itemList && (
 				<View
 					style={{
-						marginTop: 7,
-						marginLeft: 22,
+						alignSelf: "center",
 						flexDirection: "row",
 						justifyContent: "space-evenly",
-						width: 90,
 					}}>
 					<PulsingPressable
+						style={{
+							height: 30,
+							width: 30,
+							alignSelf: "center",
+							alignItems: "center",
+							justifyContent: "center",
+						}}
 						pulsing={props.itemType == "Spirit" ? true : false}
 						onPress={() => props.typeFunc("Spirit")}>
 						<SpiritSvg fill={"#CE90FF"} />
 					</PulsingPressable>
 					<PulsingPressable
+						style={{
+							height: 30,
+							width: 30,
+							alignSelf: "center",
+							alignItems: "center",
+							justifyContent: "center",
+						}}
 						pulsing={props.itemType == "Vitality" ? true : false}
 						onPress={() => props.typeFunc("Vitality")}>
 						<VitalitySvg fill={"#00FF99"} />
 					</PulsingPressable>
 					<PulsingPressable
+						style={{
+							height: 30,
+							width: 30,
+							alignSelf: "center",
+							alignItems: "center",
+							justifyContent: "center",
+						}}
 						pulsing={props.itemType == "Weapon" ? true : false}
 						onPress={() => props.typeFunc("Weapon")}>
 						<WeaponSvg fill={"#FF9900"} />
@@ -85,17 +104,18 @@ export const Header = (props: HeaderProps) => {
 				Array.from({ length: props.sortAmount }, (_, i) =>
 					props.sort == props.sortText[i] ? (
 						<CustomText
+							suppressHighlighting
 							onPress={() => props.sortFunc(props.sortText[i])}
 							key={i}
 							style={{
 								color: theme.colors.selected,
 								textAlign: "center",
-								paddingTop: 3,
 								marginHorizontal: 5,
-								fontSize: 7,
+								fontSize: 9,
 								alignSelf: "center",
 								width: 35,
 								height: 18,
+								paddingTop: 1.8,
 								borderRadius: 4,
 								borderColor: theme.colors.accent,
 								borderWidth: 1,
@@ -104,17 +124,18 @@ export const Header = (props: HeaderProps) => {
 						</CustomText>
 					) : (
 						<CustomText
+							suppressHighlighting
 							onPress={() => props.sortFunc(props.sortText[i])}
 							key={i}
 							style={{
 								color: theme.colors.font,
 								textAlign: "center",
-								paddingTop: 3,
 								marginHorizontal: 5,
-								fontSize: 7,
+								fontSize: 9,
 								alignSelf: "center",
 								width: 35,
 								height: 18,
+								paddingTop: 1.8,
 								borderRadius: 4,
 								borderColor: theme.colors.accent,
 								borderWidth: 1,

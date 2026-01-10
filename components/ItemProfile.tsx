@@ -149,11 +149,20 @@ export const ItemProfile = ({ itemId }: Props) => {
 			<View style={{ position: "absolute" }}>
 				{rt.themeName === "dark" ? (
 					<>
-						<LinearGradient colors={["#0a0a0ab3", "#0a0a0ab3"]}>
-							<Image
-								style={{ width: 1390, height: 900 }}
-								source={require("../images/Background_Buildings.png")}></Image>
-						</LinearGradient>
+						{/* <LinearGradient
+							style={{
+								zIndex: 9,
+								width: 500,
+								height: 1000,
+								position: "absolute",
+							}}
+							colors={[
+								"rgba(10, 10, 10, 0.47)",
+								"rgba(142, 142, 142, 0.27)",
+							]}></LinearGradient> */}
+						<Image
+							style={{ width: 1390, height: 900 }}
+							source={require("../images/Background_Buildings.png")}></Image>
 					</>
 				) : (
 					<Image
@@ -384,52 +393,54 @@ export const ItemProfile = ({ itemId }: Props) => {
 								}}>
 								Upgrades to: {""}
 							</CustomText>
-							{foundItemForImages.Upgrades.map((upgrade: string, index) => {
-								return (
-									<View
-										key={upgrade}
-										style={{ alignSelf: "center", flexDirection: "row" }}>
-										<Link
-											href={{
-												pathname: `/items/[itemId]`,
-												params: { itemId: upgrade },
-											}}
-											push
-											asChild>
-											<Pressable style={{}}>
-												{({ pressed }) => (
-													<CustomText
-														style={[
-															styles.heroText,
-															pressed && styles.heroTextFade,
-														]}>
-														{upgrade}
-													</CustomText>
-												)}
-											</Pressable>
-										</Link>
-										{index < foundItemForImages.Upgrades.length - 1 ? (
-											<CustomText
-												style={{
-													color: theme.colors.font,
-													fontSize: 12,
-													alignSelf: "center",
-												}}>
-												,{" "}
-											</CustomText>
-										) : (
-											<CustomText
-												style={{
-													color: theme.colors.font,
-													fontSize: 12,
-													alignSelf: "center",
-												}}>
-												{" "}
-											</CustomText>
-										)}
-									</View>
-								);
-							})}
+							{foundItemForImages.Upgrades.map(
+								(upgrade: string, index: number) => {
+									return (
+										<View
+											key={upgrade}
+											style={{ alignSelf: "center", flexDirection: "row" }}>
+											<Link
+												href={{
+													pathname: `/items/[itemId]`,
+													params: { itemId: upgrade },
+												}}
+												push
+												asChild>
+												<Pressable style={{}}>
+													{({ pressed }) => (
+														<CustomText
+															style={[
+																styles.heroText,
+																pressed && styles.heroTextFade,
+															]}>
+															{upgrade}
+														</CustomText>
+													)}
+												</Pressable>
+											</Link>
+											{index < foundItemForImages.Upgrades.length - 1 ? (
+												<CustomText
+													style={{
+														color: theme.colors.font,
+														fontSize: 12,
+														alignSelf: "center",
+													}}>
+													,{" "}
+												</CustomText>
+											) : (
+												<CustomText
+													style={{
+														color: theme.colors.font,
+														fontSize: 12,
+														alignSelf: "center",
+													}}>
+													{" "}
+												</CustomText>
+											)}
+										</View>
+									);
+								}
+							)}
 						</BlurView>
 					) : null}
 				</View>

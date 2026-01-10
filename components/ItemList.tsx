@@ -7,12 +7,13 @@ import { Header } from "./Header";
 import { CustomText } from "./CustomText";
 import { LoadingIcon } from "./LoadingIcon";
 import { ItemImages } from "@/data/items";
+import { BlurView } from "expo-blur";
 
 export const ItemList = () => {
 	const [sort, setSort] = useState("");
 	const [itemType, setItemType] = useState("");
 
-	const { theme } = useUnistyles();
+	const { theme, rt } = useUnistyles();
 
 	const itemTypeIndex = itemType as keyof typeof ItemImages;
 
@@ -55,10 +56,40 @@ export const ItemList = () => {
 				back={false}
 				sortable={true}
 			/>
+			<View style={{ position: "absolute" }}>
+				{rt.themeName === "dark" ? (
+					<>
+						{/* <LinearGradient
+										style={{
+											zIndex: 9,
+											width: 500,
+											height: 1000,
+											position: "absolute",
+										}}
+										colors={[
+											"rgba(10, 10, 10, 0.47)",
+											"rgba(142, 142, 142, 0.27)",
+										]}></LinearGradient> */}
+						<Image
+							style={{ width: 1390, height: 900 }}
+							source={require("../images/Background_Buildings.png")}></Image>
+					</>
+				) : (
+					<Image
+						style={{
+							width: 1390,
+							height: 900,
+						}}
+						source={require("../images/Background_Buildings_Light.png")}></Image>
+				)}
+			</View>
 			<FlatList
 				data={sorted}
 				renderItem={({ item }) => (
-					<View style={styles.heroListItem}>
+					<BlurView
+						style={styles.heroListItem}
+						intensity={20}
+						tint={rt.themeName === "dark" ? "dark" : "light"}>
 						<Image
 							source={item.Image}
 							style={{
@@ -91,7 +122,7 @@ export const ItemList = () => {
 						<View style={{ height: 10, alignSelf: "center" }}>
 							<CustomText style={styles.percentText}></CustomText>
 						</View>
-					</View>
+					</BlurView>
 				)}></FlatList>
 		</View>
 	);
@@ -107,12 +138,13 @@ const styles = StyleSheet.create((theme) => ({
 	heroListItem: {
 		alignSelf: "center",
 		flexDirection: "row",
-		backgroundColor: theme.colors.primary,
 		borderRadius: 4,
 		width: 330,
 		height: 40,
 		paddingHorizontal: 8,
 		marginVertical: 1,
+		overflow: "hidden",
+		borderWidth: 1,
 	},
 	heroText: {
 		color: theme.colors.font,
