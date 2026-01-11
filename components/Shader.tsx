@@ -15,27 +15,30 @@ const float3 main_x_phase = float3(0, 45, 55);
 const float3 main_y_freq = float3(0.415, 0.61, 0.82);
 const float3 main_y_amp = float3(0.72, 0.28, 0.15);
 const float3 main_y_phase = float3(90, 120, 10);
-const float part_timefact_min = 6;
+const float part_timefact_min = 1;
 const float part_timefact_max = 20;
 const float2 part_max_mov = float2(0.28, 0.28);
 const float time_factor = 0.25;
-const float start_time = 2.5;
+const float start_time = 5;
 const float grow_time_factor = 0.15;
 const float part_life_time_min = 0.9;
 const float part_life_time_max = 3.0;
-const float part_int_div = 60000;
+const float part_int_div = 15000;
 const float part_int_factor_min = 0.3;
 const float part_int_factor_max = 9.2;
-const float part_spark_min_int = 0.25;
-const float part_spark_max_int = 0.88;
-const float part_spark_min_freq = 2.5;
-const float part_spark_max_freq = 6.0;
+const float part_spark_min_int = 0.15;
+const float part_spark_max_int = 0.68;
+const float part_spark_min_freq = 5.5;
+const float part_spark_max_freq = 11.0;
 const float part_spark_time_freq_fact = 0.35;
 const float mp_int = 0.0;
 const float dist_factor = 3.0;
-const float ppow = 2.5;
+const float ppow = 2.3;
 const float part_min_saturation = 0.5;
 const float part_max_saturation = 0.9;
+const float part_min_hue = -0.08;
+const float part_max_hue = 0.08;
+const float hue_time_factor = 0.035;
 const float mp_saturation = 0.18;
 const float2 part_starhv_dfac = float2(9, 0.32);
 const float part_starhv_ifac = 0.20;
@@ -108,6 +111,8 @@ float3 getParticleColor(int i, float pint) {
 
   hsv.y *= mix(part_min_saturation, part_max_saturation,
                random(float(i * 6 + 44) + runnr * 3.3)) * 0.45 / pint;
+ float hueOffset = mix(part_min_hue, part_max_hue, random(float(i)) + hue_time_factor);
+ hsv.x += hueOffset;
 
   hsv.z *= pint;
 
