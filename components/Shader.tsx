@@ -1,13 +1,13 @@
 import { Canvas, Fill, Shader, Skia } from "@shopify/react-native-skia";
 import { useWindowDimensions } from "react-native";
 import { useState, useEffect } from "react";
+import { useUnistyles } from "react-native-unistyles";
 
 const source = Skia.RuntimeEffect.Make(`
-// Magic particles — SkSL conversion
 const float twopi = 6.28319;
-const int nb_particles = 95;
-const float2 gen_scale = float2(0.95);
-const float2 middlepoint = float2(0.0, 0.6);
+const int nb_particles = 100;
+const float2 gen_scale = float2(0.98);
+const float2 middlepoint = float2(0.0, 0.5);
 const float2 gravitation = float2(0, -4.5);
 const float3 main_x_freq = float3(0.4, 0.66, 0.78);
 const float3 main_x_amp = float3(0.8, 0.24, 0.18);
@@ -24,8 +24,8 @@ const float grow_time_factor = 0.15;
 const float part_life_time_min = 0.9;
 const float part_life_time_max = 3.0;
 const float part_int_div = 60000;
-const float part_int_factor_min = 0.1;
-const float part_int_factor_max = 3.2;
+const float part_int_factor_min = 0.3;
+const float part_int_factor_max = 9.2;
 const float part_spark_min_int = 0.25;
 const float part_spark_max_int = 0.88;
 const float part_spark_min_freq = 2.5;
@@ -33,7 +33,7 @@ const float part_spark_max_freq = 6.0;
 const float part_spark_time_freq_fact = 0.35;
 const float mp_int = 0.0;
 const float dist_factor = 3.0;
-const float ppow = 2.3;
+const float ppow = 2.5;
 const float part_min_saturation = 0.5;
 const float part_max_saturation = 0.9;
 const float mp_saturation = 0.18;
@@ -45,6 +45,10 @@ const float mb_factor = 0.70;
 
 uniform float iTime;
 uniform float2 iResolution;
+uniform float3 backgroundColor;
+uniform float3 particleColor;
+
+
 
 float pst, plt, runnr, time2, time3, time4;
 
@@ -83,12 +87,33 @@ float2 getParticlePosition(int i) {
   return (ppos + delta_pos + grav_pos) * gen_scale;
 }
 
-float3 getParticleColor(int i, float pint) {
-  float saturation = mix(part_min_saturation, part_max_saturation, 
-                         random(float(i * 6 + 44) + runnr * 3.3)) * 0.45 / pint;
-  return hsv2rgb(float3(0.75, saturation, pint));
+float3 rgb2hsv(float3 c) {
+  float4 K = float4(0.0, -1.0/3.0, 2.0/3.0, -1.0);
+  float4 p = mix(float4(c.bg, K.wz),
+                 float4(c.gb, K.xy),
+                 step(c.b, c.g));
+  float4 q = mix(float4(p.xyw, c.r),
+                 float4(c.r, p.yzx),
+                 step(p.x, c.r));
+
+  float d = q.x - min(q.w, q.y);
+  float e = 1.0e-10;
+  return float3(abs(q.z + (q.w - q.y) / (6.0 * d + e)),
+                d / (q.x + e),
+                q.x);
 }
 
+float3 getParticleColor(int i, float pint) {
+  float3 hsv = rgb2hsv(particleColor);
+
+  hsv.y *= mix(part_min_saturation, part_max_saturation,
+               random(float(i * 6 + 44) + runnr * 3.3)) * 0.45 / pint;
+
+  hsv.z *= pint;
+
+  return hsv2rgb(hsv);
+}
+  
 float3 drawParticles(float2 uv, float timedelta) {
   time2 = time_factor * (iTime + timedelta);
   float3 pcol = float3(0);
@@ -112,10 +137,11 @@ float3 drawParticles(float2 uv, float timedelta) {
   
   return pcol;
 }
+  
 
 half4 main(float2 fragCoord) {
   float2 uv = fragCoord.xy / iResolution.xx;
-  half3 pcolor = half3(0);
+  float3 pcolor = half3(backgroundColor);
   pcolor += half3(drawParticles(uv, 0)) * 0.9;
   return half4(pcolor, 1);
 }
@@ -125,9 +151,24 @@ if (!source) {
 	throw new Error("Couldn't compile the shader");
 }
 
-export const SimpleShader = () => {
+const hexToRgb = (hex: string): [number, number, number] => {
+	hex = hex.replace("#", "");
+
+	const r = parseInt(hex.substring(0, 2), 16) / 255;
+	const g = parseInt(hex.substring(2, 4), 16) / 255;
+	const b = parseInt(hex.substring(4, 6), 16) / 255;
+
+	return [r, g, b];
+};
+
+interface SparkleShaderProps {
+	particleColorProp: string;
+}
+
+export const SparkleShader = ({ particleColorProp }: SparkleShaderProps) => {
 	const { width, height } = useWindowDimensions();
 	const [time, setTime] = useState(0);
+	const { theme } = useUnistyles();
 
 	useEffect(() => {
 		let animationFrameId: number;
@@ -144,13 +185,15 @@ export const SimpleShader = () => {
 	}, []);
 
 	return (
-		<Canvas style={{ flex: 1 }}>
+		<Canvas style={{ width: width, height: height }}>
 			<Fill>
 				<Shader
 					source={source}
 					uniforms={{
 						iTime: time,
 						iResolution: [width, height],
+						backgroundColor: hexToRgb(theme.colors.background),
+						particleColor: hexToRgb(particleColorProp),
 					}}
 				/>
 			</Fill>

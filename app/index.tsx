@@ -12,8 +12,7 @@ import {
 } from "@expo-google-fonts/eb-garamond";
 import { useUnistyles } from "react-native-unistyles";
 import { ItemList } from "@/components/ItemList";
-import { SimpleShader } from "@/components/Shader";
-import { NativeModules, TurboModuleRegistry } from "react-native";
+import { SparkleShader } from "@/components/Shader";
 
 export default function Index() {
 	const { theme } = useUnistyles();
@@ -24,19 +23,12 @@ export default function Index() {
 		EBGaramond_600SemiBold,
 		EBGaramond_800ExtraBold,
 	});
-	console.log("NativeModules.RNSkiaModule:", NativeModules.RNSkiaModule);
-
-	try {
-		console.log("Turbo:", TurboModuleRegistry.getEnforcing("RNSkiaModule"));
-	} catch (e) {
-		console.error("Skia NOT registered", e);
-	}
 
 	return (
 		<SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }}>
 			{/* <HeroList /> */}
-			{/* <ItemList /> */}
-			<SimpleShader />
+			<ItemList />
+			{/* <SparkleShader /> */}
 		</SafeAreaView>
 	);
 }

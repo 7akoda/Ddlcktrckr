@@ -1,4 +1,10 @@
-import { View, Pressable, Dimensions, ScrollView } from "react-native";
+import {
+	View,
+	Pressable,
+	Dimensions,
+	ScrollView,
+	useWindowDimensions,
+} from "react-native";
 import { Image } from "expo-image";
 import { useUnistyles, StyleSheet } from "react-native-unistyles";
 import { Header } from "./Header";
@@ -9,7 +15,8 @@ import { CooldownSvg } from "./svgComponents/CooldownSvg";
 import { useItemData } from "@/hooks/useItemData";
 import { Link } from "expo-router";
 import { BlurView } from "expo-blur";
-import { LinearGradient } from "expo-linear-gradient";
+import { SparkleShader } from "./Shader";
+import { useEffect, useState } from "react";
 
 type Props = {
 	itemId: string[] | string;
@@ -19,8 +26,24 @@ type Props = {
 
 export const ItemProfile = ({ itemId }: Props) => {
 	const { theme, rt } = useUnistyles();
-	const screenHeight = Dimensions.get("window").height;
+	const { width, height } = useWindowDimensions();
+	const [particleColor, setParticleColor] = useState<string>("#FF9900");
+
 	const { itemData, isError, isLoading, error } = useItemData();
+	const foundItem = itemData?.find((item: any) => item.name === itemId);
+
+	useEffect(() => {
+		if (!foundItem) return;
+
+		if (foundItem.item_slot_type == "spirit") {
+			setParticleColor("#CE90FF");
+		} else if (foundItem.item_slot_type == "vitality") {
+			setParticleColor("#00FF99");
+		} else {
+			setParticleColor("#FF9900");
+		}
+	}, [foundItem?.item_slot_type]);
+
 	if (isLoading) {
 		return <LoadingIcon />;
 	}
@@ -34,8 +57,7 @@ export const ItemProfile = ({ itemId }: Props) => {
 		);
 	}
 
-	const foundItem = itemData.find((item: any) => item.name === itemId);
-	console.log(foundItem.id);
+	//console.log(foundItem.id);
 
 	const cleanDescription = (desc: string) => {
 		if (!desc) return "";
@@ -77,7 +99,7 @@ export const ItemProfile = ({ itemId }: Props) => {
 			...(innateSection?.section_attributes?.[0]?.properties ?? []),
 			...(innateSection?.section_attributes?.[0]?.elevated_properties ?? []),
 		];
-		console.log(innateProps);
+		//console.log(innateProps);
 
 		innateStats = innateProps.map((key, index: number) => {
 			const prop = foundItem.properties[key];
@@ -99,7 +121,7 @@ export const ItemProfile = ({ itemId }: Props) => {
 
 		activeStats = activeProps.map((key, index: number) => {
 			const prop = foundItem.properties[key];
-			console.log(prop);
+			//console.log(prop);
 			const value = String(prop.value);
 			const postfix = prop.postfix == undefined ? "" : String(prop.postfix);
 			const label = String(prop.label);
@@ -141,25 +163,21 @@ export const ItemProfile = ({ itemId }: Props) => {
 				: `${value}${postfix} ${label}${conditional} `;
 		});
 	}
-	console.log(passiveStats);
+	//console.log(passiveStats);
 	console.log(foundItem.item_slot_type);
+
 	return (
-		<View style={{ backgroundColor: theme.colors.background }}>
+		<View
+			style={{
+				height: height,
+				width: width,
+			}}>
 			<Header back={true} sortable={false} />
 			<View style={{ position: "absolute" }}>
-				{rt.themeName === "dark" ? (
+				<SparkleShader particleColorProp={particleColor} />
+
+				{/* {rt.themeName === "dark" ? (
 					<>
-						{/* <LinearGradient
-							style={{
-								zIndex: 9,
-								width: 500,
-								height: 1000,
-								position: "absolute",
-							}}
-							colors={[
-								"rgba(10, 10, 10, 0.47)",
-								"rgba(142, 142, 142, 0.27)",
-							]}></LinearGradient> */}
 						<Image
 							style={{ width: 1390, height: 900 }}
 							source={require("../images/Background_Buildings.png")}></Image>
@@ -171,13 +189,13 @@ export const ItemProfile = ({ itemId }: Props) => {
 							height: 900,
 						}}
 						source={require("../images/Background_Buildings_Light.png")}></Image>
-				)}
+				)} */}
 			</View>
 			<View style={styles.itemViewPAPA}>
 				<View style={styles.itemView}>
 					<BlurView
 						tint={rt.themeName === "dark" ? "dark" : "light"}
-						intensity={20}
+						intensity={10}
 						style={{
 							flexDirection: "row",
 							alignSelf: "center",
@@ -232,7 +250,7 @@ export const ItemProfile = ({ itemId }: Props) => {
 					</BlurView>
 					{foundItem.properties.AbilityCooldown.value > 0 ? (
 						<BlurView
-							intensity={20}
+							intensity={10}
 							tint={rt.themeName === "dark" ? "dark" : "light"}
 							style={{
 								borderWidth: 1,
@@ -310,7 +328,7 @@ export const ItemProfile = ({ itemId }: Props) => {
 					{description && (
 						<BlurView
 							tint={rt.themeName === "dark" ? "dark" : "light"}
-							intensity={20}
+							intensity={10}
 							style={{
 								borderWidth: 1,
 								flexWrap: "wrap",
@@ -339,7 +357,7 @@ export const ItemProfile = ({ itemId }: Props) => {
 
 					{activeSection || passiveSection !== undefined ? (
 						<BlurView
-							intensity={20}
+							intensity={10}
 							tint={rt.themeName === "dark" ? "dark" : "light"}
 							style={{
 								borderWidth: 1,
@@ -370,7 +388,7 @@ export const ItemProfile = ({ itemId }: Props) => {
 					) : null}
 					{foundItemForImages.Upgrades.length > 0 ? (
 						<BlurView
-							intensity={20}
+							intensity={10}
 							tint={rt.themeName === "dark" ? "dark" : "light"}
 							style={{
 								borderWidth: 1,
@@ -433,9 +451,7 @@ export const ItemProfile = ({ itemId }: Props) => {
 														color: theme.colors.font,
 														fontSize: 12,
 														alignSelf: "center",
-													}}>
-													{" "}
-												</CustomText>
+													}}></CustomText>
 											)}
 										</View>
 									);
@@ -445,12 +461,6 @@ export const ItemProfile = ({ itemId }: Props) => {
 					) : null}
 				</View>
 			</View>
-			<ScrollView
-				showsVerticalScrollIndicator={false}
-				style={{
-					height: screenHeight,
-					zIndex: 3,
-				}}></ScrollView>
 		</View>
 	);
 };

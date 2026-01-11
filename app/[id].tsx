@@ -1,6 +1,6 @@
 import { HeroProfile } from "@/components/HeroProfile";
 import { Link, useLocalSearchParams } from "expo-router";
-import { Button, Text, View, Image, SafeAreaView } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Id() {
 	const { id } = useLocalSearchParams();

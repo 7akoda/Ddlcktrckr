@@ -8,6 +8,7 @@ import { CustomText } from "./CustomText";
 import { LoadingIcon } from "./LoadingIcon";
 import { ItemImages } from "@/data/items";
 import { BlurView } from "expo-blur";
+import { SparkleShader } from "./Shader";
 
 export const ItemList = () => {
 	const [sort, setSort] = useState("");
@@ -59,17 +60,6 @@ export const ItemList = () => {
 			<View style={{ position: "absolute" }}>
 				{rt.themeName === "dark" ? (
 					<>
-						{/* <LinearGradient
-										style={{
-											zIndex: 9,
-											width: 500,
-											height: 1000,
-											position: "absolute",
-										}}
-										colors={[
-											"rgba(10, 10, 10, 0.47)",
-											"rgba(142, 142, 142, 0.27)",
-										]}></LinearGradient> */}
 						<Image
 							style={{ width: 1390, height: 900 }}
 							source={require("../images/Background_Buildings.png")}></Image>
