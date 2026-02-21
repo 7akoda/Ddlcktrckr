@@ -12,7 +12,6 @@ import {
 } from "@expo-google-fonts/eb-garamond";
 import { useUnistyles } from "react-native-unistyles";
 import { ItemList } from "@/components/ItemList";
-import { SparkleShader } from "@/components/Shader";
 
 export default function Index() {
 	const { theme } = useUnistyles();
@@ -28,7 +27,6 @@ export default function Index() {
 		<SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }}>
 			{/* <HeroList /> */}
 			<ItemList />
-			{/* <SparkleShader /> */}
 		</SafeAreaView>
 	);
 }

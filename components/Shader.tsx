@@ -1,231 +1,26 @@
+import { useEffect } from "react";
+import { Canvas, Circle, Group } from "@shopify/react-native-skia";
 import {
-	Canvas,
-	Fill,
-	Shader,
-	Skia,
-	useClock,
-} from "@shopify/react-native-skia";
-import { useWindowDimensions } from "react-native";
-import { useState, useEffect } from "react";
-import { useUnistyles } from "react-native-unistyles";
-import { useDerivedValue } from "react-native-reanimated";
+	useDerivedValue,
+	useSharedValue,
+	withRepeat,
+	withTiming,
+} from "react-native-reanimated";
 
-const source = Skia.RuntimeEffect.Make(`
-    const float twopi = 6.28319;
-    const int nb_particles = 10;
-    const float2 gen_scale = float2(0.98);
-    const float2 middlepoint = float2(0.0, 0.5);
-    const float2 gravitation = float2(0, -4.5);
-    const float3 main_x_freq = float3(0.4, 0.66, 0.78);
-    const float3 main_x_amp = float3(0.8, 0.24, 0.18);
-    const float3 main_x_phase = float3(0, 45, 55);
-    const float3 main_y_freq = float3(0.415, 0.61, 0.82);
-    const float3 main_y_amp = float3(0.72, 0.28, 0.15);
-    const float3 main_y_phase = float3(90, 120, 10);
-    const float part_timefact_min = 1;
-    const float part_timefact_max = 20;
-    const float2 part_max_mov = float2(0.28, 0.28);
-    const float time_factor = 0.4;
-    const float start_time = 1;
-    const float grow_time_factor = 0.15;
-    const float part_life_time_min = 0.9;
-    const float part_life_time_max = 3.0;
-    const float part_int_div = 50000;
-    const float part_int_factor_min = 0.3;
-    const float part_int_factor_max = 9.2;
-    const float part_spark_min_int = 0.15;
-    const float part_spark_max_int = 0.78;
-    const float part_spark_min_freq = 5.5;
-    const float part_spark_max_freq = 7;
-    const float part_spark_time_freq_fact = 0.35;
-    const float mp_int = 40;
-    const float dist_factor = 10.0;
-    const float ppow =2.6;
-    const float part_min_saturation = 0.5;
-    const float part_max_saturation = 0.9;
-    const float part_min_hue = -0.08;
-    const float part_max_hue = 0.08;
-    const float hue_time_factor = 0.035;
-    const float mp_hue = 0.0;  
-    const float mp_saturation = 0.18;  // Main particle saturation
-   const float2 part_starhv_dfac = float2(9, 0.32);
-const float part_starhv_ifac = 0.25;
-const float2 part_stardiag_dfac = float2(13, 0.61);
-const float part_stardiag_ifac = 0.19;
-    
-    uniform float iTime;
-    uniform float2 iResolution;
-    uniform float3 backgroundColor;
-    uniform float3 particleColor;
-    
-    float pst, plt, runnr, time2, time3, time4;
-    
-    float3 hsv2rgb(float3 hsv) {
-      hsv.yz = clamp(hsv.yz, 0, 1);
-      return hsv.z * (0.63 * hsv.y * (cos(twopi * (hsv.x + float3(0, 2.0/3.0, 1.0/3.0))) - 1) + 1);
-    }
-    
-    float random(float co) {
-      return fract(sin(co * 12.989) * 43758.545);
-    }
-    
-    float harms(float3 freq, float3 amp, float3 phase, float time) {
-      float val = 0;
-      for (int h = 0; h < 3; h++) {
-        val += amp[h] * cos(time * freq[h] * twopi + phase[h] / 360 * twopi);
-      }
-      return (1 + val) * 0.5;
-    }
-    
-    float2 getParticlePosition(int i) {
-      float part_timefact = mix(part_timefact_min, part_timefact_max, random(float(i * 2 + 94) + runnr * 1.5));
-      float ptime = (runnr * plt + pst) * (-1 / part_timefact + 1) + time2 / part_timefact;
-      
-      float2 ppos = float2(
-        harms(main_x_freq, main_x_amp, main_x_phase, ptime),
-        harms(main_y_freq, main_y_amp, main_y_phase, ptime)
-      ) + middlepoint;
-      
-      float2 delta_pos = part_max_mov * (float2(
-        random(float(i * 3 - 23) + runnr * 4),
-        random(float(i * 7 + 632) - runnr * 2.5)
-      ) - 0.5) * (time3 - pst);
-      
-      float2 grav_pos = gravitation * pow(time4, 2) / 250;
-      return (ppos + delta_pos + grav_pos) * gen_scale;
-    }
-    
-    float2 getParticlePosition_mp() {
-      float2 ppos = float2(
-        harms(main_x_freq, main_x_amp, main_x_phase, time2),
-        harms(main_y_freq, main_y_amp, main_y_phase, time2)
-      ) + middlepoint;
-      return gen_scale * ppos;
-    }
-    
-    float3 rgb2hsv(float3 c) {
-      float4 K = float4(0.0, -1.0/3.0, 2.0/3.0, -1.0);
-      float4 p = mix(float4(c.bg, K.wz),
-                     float4(c.gb, K.xy),
-                     step(c.b, c.g));
-      float4 q = mix(float4(p.xyw, c.r),
-                     float4(c.r, p.yzx),
-                     step(p.x, c.r));
-    
-      float d = q.x - min(q.w, q.y);
-      float e = 1.0e-10;
-      return float3(abs(q.z + (q.w - q.y) / (6.0 * d + e)),
-                    d / (q.x + e),
-                    q.x);
-    }
-    
-    float3 getParticleColor(int i, float pint) {
-      float3 hsv = rgb2hsv(particleColor);
-    
-      hsv.y *= mix(part_min_saturation, part_max_saturation,
-                   random(float(i * 6 + 44) + runnr * 3.3)) * 0.45 / pint;
-      float hueOffset = mix(part_min_hue, part_max_hue, random(float(i)) + hue_time_factor);
-      hsv.x += hueOffset;
-    
-      hsv.z *= pint;
-    
-      return hsv2rgb(hsv);
-    }
-    
-   float3 getParticleColor_mp(float pint) {
-  float3 hsv = rgb2hsv(particleColor);
-
-  hsv.y *= mix(part_min_saturation, part_max_saturation,
-               random(float(6 + 44) + runnr * 3.3)) * 0.45 / pint;
-  float hueOffset = mix(part_min_hue, part_max_hue, random(iTime) / 8) + hue_time_factor;
-  hsv.x += hueOffset;
-
-  hsv.z *= pint;
-
-  return hsv2rgb(hsv);
-}
-      
-    float3 drawParticles(float2 uv, float timedelta) {
-      time2 = time_factor * (iTime + timedelta);
-      float3 pcol = float3(0);
-      
-      // Draw regular particles
-      for (int i = 1; i < nb_particles; i++) {
-        pst = start_time * random(float(i * 2));
-        plt = mix(part_life_time_min, part_life_time_max, random(float(i * 2 - 35)));
-        time4 = mod(time2 - pst, plt);
-        time3 = time4 + pst;
-        runnr = floor((time2 - pst) / plt);
-        
-        float2 ppos = getParticlePosition(i);
-        float dist = distance(uv, ppos);
-        
-        float pint0 = mix(part_int_factor_min, part_int_factor_max, random(runnr * 4 + float(i - 55)));
-        float pint = pint0 * (pow(1.5 / (dist * dist_factor + 0.015), ppow) / part_int_div) * (1.0 - time4 / plt);
-        pint *= smoothstep(0, grow_time_factor * plt, time4);
-        float sparkfreq = clamp(part_spark_time_freq_fact*time4, 0.1, 1)*part_spark_min_freq + random(float(i*5 + 72) - runnr*1.8)*(part_spark_max_freq - part_spark_min_freq);
-        pint *= mix(part_spark_min_int, part_spark_max_int, random(float(i*7 - 621) - runnr*12.))*sin(sparkfreq*twopi*time2)/2. + 1.;
-        pcol += getParticleColor(i, pint);
-      }
-      
-      float2 ppos_mp = getParticlePosition_mp();
-      float dist_mp = distance(uv, ppos_mp);
-      
-      float pint1_mp = 1.0 / (dist_mp * dist_factor + 0.015);
-      
-      if (part_int_factor_max * pint1_mp > 6.0) {
-        float pint_mp = part_int_factor_max * (pow(pint1_mp, ppow) / part_int_div) * mp_int;
-        pcol += getParticleColor_mp(pint_mp);
-      }
-      
-      return pcol;
-    }
-    
-    half4 main(float2 fragCoord) {
-      float2 uv = fragCoord.xy / iResolution.xx;
-      float3 pcolor = half3(backgroundColor);
-      pcolor += half3(drawParticles(uv, 0.0)) * 9.0;
-      return half4(pcolor, 1);
-    }
-    `);
-if (!source) {
-	throw new Error("Couldn't compile the shader");
-}
-
-const hexToRgb = (hex: string): [number, number, number] => {
-	hex = hex.replace("#", "");
-
-	const r = parseInt(hex.substring(0, 2), 16) / 255;
-	const g = parseInt(hex.substring(2, 4), 16) / 255;
-	const b = parseInt(hex.substring(4, 6), 16) / 255;
-
-	return [r, g, b];
-};
-
-interface SparkleShaderProps {
-	particleColorProp: string;
-}
-
-export const SparkleShader = ({ particleColorProp }: SparkleShaderProps) => {
-	const { width, height } = useWindowDimensions();
-	const { theme } = useUnistyles();
-	const time = useClock();
-	const backgroundColor = hexToRgb(theme.colors.background);
-	const particleColor = hexToRgb(particleColorProp);
-	const uniforms = useDerivedValue(() => {
-		return {
-			iTime: time.value / 1000,
-			iResolution: [width, height],
-			backgroundColor: backgroundColor,
-			particleColor: particleColor,
-		};
-	});
-
+export const HelloWorld = () => {
+	const size = 256;
+	const r = useSharedValue(0);
+	const c = useDerivedValue(() => size - r.value);
+	useEffect(() => {
+		r.value = withRepeat(withTiming(size * 0.33, { duration: 1000 }), -1);
+	}, [r, size]);
 	return (
-		<Canvas style={{ width: width, height: height }}>
-			<Fill>
-				<Shader source={source} uniforms={uniforms} />
-			</Fill>
+		<Canvas style={{ flex: 1 }}>
+			<Group blendMode="multiply">
+				<Circle cx={r} cy={r} r={r} color="cyan" />
+				<Circle cx={c} cy={r} r={r} color="magenta" />
+				<Circle cx={size / 2} cy={c} r={r} color="yellow" />
+			</Group>
 		</Canvas>
 	);
 };

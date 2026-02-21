@@ -158,7 +158,7 @@ export const ItemImages: ItemGroups = {
 				Clock: false,
 				Description:
 					"Reduces the duration of all negative effects applied to you.",
-				Upgrades: ["Debuff Remover", "Unstoppable"],
+				Upgrades: ["Dispel Magic", "Unstoppable"],
 				Nuance: null,
 				Downgrades: [],
 			},
@@ -377,7 +377,7 @@ export const ItemImages: ItemGroups = {
 				Downgrades: [],
 			},
 			{
-				Name: "Debuff Remover",
+				Name: "Dispel Magic",
 				Image: require("../images/Vitality/3200/Debuff_Remover.png"),
 				Flat: ["+30% Debuff Resist", "+100 Bonus Health"],
 				Clock: true,
@@ -2366,7 +2366,7 @@ export const ItemImages: ItemGroups = {
 				Upgrades: [],
 			},
 			{
-				Name: "Curse",
+				Name: "Cursed Relic",
 				Image: require("../images/Spirit/6400/Curse.png"),
 				Flat: ["+20% Weapon Damage"],
 				Clock: true,
