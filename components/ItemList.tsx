@@ -8,7 +8,6 @@ import { CustomText } from "./CustomText";
 import { LoadingIcon } from "./LoadingIcon";
 import { ItemImages } from "@/data/items";
 import { BlurView } from "expo-blur";
-import { SparkleShader } from "./Shader";
 
 export const ItemList = () => {
 	const [sort, setSort] = useState("");

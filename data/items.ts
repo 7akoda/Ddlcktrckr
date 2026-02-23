@@ -1155,6 +1155,20 @@ export const ItemImages: ItemGroups = {
 				Nuance: null,
 			},
 			{
+				Name: "Recharging Rush",
+				Image: require("../images/Weapon/1600/Recharging_Rush.png"),
+				Flat: ["+7 Spirit Power"],
+				Description:
+					"Your attacks have additional Weapon Damage against enemies above 50% health.",
+				Clock: true,
+				Timer: null,
+				Type: "Passive",
+				ActiveDescription: ["+40% Weapon Damage (Conditional)"],
+				Downgrades: [],
+				Upgrades: [],
+				Nuance: null,
+			},
+			{
 				Name: "Slowing Bullets",
 				Image: require("../images/Weapon/1600/Slowing_Bullets.png"),
 				Flat: ["+7% Fire Rate"],
@@ -1249,6 +1263,26 @@ export const ItemImages: ItemGroups = {
 			{
 				Name: "Alchemical Fire",
 				Image: require("../images/Weapon/3200/Alchemical_Fire.png"),
+				Flat: ["+8 Spirit Power"],
+				Clock: true,
+				Timer: "30s",
+				Type: "Active",
+				Description:
+					"Throw a flask that explodes on contact, creating an area that does increasing Spirit Damage per second and reduces enemy Bullet Resist.",
+				Nuance: ["50% less effective vs non-heroes."],
+				ActiveDescription: [
+					"45 x 0.15 Spirit Damage Per Second",
+					"-8% x -0.07 Bullet Resist (Conditional)",
+					"95 x 0.3 Max DPS",
+					"10m Radius",
+					"5s Duration",
+				],
+				Upgrades: [],
+				Downgrades: [],
+			},
+			{
+				Name: "Ballistic Enchantment",
+				Image: require("../images/Weapon/3200/Ballistic_Enchantment.png"),
 				Flat: ["+8 Spirit Power"],
 				Clock: true,
 				Timer: "30s",
