@@ -15,7 +15,7 @@ import { CooldownSvg } from "./svgComponents/CooldownSvg";
 import { useItemData } from "@/hooks/useItemData";
 import { Link } from "expo-router";
 import { BlurView } from "expo-blur";
-import { act, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ItemIcon } from "./ItemIcon";
 import React from "react";
 
@@ -23,13 +23,10 @@ type Props = {
 	itemId: string[] | string;
 };
 
-//fortitude issue
-
 export const ItemProfile = ({ itemId }: Props) => {
 	const { theme, rt } = useUnistyles();
 	const { width, height } = useWindowDimensions();
 	const [particleColor, setParticleColor] = useState<string>("#FF9900");
-
 	const { itemData, isError, isLoading, error } = useItemData();
 	const foundItem = itemData?.find((item: any) => item.name === itemId);
 
@@ -50,10 +47,10 @@ export const ItemProfile = ({ itemId }: Props) => {
 	}
 
 	if (isError) {
-		console.error("Hero stats error:", error);
+		console.error("Item Data error:", error);
 		return (
 			<CustomText style={{ color: "#EADEDA" }}>
-				Failed to load hero data.
+				Failed to load Item data.
 			</CustomText>
 		);
 	}
@@ -64,10 +61,13 @@ export const ItemProfile = ({ itemId }: Props) => {
 		if (!desc) return "";
 
 		let cleaned = desc.replace(/<svg[\s\S]*?<\/svg>/gi, "");
+
 		let superCleaned = cleaned.replace(
 			/{g:citadel_binding:'Reload'}/,
 			"reload"
 		);
+
+		superCleaned = superCleaned.replace(/[.]/g, ".\n");
 
 		superCleaned = superCleaned.replace(/<[^>]+>/g, "");
 
@@ -81,6 +81,27 @@ export const ItemProfile = ({ itemId }: Props) => {
 		return superCleaned;
 	};
 
+	const cleanDecimals = (scale: number) => {
+		const scaleString = String(scale);
+		const scaleArr = [...scaleString];
+
+		const filterScale = scaleArr.filter((s) => {
+			return s !== "-";
+		});
+		if (filterScale.length == 1 || 2) {
+			return scale;
+		} else {
+			for (let i = 2; i < filterScale.length; i++) {
+				if (filterScale[i + 1] !== "0" && filterScale[i + 2] >= "5") {
+					return scale.toFixed(i + 1);
+				} else if (filterScale[i + 1] !== "0") {
+					return scale.toFixed(i);
+				} else {
+					return scale.toFixed(1);
+				}
+			}
+		}
+	};
 	const description = foundItem.description.desc ? (
 		cleanDescription(foundItem.description.desc)
 	) : foundItem.description.active && foundItem.description.passive ? (
@@ -132,20 +153,36 @@ export const ItemProfile = ({ itemId }: Props) => {
 		(item) => item.Name === itemId
 	);
 
-	let unNamedStats: string[] = [];
-	const unNamed = foundItem.tooltip_sections?.[1]?.section_type;
-	console.log(unNamed);
-	const unNamedSection =
-		foundItem.tooltip_sections?.[1]?.section_attributes?.[0];
-	if (unNamed !== "passive" && unNamed !== "active" && unNamed !== undefined) {
-		const unNamedProps = [
-			...(unNamedSection.properties ?? []),
-			...(unNamedSection.important_properties ?? []),
+	const innateSection = foundItem.tooltip_sections.find(
+		(section: any) => section.section_type === "innate"
+	);
+
+	let innateStats: string[] = [];
+	if (innateSection) {
+		let innateProps = [
+			...(innateSection?.section_attributes?.[0]?.properties ?? []),
+			...(innateSection?.section_attributes?.[0]?.elevated_properties ?? []),
 		];
-		unNamedStats = unNamedProps.map((key, index: number) => {
+
+		innateProps = innateProps.filter((key) => {
 			const prop = foundItem.properties[key];
-			console.log("from unNamedStats: " + key);
-			return index <= unNamedProps.length && key !== "AbilityCooldown" ? (
+			return (
+				prop !== undefined &&
+				parseFloat(prop.value) !== 0 &&
+				prop.value !== "" &&
+				prop.label &&
+				key !== "InterruptCooldown" &&
+				key !== "AbilityCooldown"
+			);
+		});
+
+		innateStats = innateProps.map((key, index: number) => {
+			const prop = foundItem.properties[key];
+			const value = prop.value;
+			const postfix = prop.postfix == undefined ? "" : prop.postfix;
+			const prefix = prop.prefix;
+			const label = prop.label;
+			return (
 				<React.Fragment key={key}>
 					<CustomText
 						style={{
@@ -157,39 +194,30 @@ export const ItemProfile = ({ itemId }: Props) => {
 							fontSize: 12,
 							fontFamily: theme.fontFamily.regular,
 						}}>
-						{prop.value}
-						{prop.postfix == prop.value[prop.value.length - 1]
+						{index > 0 ? <>{"\n"}</> : null}
+						{prefix == value[0]
 							? ""
-							: prop.postfix}
-						{" " + prop.label}
-						{index !== unNamedProps.length - 1 && key !== "AbilityCooldown"
-							? `\n`
-							: null}
+							: value[0] == "-"
+							? ""
+							: prefix === "{s:sign}"
+							? "+"
+							: prefix}
+						{value[value.length - 1] == postfix[1] &&
+						postfix !== value[value.length - 1]
+							? value.slice(0, value.length - 1)
+							: value}
+						{postfix == "m" &&
+						label === "Move Speed" &&
+						value[value.length - 1] == "m"
+							? "/s" + " "
+							: postfix == value[value.length - 1] ||
+							  postfix[postfix.length - 1] == value[value.length - 1]
+							? "" + " "
+							: postfix + " "}
+						{label}
 					</CustomText>
 				</React.Fragment>
-			) : null;
-		});
-	}
-
-	const innateSection = foundItem.tooltip_sections.find(
-		(section: any) => section.section_type === "innate"
-	);
-
-	let innateStats: string[] = [];
-
-	if (innateSection) {
-		const innateProps = [
-			...(innateSection?.section_attributes?.[0]?.properties ?? []),
-			...(innateSection?.section_attributes?.[0]?.elevated_properties ?? []),
-		];
-
-		innateStats = innateProps.map((key, index: number) => {
-			const prop = foundItem.properties[key];
-			return index !== 0 && prop.value !== ""
-				? `\n${prop.value}${prop.postfix || ""} ${prop.label}`
-				: prop.value !== ""
-				? `${prop.value}${prop.postfix || ""} ${prop.label}`
-				: null;
+			);
 		});
 	}
 
@@ -198,15 +226,27 @@ export const ItemProfile = ({ itemId }: Props) => {
 	);
 	let activeStats: string[] = [];
 	if (activeSection) {
-		const activeProps = [
+		let activeProps = [
 			...(activeSection?.section_attributes?.[0]?.properties ?? []),
 			...(activeSection?.section_attributes?.[0]?.important_properties ?? []),
 		];
+		activeProps = activeProps.filter((key) => {
+			const prop = foundItem.properties[key];
+			return (
+				prop !== undefined &&
+				parseFloat(prop.value) !== 0 &&
+				prop.value !== "" &&
+				prop.label &&
+				key !== "InterruptCooldown" &&
+				key !== "AbilityCooldown"
+			);
+		});
 		activeStats = activeProps.map((key, index: number) => {
 			if (
 				key !== "StatusEffectEMP" &&
 				key !== "StatusEffectDisarmed" &&
-				key !== "StatusEffectStun"
+				key !== "StatusEffectStun" &&
+				key !== "StatusEffectInvisible"
 			) {
 				const prop = foundItem.properties[key];
 				const value = String(prop.value);
@@ -214,7 +254,8 @@ export const ItemProfile = ({ itemId }: Props) => {
 				const scaleType = prop?.scale_function?.specific_stat_scale_type;
 				const postfix = prop.postfix == undefined ? "" : String(prop.postfix);
 				const label = String(prop.label);
-				const conditional = prop.tooltip_is_important ? " (Conditional)" : "";
+				// const conditional =
+				// 	prop.tooltip_section == "active" ? " (Conditional)" : "";
 				console.log("from activeStats: " + key);
 				return prop.value !== undefined && key !== "AbilityCooldown" ? (
 					<React.Fragment key={key}>
@@ -228,11 +269,27 @@ export const ItemProfile = ({ itemId }: Props) => {
 								fontSize: 12,
 								fontFamily: theme.fontFamily.regular,
 							}}>
-							{value}
-							{postfix == value[value.length - 1] ? "" : postfix}{" "}
+							{prop.prefix == prop.value[0]
+								? ""
+								: prop.value[0] == "-"
+								? ""
+								: prop.prefix === "{s:sign}"
+								? "+"
+								: prop.prefix}
+							{value[value.length - 1] == postfix[1] &&
+							postfix !== value[value.length - 1]
+								? value.slice(0, value.length - 1)
+								: value}
+							{postfix == "m" &&
+							label === "Move Speed" &&
+							value[value.length - 1] == "m"
+								? "/s" + " "
+								: postfix == value[value.length - 1] ||
+								  postfix[postfix.length - 1] == value[value.length - 1]
+								? "" + " "
+								: postfix + " "}
 							{scaleType == "ETechPower" ? (
 								<>
-									<CustomText> </CustomText>
 									<Image
 										source={require("../images/25px-Spirit_scaling.png")}
 										style={{ width: 12, height: 10 }}
@@ -247,12 +304,11 @@ export const ItemProfile = ({ itemId }: Props) => {
 											fontSize: 12,
 											fontFamily: theme.fontFamily.regular,
 										}}>
-										{scale ?? ""}
+										{cleanDecimals(scale) ?? ""}{" "}
 									</CustomText>
 								</>
 							) : scaleType == "ELevelUpBoons" ? (
 								<>
-									<CustomText> </CustomText>
 									<Image
 										source={require("../images/20px-Boon_scaling.png")}
 										style={{ width: 12, height: 10 }}
@@ -267,14 +323,14 @@ export const ItemProfile = ({ itemId }: Props) => {
 											fontSize: 12,
 											fontFamily: theme.fontFamily.regular,
 										}}>
-										{scale ?? ""}
+										{cleanDecimals(scale) ?? ""}{" "}
 									</CustomText>
 								</>
 							) : (
 								""
 							)}
-							{" " + label}
-							{conditional}
+							{label}
+							{/* {conditional} */}
 							{index !== activeProps.length - 1 ? `\n` : null}
 						</CustomText>
 					</React.Fragment>
@@ -286,6 +342,8 @@ export const ItemProfile = ({ itemId }: Props) => {
 					? `Disarmed Status Effect\n`
 					: key == "StatusEffectStun"
 					? `Stun Status Effect\n`
+					: key == "StatusEffectInvisible"
+					? `Invisible Status Effect\n`
 					: null;
 			} else if (index == activeProps.length - 1) {
 				return key == "StatusEffectEMP"
@@ -294,6 +352,8 @@ export const ItemProfile = ({ itemId }: Props) => {
 					? `Disarmed Status Effect`
 					: key == "StatusEffectStun"
 					? `Stun Status Effect`
+					: key == "StatusEffectInvisible"
+					? "Invisible Status Effect"
 					: null;
 			}
 		});
@@ -304,13 +364,27 @@ export const ItemProfile = ({ itemId }: Props) => {
 	);
 	let passiveStats: string[] = [];
 	if (passiveSection) {
-		const passiveProps = [
+		let passiveProps = [
 			...(passiveSection?.section_attributes?.[0]?.properties ?? []),
-
 			...(passiveSection?.section_attributes?.[0]?.important_properties ?? []),
 			...(passiveSection?.section_attributes?.[0]?.elevated_properties ?? []),
 		];
+
+		passiveProps = passiveProps.filter((key) => {
+			const prop = foundItem.properties[key];
+			return (
+				prop !== undefined &&
+				parseFloat(prop.value) !== 0 &&
+				prop.value !== "" &&
+				prop.label &&
+				key !== "InterruptCooldown" &&
+				key !== "AbilityCooldown"
+			);
+		});
+
 		passiveStats = passiveProps.map((key, index: number) => {
+			console.log("from passiveStats: " + key);
+
 			if (
 				key !== "StatusEffectEMP" &&
 				key !== "StatusEffectDisarmed" &&
@@ -319,15 +393,17 @@ export const ItemProfile = ({ itemId }: Props) => {
 				key !== "StatusEffectInvisible"
 			) {
 				const prop = foundItem.properties[key];
-				const value = String(prop.value);
+
+				const value = prop.value;
 				const scale = prop?.scale_function?.stat_scale;
 				const scaleType = prop?.scale_function?.specific_stat_scale_type;
-				const postfix = prop.postfix == undefined ? "" : String(prop.postfix);
-				const label = String(prop.label);
-				const conditional = prop.tooltip_is_important ? " (Conditional)" : "";
-				console.log("from passiveStats: " + key);
-				console.log();
-				return prop.value !== undefined && key !== "AbilityCooldown" ? (
+				const postfix = prop.postfix == undefined ? "" : prop.postfix;
+				const label = prop.label;
+				// const conditional =
+				// 	prop.tooltip_section == "passive" ? " (Conditional)" : "";
+				return prop.value !== undefined &&
+					key !== "AbilityCooldown" &&
+					key !== "InterruptCooldown" ? (
 					<React.Fragment key={key}>
 						<CustomText
 							style={{
@@ -339,14 +415,29 @@ export const ItemProfile = ({ itemId }: Props) => {
 								fontSize: 12,
 								fontFamily: theme.fontFamily.regular,
 							}}>
-							{value}
-							{postfix == value[value.length - 1] ||
-							postfix[postfix.length - 1] == value[value.length - 1]
+							{prop.prefix == prop.value[0]
 								? ""
-								: postfix}{" "}
+								: prop.value[0] == "-"
+								? ""
+								: prop.prefix === "{s:sign}"
+								? "+"
+								: prop.prefix}
+							{value[value.length - 1] == postfix[1] &&
+							postfix !== value[value.length - 1]
+								? value.slice(0, value.length - 1)
+								: value}
+							{postfix == "m" &&
+							label === "Move Speed" &&
+							value[value.length - 1] == "m"
+								? "/s" + " "
+								: postfix == value[value.length - 1] ||
+								  postfix[postfix.length - 1] == value[value.length - 1]
+								? "" + " "
+								: postfix[0] == " "
+								? postfix.slice(1) + " "
+								: postfix + " "}
 							{scaleType == "ETechPower" ? (
 								<>
-									<CustomText> </CustomText>
 									<Image
 										source={require("../images/25px-Spirit_scaling.png")}
 										style={{ width: 12, height: 10 }}
@@ -361,12 +452,11 @@ export const ItemProfile = ({ itemId }: Props) => {
 											fontSize: 12,
 											fontFamily: theme.fontFamily.regular,
 										}}>
-										{scale ?? ""}
+										{cleanDecimals(scale) ?? ""}{" "}
 									</CustomText>
 								</>
 							) : scaleType == "ELevelUpBoons" ? (
 								<>
-									<CustomText> </CustomText>
 									<Image
 										source={require("../images/20px-Boon_scaling.png")}
 										style={{ width: 10, height: 8 }}
@@ -381,14 +471,14 @@ export const ItemProfile = ({ itemId }: Props) => {
 											fontSize: 12,
 											fontFamily: theme.fontFamily.regular,
 										}}>
-										{scale ?? ""}
+										{cleanDecimals(scale) ?? ""}{" "}
 									</CustomText>
 								</>
 							) : (
 								""
 							)}
-							{" " + label}
-							{conditional}
+							{label}
+							{/* {conditional} */}
 							{index !== passiveProps.length - 1 ? `\n` : null}
 						</CustomText>
 					</React.Fragment>
@@ -400,7 +490,7 @@ export const ItemProfile = ({ itemId }: Props) => {
 					? `Disarmed Status Effect\n`
 					: key == "StatusEffectStun"
 					? `Stun Status Effect\n`
-					: key == "StatusEffectInvisible"
+					: key == "Status Effect Invisible"
 					? `Invisible Status Effect\n`
 					: null;
 			} else if (index == passiveProps.length - 1) {
@@ -414,6 +504,123 @@ export const ItemProfile = ({ itemId }: Props) => {
 					? `Invisible Status Effect`
 					: null;
 			}
+		});
+	}
+
+	let unNamedStats: string[] = [];
+	const unNamed = foundItem.tooltip_sections?.[1]?.section_type;
+	const unNamedSection =
+		foundItem.tooltip_sections?.[1]?.section_attributes?.[0];
+	let unNamedSectionBecauseBadApi;
+	let unNamedSectionBecauseBadApiSectionType;
+	if (!activeSection && !passiveSection) {
+		unNamedSectionBecauseBadApi =
+			foundItem.tooltip_sections?.[0]?.section_attributes?.[0];
+		unNamedSectionBecauseBadApiSectionType =
+			foundItem.tooltip_sections?.[0]?.section_type;
+	}
+	console.log(unNamedSectionBecauseBadApi);
+	if (
+		unNamed == undefined &&
+		unNamedSection !== undefined &&
+		unNamedSectionBecauseBadApi !== undefined
+	) {
+		let unNamedProps = [];
+
+		if (unNamedSectionBecauseBadApiSectionType == "innate") {
+			unNamedProps = [
+				...(unNamedSection?.properties ?? []),
+				...(unNamedSection?.important_properties ?? []),
+			];
+		} else {
+			unNamedProps = [
+				...(unNamedSection?.properties ?? []),
+				...(unNamedSection?.important_properties ?? []),
+				...(unNamedSectionBecauseBadApi?.properties ?? []),
+				...(unNamedSectionBecauseBadApi?.important_properties ?? []),
+			];
+		}
+
+		console.log("unnamed = " + unNamedProps);
+
+		unNamedStats = unNamedProps.map((key, index: number) => {
+			const prop = foundItem.properties[key];
+			const scale = prop?.scale_function?.stat_scale;
+			const scaleType = prop?.scale_function?.specific_stat_scale_type;
+
+			return index <= unNamedProps.length && key !== "AbilityCooldown" ? (
+				<React.Fragment key={key}>
+					<CustomText
+						style={{
+							color: theme.colors.font,
+							flexDirection: "column",
+							marginHorizontal: 6,
+							marginVertical: 6,
+							lineHeight: 15,
+							fontSize: 12,
+							fontFamily: theme.fontFamily.regular,
+						}}>
+						{prop.prefix == prop.value[0]
+							? ""
+							: prop.value[0] == "-"
+							? ""
+							: prop.prefix === "{s:sign}"
+							? "+"
+							: prop.prefix}
+						{prop.value}
+						{prop.postfix == prop.value[prop.value.length - 1]
+							? ""
+							: prop.postfix}
+						{scaleType == "ETechPower" ? (
+							<>
+								<CustomText> </CustomText>
+								<Image
+									source={require("../images/25px-Spirit_scaling.png")}
+									style={{ width: 12, height: 10 }}
+								/>
+								<CustomText
+									style={{
+										color: "#CE90FF",
+										flexDirection: "column",
+										marginHorizontal: 6,
+										marginVertical: 6,
+										lineHeight: 15,
+										fontSize: 12,
+										fontFamily: theme.fontFamily.regular,
+									}}>
+									{scale ?? ""}
+								</CustomText>
+							</>
+						) : scaleType == "ELevelUpBoons" ? (
+							<>
+								<CustomText> </CustomText>
+								<Image
+									source={require("../images/20px-Boon_scaling.png")}
+									style={{ width: 12, height: 10 }}
+								/>
+								<CustomText
+									style={{
+										color: "##00FF99",
+										flexDirection: "column",
+										marginHorizontal: 6,
+										marginVertical: 6,
+										lineHeight: 15,
+										fontSize: 12,
+										fontFamily: theme.fontFamily.regular,
+									}}>
+									{scale ?? ""}
+								</CustomText>
+							</>
+						) : (
+							""
+						)}
+						{" " + prop.label}
+						{index !== unNamedProps.length - 1 && key !== "AbilityCooldown"
+							? `\n`
+							: null}
+					</CustomText>
+				</React.Fragment>
+			) : null;
 		});
 	}
 
