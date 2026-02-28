@@ -18,7 +18,14 @@ import { BlurView } from "expo-blur";
 import { useEffect, useState } from "react";
 import { ItemIcon } from "./ItemIcon";
 import React from "react";
-
+import {
+	cleanDecimals,
+	cleanDescription,
+} from "@/api/decimaldescriptionTransform";
+import { ActiveData } from "@/api/itemActive";
+import { InnateData } from "@/api/itemInnate";
+import { PassiveData } from "@/api/itemPassive";
+import { UnNamedData } from "@/api/itemUnNamed";
 type Props = {
 	itemId: string[] | string;
 };
@@ -54,96 +61,75 @@ export const ItemProfile = ({ itemId }: Props) => {
 			</CustomText>
 		);
 	}
-
-	console.log(foundItem.id);
-
-	const cleanDescription = (desc: string) => {
-		if (!desc) return "";
-
-		let cleaned = desc.replace(/<svg[\s\S]*?<\/svg>/gi, "");
-
-		let superCleaned = cleaned.replace(
-			/{g:citadel_binding:'Reload'}/,
-			"reload"
-		);
-
-		superCleaned = superCleaned.replace(/[.]/g, ".\n");
-
-		superCleaned = superCleaned.replace(/<[^>]+>/g, "");
-
-		try {
-			const { decode } = require("he");
-			superCleaned = decode(superCleaned);
-		} catch {}
-
-		superCleaned = superCleaned.replace(/\s+/g, " ").trim();
-
-		return superCleaned;
-	};
-
-	const cleanDecimals = (scale: number) => {
-		const scaleString = String(scale);
-		const scaleArr = [...scaleString];
-
-		const filterScale = scaleArr.filter((s) => {
-			return s !== "-";
-		});
-		if (filterScale.length == 1 || 2) {
-			return scale;
-		} else {
-			for (let i = 2; i < filterScale.length; i++) {
-				if (filterScale[i + 1] !== "0" && filterScale[i + 2] >= "5") {
-					return scale.toFixed(i + 1);
-				} else if (filterScale[i + 1] !== "0") {
-					return scale.toFixed(i);
-				} else {
-					return scale.toFixed(1);
-				}
-			}
-		}
-	};
-	const description = foundItem.description.desc ? (
-		cleanDescription(foundItem.description.desc)
-	) : foundItem.description.active && foundItem.description.passive ? (
-		<>
-			<CustomText
-				style={{
-					color: theme.colors.font,
-					flexDirection: "column",
-					marginHorizontal: 6,
-					marginVertical: 4,
-					lineHeight: 15,
-					fontSize: 12,
-					fontFamily: theme.fontFamily.regular,
-				}}>
-				{cleanDescription(foundItem.description.passive)}
-
-				{"\n"}
-			</CustomText>
-			<CustomText
-				style={{
-					color: theme.colors.font,
-					flexDirection: "column",
-					marginHorizontal: 6,
-					marginVertical: 4,
-					lineHeight: 15,
-					fontSize: 12,
-					fontFamily: theme.fontFamily.regular,
-				}}>
-				{cleanDescription(foundItem.description.active)}
-			</CustomText>
-		</>
-	) : foundItem.description.active ? (
-		cleanDescription(foundItem.description.active)
-	) : foundItem.description.passive ? (
-		cleanDescription(foundItem.description.passive)
-	) : foundItem.tooltip_sections?.[1]?.section_attributes?.[0]?.loc_string ? (
-		cleanDescription(
-			foundItem.tooltip_sections[1].section_attributes[0].loc_string
-		)
-	) : (
-		""
+	const innateSection = foundItem.tooltip_sections.find(
+		(section: any) => section.section_type === "innate"
 	);
+
+	const passiveSection = foundItem.tooltip_sections.filter(
+		(section: any) => section.section_type == "passive"
+	);
+	let passiveLengthBoolean = false;
+	if (passiveSection) {
+		if (passiveSection.length > 1) {
+			passiveLengthBoolean = true;
+		}
+	}
+	const activeSection = foundItem.tooltip_sections.find(
+		(section: any) => section.section_type === "active"
+	);
+	let activeLengthBoolean = false;
+	if (activeSection) {
+		if (activeSection.section_attributes.length > 1) {
+			activeLengthBoolean = true;
+		}
+	}
+	const unNamedSection = foundItem.tooltip_sections.find((section: any) => {
+		return (
+			section.section_type !== "innate" &&
+			section.section_type !== "passive" &&
+			section.section_type !== "active"
+		);
+	});
+
+	const passiveSectionFound = foundItem.tooltip_sections.find(
+		(section: any) => section.section_type == "passive"
+	);
+
+	const hasUnNamed = !!unNamedSection;
+	const hasPassive = !!passiveSectionFound;
+	const hasActive = !!activeSection;
+	const hasInnate = !!innateSection;
+	console.log(foundItem.id);
+	const description = {
+		desc: foundItem?.description?.desc
+			? cleanDescription(foundItem.description.desc)
+			: null,
+
+		passive: foundItem?.description?.passive
+			? cleanDescription(foundItem.description.passive)
+			: passiveSection[0]?.section_attributes?.[0]?.loc_string
+			? cleanDescription(passiveSection[0]?.section_attributes[0].loc_string)
+			: null,
+
+		active: foundItem?.description?.active
+			? cleanDescription(foundItem.description.active)
+			: activeSection?.section_attributes?.[0]?.loc_string
+			? cleanDescription(activeSection.section_attributes[0].loc_string)
+			: null,
+
+		unNamed: unNamedSection?.section_attributes?.[0]?.loc_string
+			? cleanDescription(unNamedSection.section_attributes[0].loc_string)
+			: null,
+
+		passive2: passiveSection[1]?.section_attributes?.[0]?.loc_string
+			? cleanDescription(passiveSection[1].section_attributes[0].loc_string)
+			: null,
+
+		active2: activeSection?.section_attributes?.[1]?.loc_string
+			? cleanDescription(activeSection.section_attributes[1].loc_string)
+			: null,
+	};
+	const hasDescription = Object.values(description).some(Boolean);
 
 	const allItemsForImages = Object.values(ItemImages).flatMap((category) =>
 		Object.values(category).flat()
@@ -152,478 +138,6 @@ export const ItemProfile = ({ itemId }: Props) => {
 	const foundItemForImages = allItemsForImages.find(
 		(item) => item.Name === itemId
 	);
-
-	const innateSection = foundItem.tooltip_sections.find(
-		(section: any) => section.section_type === "innate"
-	);
-
-	let innateStats: string[] = [];
-	if (innateSection) {
-		let innateProps = [
-			...(innateSection?.section_attributes?.[0]?.properties ?? []),
-			...(innateSection?.section_attributes?.[0]?.elevated_properties ?? []),
-		];
-
-		innateProps = innateProps.filter((key) => {
-			const prop = foundItem.properties[key];
-			return (
-				prop !== undefined &&
-				parseFloat(prop.value) !== 0 &&
-				prop.value !== "" &&
-				prop.label &&
-				key !== "InterruptCooldown" &&
-				key !== "AbilityCooldown"
-			);
-		});
-
-		innateStats = innateProps.map((key, index: number) => {
-			const prop = foundItem.properties[key];
-			const value = prop.value;
-			const postfix = prop.postfix == undefined ? "" : prop.postfix;
-			const prefix = prop.prefix;
-			const label = prop.label;
-			return (
-				<React.Fragment key={key}>
-					<CustomText
-						style={{
-							color: theme.colors.font,
-							flexDirection: "column",
-							marginHorizontal: 6,
-							marginVertical: 6,
-							lineHeight: 15,
-							fontSize: 12,
-							fontFamily: theme.fontFamily.regular,
-						}}>
-						{index > 0 ? <>{"\n"}</> : null}
-						{prefix == value[0]
-							? ""
-							: value[0] == "-"
-							? ""
-							: prefix === "{s:sign}"
-							? "+"
-							: prefix}
-						{value[value.length - 1] == postfix[1] &&
-						postfix !== value[value.length - 1]
-							? value.slice(0, value.length - 1)
-							: value}
-						{postfix == "m" &&
-						label === "Move Speed" &&
-						value[value.length - 1] == "m"
-							? "/s" + " "
-							: postfix == value[value.length - 1] ||
-							  postfix[postfix.length - 1] == value[value.length - 1]
-							? "" + " "
-							: postfix + " "}
-						{label}
-					</CustomText>
-				</React.Fragment>
-			);
-		});
-	}
-
-	const activeSection = foundItem.tooltip_sections.find(
-		(section: any) => section.section_type === "active"
-	);
-	let activeStats: string[] = [];
-	if (activeSection) {
-		let activeProps = [
-			...(activeSection?.section_attributes?.[0]?.properties ?? []),
-			...(activeSection?.section_attributes?.[0]?.important_properties ?? []),
-		];
-		activeProps = activeProps.filter((key) => {
-			const prop = foundItem.properties[key];
-			return (
-				prop !== undefined &&
-				parseFloat(prop.value) !== 0 &&
-				prop.value !== "" &&
-				prop.label &&
-				key !== "InterruptCooldown" &&
-				key !== "AbilityCooldown"
-			);
-		});
-		activeStats = activeProps.map((key, index: number) => {
-			if (
-				key !== "StatusEffectEMP" &&
-				key !== "StatusEffectDisarmed" &&
-				key !== "StatusEffectStun" &&
-				key !== "StatusEffectInvisible"
-			) {
-				const prop = foundItem.properties[key];
-				const value = String(prop.value);
-				const scale = prop?.scale_function?.stat_scale;
-				const scaleType = prop?.scale_function?.specific_stat_scale_type;
-				const postfix = prop.postfix == undefined ? "" : String(prop.postfix);
-				const label = String(prop.label);
-				// const conditional =
-				// 	prop.tooltip_section == "active" ? " (Conditional)" : "";
-				console.log("from activeStats: " + key);
-				return prop.value !== undefined && key !== "AbilityCooldown" ? (
-					<React.Fragment key={key}>
-						<CustomText
-							style={{
-								color: theme.colors.font,
-								flexDirection: "column",
-								marginHorizontal: 6,
-								marginVertical: 6,
-								lineHeight: 15,
-								fontSize: 12,
-								fontFamily: theme.fontFamily.regular,
-							}}>
-							{prop.prefix == prop.value[0]
-								? ""
-								: prop.value[0] == "-"
-								? ""
-								: prop.prefix === "{s:sign}"
-								? "+"
-								: prop.prefix}
-							{value[value.length - 1] == postfix[1] &&
-							postfix !== value[value.length - 1]
-								? value.slice(0, value.length - 1)
-								: value}
-							{postfix == "m" &&
-							label === "Move Speed" &&
-							value[value.length - 1] == "m"
-								? "/s" + " "
-								: postfix == value[value.length - 1] ||
-								  postfix[postfix.length - 1] == value[value.length - 1]
-								? "" + " "
-								: postfix + " "}
-							{scaleType == "ETechPower" ? (
-								<>
-									<Image
-										source={require("../images/25px-Spirit_scaling.png")}
-										style={{ width: 12, height: 10 }}
-									/>
-									<CustomText
-										style={{
-											color: "#CE90FF",
-											flexDirection: "column",
-											marginHorizontal: 6,
-											marginVertical: 6,
-											lineHeight: 15,
-											fontSize: 12,
-											fontFamily: theme.fontFamily.regular,
-										}}>
-										{cleanDecimals(scale) ?? ""}{" "}
-									</CustomText>
-								</>
-							) : scaleType == "ELevelUpBoons" ? (
-								<>
-									<Image
-										source={require("../images/20px-Boon_scaling.png")}
-										style={{ width: 12, height: 10 }}
-									/>
-									<CustomText
-										style={{
-											color: "##00FF99",
-											flexDirection: "column",
-											marginHorizontal: 6,
-											marginVertical: 6,
-											lineHeight: 15,
-											fontSize: 12,
-											fontFamily: theme.fontFamily.regular,
-										}}>
-										{cleanDecimals(scale) ?? ""}{" "}
-									</CustomText>
-								</>
-							) : (
-								""
-							)}
-							{label}
-							{/* {conditional} */}
-							{index !== activeProps.length - 1 ? `\n` : null}
-						</CustomText>
-					</React.Fragment>
-				) : null;
-			} else if (index !== activeProps.length - 1) {
-				return key == "StatusEffectEMP"
-					? `Silenced Status Effect\n`
-					: key == "StatusEffectDisarmed"
-					? `Disarmed Status Effect\n`
-					: key == "StatusEffectStun"
-					? `Stun Status Effect\n`
-					: key == "StatusEffectInvisible"
-					? `Invisible Status Effect\n`
-					: null;
-			} else if (index == activeProps.length - 1) {
-				return key == "StatusEffectEMP"
-					? `Silenced Status Effect`
-					: key == "StatusEffectDisarmed"
-					? `Disarmed Status Effect`
-					: key == "StatusEffectStun"
-					? `Stun Status Effect`
-					: key == "StatusEffectInvisible"
-					? "Invisible Status Effect"
-					: null;
-			}
-		});
-	}
-
-	const passiveSection = foundItem.tooltip_sections.find(
-		(section: any) => section.section_type === "passive"
-	);
-	let passiveStats: string[] = [];
-	if (passiveSection) {
-		let passiveProps = [
-			...(passiveSection?.section_attributes?.[0]?.properties ?? []),
-			...(passiveSection?.section_attributes?.[0]?.important_properties ?? []),
-			...(passiveSection?.section_attributes?.[0]?.elevated_properties ?? []),
-		];
-
-		passiveProps = passiveProps.filter((key) => {
-			const prop = foundItem.properties[key];
-			return (
-				prop !== undefined &&
-				parseFloat(prop.value) !== 0 &&
-				prop.value !== "" &&
-				prop.label &&
-				key !== "InterruptCooldown" &&
-				key !== "AbilityCooldown"
-			);
-		});
-
-		passiveStats = passiveProps.map((key, index: number) => {
-			console.log("from passiveStats: " + key);
-
-			if (
-				key !== "StatusEffectEMP" &&
-				key !== "StatusEffectDisarmed" &&
-				key !== "StatusEffectStun" &&
-				key !== "ParrySuccessHeal" &&
-				key !== "StatusEffectInvisible"
-			) {
-				const prop = foundItem.properties[key];
-
-				const value = prop.value;
-				const scale = prop?.scale_function?.stat_scale;
-				const scaleType = prop?.scale_function?.specific_stat_scale_type;
-				const postfix = prop.postfix == undefined ? "" : prop.postfix;
-				const label = prop.label;
-				// const conditional =
-				// 	prop.tooltip_section == "passive" ? " (Conditional)" : "";
-				return prop.value !== undefined &&
-					key !== "AbilityCooldown" &&
-					key !== "InterruptCooldown" ? (
-					<React.Fragment key={key}>
-						<CustomText
-							style={{
-								color: theme.colors.font,
-								flexDirection: "column",
-								marginHorizontal: 6,
-								marginVertical: 6,
-								lineHeight: 15,
-								fontSize: 12,
-								fontFamily: theme.fontFamily.regular,
-							}}>
-							{prop.prefix == prop.value[0]
-								? ""
-								: prop.value[0] == "-"
-								? ""
-								: prop.prefix === "{s:sign}"
-								? "+"
-								: prop.prefix}
-							{value[value.length - 1] == postfix[1] &&
-							postfix !== value[value.length - 1]
-								? value.slice(0, value.length - 1)
-								: value}
-							{postfix == "m" &&
-							label === "Move Speed" &&
-							value[value.length - 1] == "m"
-								? "/s" + " "
-								: postfix == value[value.length - 1] ||
-								  postfix[postfix.length - 1] == value[value.length - 1]
-								? "" + " "
-								: postfix[0] == " "
-								? postfix.slice(1) + " "
-								: postfix + " "}
-							{scaleType == "ETechPower" ? (
-								<>
-									<Image
-										source={require("../images/25px-Spirit_scaling.png")}
-										style={{ width: 12, height: 10 }}
-									/>
-									<CustomText
-										style={{
-											color: "#CE90FF",
-											flexDirection: "column",
-											marginHorizontal: 6,
-											marginVertical: 6,
-											lineHeight: 15,
-											fontSize: 12,
-											fontFamily: theme.fontFamily.regular,
-										}}>
-										{cleanDecimals(scale) ?? ""}{" "}
-									</CustomText>
-								</>
-							) : scaleType == "ELevelUpBoons" ? (
-								<>
-									<Image
-										source={require("../images/20px-Boon_scaling.png")}
-										style={{ width: 10, height: 8 }}
-									/>
-									<CustomText
-										style={{
-											color: "#00FF99",
-											flexDirection: "column",
-											marginHorizontal: 6,
-											marginVertical: 6,
-											lineHeight: 15,
-											fontSize: 12,
-											fontFamily: theme.fontFamily.regular,
-										}}>
-										{cleanDecimals(scale) ?? ""}{" "}
-									</CustomText>
-								</>
-							) : (
-								""
-							)}
-							{label}
-							{/* {conditional} */}
-							{index !== passiveProps.length - 1 ? `\n` : null}
-						</CustomText>
-					</React.Fragment>
-				) : null;
-			} else if (index !== passiveProps.length - 1) {
-				return key == "StatusEffectEMP"
-					? `Silenced Status Effect\n`
-					: key == "StatusEffectDisarmed"
-					? `Disarmed Status Effect\n`
-					: key == "StatusEffectStun"
-					? `Stun Status Effect\n`
-					: key == "Status Effect Invisible"
-					? `Invisible Status Effect\n`
-					: null;
-			} else if (index == passiveProps.length - 1) {
-				return key == "StatusEffectEMP"
-					? `Silenced Status Effect`
-					: key == "StatusEffectDisarmed"
-					? `Disarmed Status Effect`
-					: key == "StatusEffectStun"
-					? `Stun Status Effect`
-					: key == "StatusEffectInvisible"
-					? `Invisible Status Effect`
-					: null;
-			}
-		});
-	}
-
-	let unNamedStats: string[] = [];
-	const unNamed = foundItem.tooltip_sections?.[1]?.section_type;
-	const unNamedSection =
-		foundItem.tooltip_sections?.[1]?.section_attributes?.[0];
-	let unNamedSectionBecauseBadApi;
-	let unNamedSectionBecauseBadApiSectionType;
-	if (!activeSection && !passiveSection) {
-		unNamedSectionBecauseBadApi =
-			foundItem.tooltip_sections?.[0]?.section_attributes?.[0];
-		unNamedSectionBecauseBadApiSectionType =
-			foundItem.tooltip_sections?.[0]?.section_type;
-	}
-	console.log(unNamedSectionBecauseBadApi);
-	if (
-		unNamed == undefined &&
-		unNamedSection !== undefined &&
-		unNamedSectionBecauseBadApi !== undefined
-	) {
-		let unNamedProps = [];
-
-		if (unNamedSectionBecauseBadApiSectionType == "innate") {
-			unNamedProps = [
-				...(unNamedSection?.properties ?? []),
-				...(unNamedSection?.important_properties ?? []),
-			];
-		} else {
-			unNamedProps = [
-				...(unNamedSection?.properties ?? []),
-				...(unNamedSection?.important_properties ?? []),
-				...(unNamedSectionBecauseBadApi?.properties ?? []),
-				...(unNamedSectionBecauseBadApi?.important_properties ?? []),
-			];
-		}
-
-		console.log("unnamed = " + unNamedProps);
-
-		unNamedStats = unNamedProps.map((key, index: number) => {
-			const prop = foundItem.properties[key];
-			const scale = prop?.scale_function?.stat_scale;
-			const scaleType = prop?.scale_function?.specific_stat_scale_type;
-
-			return index <= unNamedProps.length && key !== "AbilityCooldown" ? (
-				<React.Fragment key={key}>
-					<CustomText
-						style={{
-							color: theme.colors.font,
-							flexDirection: "column",
-							marginHorizontal: 6,
-							marginVertical: 6,
-							lineHeight: 15,
-							fontSize: 12,
-							fontFamily: theme.fontFamily.regular,
-						}}>
-						{prop.prefix == prop.value[0]
-							? ""
-							: prop.value[0] == "-"
-							? ""
-							: prop.prefix === "{s:sign}"
-							? "+"
-							: prop.prefix}
-						{prop.value}
-						{prop.postfix == prop.value[prop.value.length - 1]
-							? ""
-							: prop.postfix}
-						{scaleType == "ETechPower" ? (
-							<>
-								<CustomText> </CustomText>
-								<Image
-									source={require("../images/25px-Spirit_scaling.png")}
-									style={{ width: 12, height: 10 }}
-								/>
-								<CustomText
-									style={{
-										color: "#CE90FF",
-										flexDirection: "column",
-										marginHorizontal: 6,
-										marginVertical: 6,
-										lineHeight: 15,
-										fontSize: 12,
-										fontFamily: theme.fontFamily.regular,
-									}}>
-									{scale ?? ""}
-								</CustomText>
-							</>
-						) : scaleType == "ELevelUpBoons" ? (
-							<>
-								<CustomText> </CustomText>
-								<Image
-									source={require("../images/20px-Boon_scaling.png")}
-									style={{ width: 12, height: 10 }}
-								/>
-								<CustomText
-									style={{
-										color: "##00FF99",
-										flexDirection: "column",
-										marginHorizontal: 6,
-										marginVertical: 6,
-										lineHeight: 15,
-										fontSize: 12,
-										fontFamily: theme.fontFamily.regular,
-									}}>
-									{scale ?? ""}
-								</CustomText>
-							</>
-						) : (
-							""
-						)}
-						{" " + prop.label}
-						{index !== unNamedProps.length - 1 && key !== "AbilityCooldown"
-							? `\n`
-							: null}
-					</CustomText>
-				</React.Fragment>
-			) : null;
-		});
-	}
-
 	return (
 		<View
 			style={{
@@ -649,6 +163,7 @@ export const ItemProfile = ({ itemId }: Props) => {
 						source={require("../images/Background_Buildings_Light.png")}></Image>
 				)} */}
 			<View style={styles.itemViewPAPA}>
+				<View></View>
 				<View style={styles.itemView}>
 					<BlurView
 						tint={rt.themeName === "dark" ? "dark" : "light"}
@@ -750,7 +265,8 @@ export const ItemProfile = ({ itemId }: Props) => {
 							</>
 						</BlurView>
 					) : null}
-					{innateStats.length > 0 && (
+
+					{hasInnate ? (
 						<>
 							<CustomText
 								style={{
@@ -778,11 +294,12 @@ export const ItemProfile = ({ itemId }: Props) => {
 									fontSize: 12,
 									fontFamily: theme.fontFamily.regular,
 								}}>
-								{innateStats}
+								<InnateData itemId={itemId} />
 							</CustomText>
 						</>
-					)}
-					{description && (
+					) : null}
+
+					{hasDescription ? (
 						<BlurView
 							tint={rt.themeName === "dark" ? "dark" : "light"}
 							intensity={0}
@@ -807,45 +324,140 @@ export const ItemProfile = ({ itemId }: Props) => {
 									fontSize: 12,
 									fontFamily: theme.fontFamily.regular,
 								}}>
-								{description}
+								{description.passive
+									? description.passive
+									: description.desc && description.unNamed
+									? description.unNamed
+									: description.desc && !description.unNamed
+									? description.desc
+									: !description.passive && description.active
+									? description.active
+									: null}
 							</CustomText>
 						</BlurView>
-					)}
-
-					{((activeStats.length != 0 || passiveStats.length != 0) &&
-						!activeStats.every((i) => i == "")) ||
-					!passiveStats.every((i) => i == "") ||
-					!unNamedStats.every((i) => i == "") ? (
-						<BlurView
-							intensity={0}
-							tint={rt.themeName === "dark" ? "dark" : "light"}
-							style={{
-								borderWidth: 1,
-
-								borderRadius: 4,
-								overflow: "hidden",
-								width: 350,
-								alignSelf: "center",
-								marginHorizontal: 24,
-								alignContent: "center",
-								flexDirection: "row",
-								marginBottom: 4,
-							}}>
-							<CustomText
+					) : null}
+					{hasPassive ||
+					hasActive ||
+					(!hasActive && !hasPassive && hasUnNamed) ? (
+						<>
+							<BlurView
+								intensity={0}
+								tint={rt.themeName === "dark" ? "dark" : "light"}
 								style={{
-									color: theme.colors.font,
-									flexDirection: "column",
-									marginHorizontal: 6,
-									marginVertical: 6,
-									lineHeight: 15,
-									fontSize: 12,
-									fontFamily: theme.fontFamily.regular,
+									borderWidth: 1,
+									borderRadius: 4,
+									overflow: "hidden",
+									width: 350,
+									alignSelf: "center",
+									marginHorizontal: 24,
+									alignContent: "center",
+									flexDirection: "row",
+									marginBottom: 4,
 								}}>
-								{activeStats && activeStats}
-								{passiveStats && passiveStats}
-								{unNamedStats && unNamedStats}
-							</CustomText>
-						</BlurView>
+								<CustomText
+									style={{
+										color: theme.colors.font,
+										flexDirection: "column",
+										marginHorizontal: 6,
+										marginVertical: 6,
+										lineHeight: 15,
+										fontSize: 12,
+										fontFamily: theme.fontFamily.regular,
+									}}>
+									{hasActive && hasPassive ? (
+										<PassiveData passiveArrays={false} itemId={itemId} />
+									) : !hasPassive && hasActive ? (
+										<ActiveData activeArrays={false} itemId={itemId} />
+									) : hasPassive && !hasActive ? (
+										<PassiveData passiveArrays={false} itemId={itemId} />
+									) : (
+										<UnNamedData itemId={itemId} />
+									)}
+								</CustomText>
+							</BlurView>
+						</>
+					) : null}
+					{passiveLengthBoolean ||
+					activeLengthBoolean ||
+					(hasPassive && hasActive) ||
+					(hasActive && hasUnNamed) ||
+					(hasPassive && hasUnNamed) ? (
+						<>
+							<BlurView
+								tint={rt.themeName === "dark" ? "dark" : "light"}
+								intensity={0}
+								style={{
+									borderWidth: 1,
+									flexWrap: "wrap",
+									width: 350,
+									borderRadius: 4,
+									overflow: "hidden",
+									margin: 4,
+									alignContent: "center",
+									alignSelf: "center",
+									flexDirection: "row",
+								}}>
+								<CustomText
+									style={{
+										color: theme.colors.font,
+										flexDirection: "column",
+										marginHorizontal: 6,
+										marginVertical: 4,
+										lineHeight: 15,
+										fontSize: 12,
+										fontFamily: theme.fontFamily.regular,
+									}}>
+									{activeLengthBoolean
+										? description.active2
+										: description.active
+										? description.active
+										: description.passive2
+										? description.passive2
+										: description.desc
+										? description.desc
+										: description.unNamed}
+								</CustomText>
+							</BlurView>
+							<BlurView
+								intensity={0}
+								tint={rt.themeName === "dark" ? "dark" : "light"}
+								style={{
+									borderWidth: 1,
+									borderRadius: 4,
+									overflow: "hidden",
+									width: 350,
+									alignSelf: "center",
+									marginHorizontal: 24,
+									alignContent: "center",
+									flexDirection: "row",
+									marginBottom: 4,
+								}}>
+								<CustomText
+									style={{
+										color: theme.colors.font,
+										flexDirection: "column",
+										marginHorizontal: 6,
+										marginVertical: 6,
+										lineHeight: 15,
+										fontSize: 12,
+										fontFamily: theme.fontFamily.regular,
+									}}>
+									{activeLengthBoolean ? (
+										<ActiveData activeArrays arrayIndex={1} itemId={itemId} />
+									) : !hasUnNamed && !passiveLengthBoolean ? (
+										<ActiveData activeArrays={false} itemId={itemId} />
+									) : passiveLengthBoolean ? (
+										<PassiveData
+											passiveArrays={passiveLengthBoolean}
+											arrayIndex={1}
+											itemId={itemId}
+										/>
+									) : (
+										<UnNamedData itemId={itemId} />
+									)}
+								</CustomText>
+							</BlurView>
+						</>
 					) : null}
 					{foundItemForImages.Upgrades.length > 0 ? (
 						<BlurView

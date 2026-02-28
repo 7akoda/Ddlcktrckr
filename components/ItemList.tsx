@@ -8,6 +8,7 @@ import { CustomText } from "./CustomText";
 import { LoadingIcon } from "./LoadingIcon";
 import { ItemImages } from "@/data/items";
 import { BlurView } from "expo-blur";
+import { useItemData } from "@/hooks/useItemData";
 
 export const ItemList = () => {
 	const [sort, setSort] = useState("");
