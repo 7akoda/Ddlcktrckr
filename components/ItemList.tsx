@@ -57,28 +57,13 @@ export const ItemList = () => {
 				back={false}
 				sortable={true}
 			/>
-			<View style={{ position: "absolute" }}>
-				{rt.themeName === "dark" ? (
-					<>
-						<Image
-							style={{ width: 1390, height: 900 }}
-							source={require("../images/Background_Buildings.png")}></Image>
-					</>
-				) : (
-					<Image
-						style={{
-							width: 1390,
-							height: 900,
-						}}
-						source={require("../images/Background_Buildings_Light.png")}></Image>
-				)}
-			</View>
+
 			<FlatList
 				data={sorted}
 				renderItem={({ item }) => (
 					<BlurView
 						style={styles.heroListItem}
-						intensity={20}
+						intensity={0}
 						tint={rt.themeName === "dark" ? "dark" : "light"}>
 						<Image
 							source={item.Image}
@@ -130,7 +115,7 @@ const styles = StyleSheet.create((theme) => ({
 		flexDirection: "row",
 		borderRadius: 4,
 		width: 330,
-		height: 40,
+		height: 40.25,
 		paddingHorizontal: 8,
 		marginVertical: 1,
 		overflow: "hidden",
@@ -154,8 +139,5 @@ const styles = StyleSheet.create((theme) => ({
 		alignSelf: "center",
 		margin: 10,
 	},
-	primaryView: {
-		backgroundColor: theme.colors.background,
-		paddingBottom: 50,
-	},
+	primaryView: { height: "100%" },
 }));

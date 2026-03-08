@@ -106,7 +106,6 @@ export const PassiveData = (props: SingleArray | MultipleArrays) => {
 			});
 		}
 	}
-	console.log(passiveProps);
 	const uniqueProps = Array.from(new Set(passiveProps));
 	const getStatusEffect = (key: string) => {
 		return key == "StatusEffectEMP" ? (
@@ -198,12 +197,12 @@ export const PassiveData = (props: SingleArray | MultipleArrays) => {
 							source={require("../images/25px-Spirit_scaling.png")}
 							style={{ width: 12, height: 10 }}
 						/>
-						{cleanDecimals(scale)}
+						x{cleanDecimals(scale)}
 					</CustomText>
 				) : scaleType == "ELevelUpBoons" ? (
 					<CustomText
 						style={{
-							color: "##00FF99",
+							color: "#00FF99",
 							fontSize: 12,
 							fontFamily: theme.fontFamily.regular,
 						}}>
@@ -212,7 +211,7 @@ export const PassiveData = (props: SingleArray | MultipleArrays) => {
 							source={require("../images/20px-Boon_scaling.png")}
 							style={{ width: 12, height: 10 }}
 						/>
-						{cleanDecimals(scale)}
+						x{cleanDecimals(scale)}
 					</CustomText>
 				) : null}
 			</>
@@ -239,7 +238,7 @@ export const PassiveData = (props: SingleArray | MultipleArrays) => {
 					const label = String(prop.label);
 					const prefix = prop.prefix == undefined ? "" : prop.prefix;
 					const valueData = getValue(value, postfix);
-					const pfixData = getPostfix(postfix, value, prop);
+					const pfixData = getPostfix(postfix, value, property);
 					const prfixData = getPrefix(prefix, value);
 					const scaleData = getScaleType(scale, scaleType);
 
@@ -253,7 +252,8 @@ export const PassiveData = (props: SingleArray | MultipleArrays) => {
 								}}>
 								{prfixData}
 								{valueData}
-								{pfixData} {scaleData}
+								{pfixData === "HP/s" ? null : pfixData}
+								{scaleData} {pfixData === "HP/s" ? pfixData + " " : null}
 								{label}
 							</CustomText>
 						</React.Fragment>
@@ -263,7 +263,6 @@ export const PassiveData = (props: SingleArray | MultipleArrays) => {
 		} else {
 			passiveStats = uniqueProps[props.arrayIndex].map(
 				(key: any, index: number) => {
-					console.log(key);
 					if (
 						key == "StatusEffectEMP" ||
 						key == "StatusEffectDisarmed" ||
@@ -281,7 +280,7 @@ export const PassiveData = (props: SingleArray | MultipleArrays) => {
 						const label = String(prop.label);
 						const prefix = prop.prefix == undefined ? "" : prop.prefix;
 						const valueData = getValue(value, postfix);
-						const pfixData = getPostfix(postfix, value, prop);
+						const pfixData = getPostfix(postfix, value, property);
 						const prfixData = getPrefix(prefix, value);
 						const scaleData = getScaleType(scale, scaleType);
 
@@ -295,8 +294,8 @@ export const PassiveData = (props: SingleArray | MultipleArrays) => {
 									}}>
 									{prfixData}
 									{valueData}
-									{pfixData} {scaleData}
-									{label}
+									{pfixData}
+									{scaleData} {label}
 								</CustomText>
 							</React.Fragment>
 						);

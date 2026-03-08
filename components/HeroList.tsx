@@ -9,11 +9,12 @@ import { Header } from "./Header";
 import { CustomText } from "./CustomText";
 import { LoadingIcon } from "./LoadingIcon";
 import { useHeroData } from "@/hooks/useHeroData";
+import { BlurView } from "expo-blur";
 
 export const HeroList = () => {
 	const [sort, setSort] = useState("Winrate");
 
-	const { theme } = useUnistyles();
+	const { theme, rt } = useUnistyles();
 
 	const { heroData, error, isLoading, isError } = useHeroData();
 
@@ -58,12 +59,15 @@ export const HeroList = () => {
 				sortFunc={(value) => handleSort(value)}
 				sortText={["Pickrate", "Winrate"]}
 				sortAmount={2}
-				itemList={false}
+				itemType={false}
 			/>
 			<FlatList
 				data={sorted}
 				renderItem={({ item }) => (
-					<View style={styles.heroListItem}>
+					<BlurView
+						intensity={0}
+						tint={rt.themeName === "dark" ? "dark" : "light"}
+						style={styles.heroListItem}>
 						<Image
 							source={{ uri: item.images.icon_hero_card_webp }}
 							style={{
@@ -72,7 +76,7 @@ export const HeroList = () => {
 								alignSelf: "center",
 								borderRadius: 4,
 								borderWidth: 2,
-								borderColor: theme.colors.accent,
+								borderColor: theme.colors.primary,
 							}}
 						/>
 						<Link
@@ -92,7 +96,6 @@ export const HeroList = () => {
 							</Pressable>
 						</Link>
 						<View style={{ flex: 1 }} />
-
 						{sort == "Winrate" ? (
 							<View style={{ height: 15, alignSelf: "center" }}>
 								<Progress.Bar
@@ -118,7 +121,7 @@ export const HeroList = () => {
 								</CustomText>
 							</View>
 						)}
-					</View>
+					</BlurView>
 				)}></FlatList>
 		</View>
 	);
@@ -135,12 +138,13 @@ const styles = StyleSheet.create((theme) => ({
 	heroListItem: {
 		alignSelf: "center",
 		flexDirection: "row",
-		backgroundColor: theme.colors.primary,
 		borderRadius: 4,
 		width: 330,
-		height: 40,
+		height: 40.25,
 		paddingHorizontal: 8,
 		marginVertical: 1,
+		overflow: "hidden",
+		borderWidth: 1,
 	},
 	heroText: {
 		color: theme.colors.font,
@@ -161,7 +165,6 @@ const styles = StyleSheet.create((theme) => ({
 		margin: 10,
 	},
 	primaryView: {
-		backgroundColor: theme.colors.background,
-		paddingBottom: 50,
+		height: "100%",
 	},
 }));

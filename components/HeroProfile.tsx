@@ -75,12 +75,13 @@ export const HeroProfile = ({ id }: Props) => {
 	});
 
 	return (
-		<View style={{ backgroundColor: theme.colors.background }}>
+		<View>
 			<Header back={true} sortable={false} />
 			<View
 				style={{
 					position: "absolute",
-					width: "100%",
+					width: "90%",
+					alignSelf: "center",
 					height: screenHeight,
 				}}>
 				<DDLKSvg></DDLKSvg>

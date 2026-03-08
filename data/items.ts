@@ -1869,6 +1869,17 @@ export const ItemImages: ItemGroups = {
 				Upgrades: ["Improved Spirit", "Surge of Power"],
 			},
 			{
+				Name: "Golden Goose Egg",
+				Image: require("../images/Spirit/800/Golden_Goose_Egg.png"),
+				Flat: ["+10 Spirit Power"],
+				Nuance: null,
+				Clock: false,
+				Description: null,
+				Downgrades: [],
+				Upgrades: ["Improved Spirit", "Surge of Power"],
+			},
+
+			{
 				Name: "Mystic Burst",
 				Image: require("../images/Spirit/800/Mystic_Burst.png"),
 				Flat: [],

@@ -186,12 +186,12 @@ export const ActiveData = (props: SingleArray | MultipleArrays) => {
 							source={require("../images/25px-Spirit_scaling.png")}
 							style={{ width: 12, height: 10 }}
 						/>
-						{cleanDecimals(scale)}
+						x{cleanDecimals(scale)}
 					</CustomText>
 				) : scaleType == "ELevelUpBoons" ? (
 					<CustomText
 						style={{
-							color: "##00FF99",
+							color: "#00FF99",
 							fontSize: 12,
 							fontFamily: theme.fontFamily.regular,
 						}}>
@@ -200,7 +200,7 @@ export const ActiveData = (props: SingleArray | MultipleArrays) => {
 							source={require("../images/20px-Boon_scaling.png")}
 							style={{ width: 12, height: 10 }}
 						/>
-						{cleanDecimals(scale)}
+						x{cleanDecimals(scale)}
 					</CustomText>
 				) : null}
 			</>

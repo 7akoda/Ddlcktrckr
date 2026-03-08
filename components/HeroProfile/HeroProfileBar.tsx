@@ -4,6 +4,7 @@ import { LoadingIcon } from "../LoadingIcon";
 import { CustomText } from "../CustomText";
 import { useHeroDataById } from "@/hooks/useHeroDataById";
 import { useUnistyles, StyleSheet } from "react-native-unistyles";
+import Svg, { SvgUri } from "react-native-svg";
 
 type Props = {
 	id: number;
@@ -11,27 +12,25 @@ type Props = {
 
 export const HeroProfileBar = ({ id }: Props) => {
 	const { heroDataById, isIdError, isIdLoading, idError } = useHeroDataById(id);
-
+	const { theme } = useUnistyles();
 	if (isIdLoading) return <LoadingIcon />;
 
 	if (isIdError) return <CustomText>{String(idError)}</CustomText>;
 	return (
 		<>
-			<Image
-				style={styles.heroBannerBackground}
-				source={require("../../images/Background_Buildings.png")}></Image>
 			<View
 				style={{
 					flexDirection: "row",
 					width: "100%",
+					paddingTop: 10,
 				}}>
-				<Image
-					source={{ uri: heroDataById.images.icon_hero_card_webp }}
-					style={styles.heroPortrait}
+				<SvgUri
+					uri={String(heroDataById.images.name_image)}
+					width="100%"
+					height="40"
+					color={"theme.colors.accent"}
 				/>
-				<CustomText style={styles.heroTextBanner}>
-					{heroDataById.name}
-				</CustomText>
+
 				<Image style={styles.heroWeapon} source={heroWeapons[id].weaponImage} />
 			</View>
 		</>
@@ -39,14 +38,6 @@ export const HeroProfileBar = ({ id }: Props) => {
 };
 
 const styles = StyleSheet.create((theme) => ({
-	heroTextBanner: {
-		color: theme.colors.bannerFont,
-		fontFamily: theme.fontFamily.extraBold,
-		fontSize: 16,
-		marginLeft: 8,
-		zIndex: 2,
-		marginTop: 25,
-	},
 	heroPortrait: {
 		width: 35,
 		height: 35,
@@ -58,15 +49,13 @@ const styles = StyleSheet.create((theme) => ({
 		marginLeft: 12,
 	},
 	heroWeapon: {
-		height: 70,
-		width: 140,
-		position: "absolute",
-		top: 0,
-		left: 235,
+		flexShrink: 1,
+		width: 100,
+		height: 50,
 		borderRadius: 4,
 		borderWidth: 2,
 		borderColor: "transparent",
-		zIndex: 2,
+		zIndex: 1,
 	},
 	heroBannerBackground: {
 		width: "100%",

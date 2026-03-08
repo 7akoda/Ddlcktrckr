@@ -26,6 +26,8 @@ import { ActiveData } from "@/api/itemActive";
 import { InnateData } from "@/api/itemInnate";
 import { PassiveData } from "@/api/itemPassive";
 import { UnNamedData } from "@/api/itemUnNamed";
+import { Shader1 } from "./Shader";
+import { DDLKSvg } from "./svgComponents/DDLKSvg";
 type Props = {
 	itemId: string[] | string;
 };
@@ -36,6 +38,7 @@ export const ItemProfile = ({ itemId }: Props) => {
 	const [particleColor, setParticleColor] = useState<string>("#FF9900");
 	const { itemData, isError, isLoading, error } = useItemData();
 	const foundItem = itemData?.find((item: any) => item.name === itemId);
+	const screenHeight = Dimensions.get("window").height;
 
 	useEffect(() => {
 		if (!foundItem) return;
@@ -139,31 +142,18 @@ export const ItemProfile = ({ itemId }: Props) => {
 		(item) => item.Name === itemId
 	);
 	return (
-		<View
-			style={{
-				height: height,
-				width: width,
-				backgroundColor: theme.colors.background,
-			}}>
+		<View>
 			<Header back={true} sortable={false} />
-			<ItemIcon itemColour={particleColor} />
-
-			{/* {rt.themeName === "dark" ? (
-					<>
-						<Image
-							style={{ width: 1390, height: 900 }}
-							source={require("../images/Background_Buildings.png")}></Image>
-					</>
-				) : (
-					<Image
-						style={{
-							width: 1390,
-							height: 900,
-						}}
-						source={require("../images/Background_Buildings_Light.png")}></Image>
-				)} */}
+			<View
+				style={{
+					position: "absolute",
+					width: "90%",
+					alignSelf: "center",
+					height: screenHeight,
+				}}>
+				<DDLKSvg></DDLKSvg>
+			</View>
 			<View style={styles.itemViewPAPA}>
-				<View></View>
 				<View style={styles.itemView}>
 					<BlurView
 						tint={rt.themeName === "dark" ? "dark" : "light"}

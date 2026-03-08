@@ -18,6 +18,16 @@ type SortableHeader = {
 	back: boolean;
 	sortable: true;
 	sortFunc: (value: string) => void;
+	sortText: string[];
+	sortAmount: number;
+	sort: string;
+	itemType: false;
+};
+
+type SortableItemHeader = {
+	back: boolean;
+	sortable: true;
+	sortFunc: (value: string) => void;
 	typeFunc: (value: string) => void;
 	sortText: string[];
 	sortAmount: number;
@@ -31,7 +41,7 @@ type NonSortableHeader = {
 	sortable: false;
 };
 
-type HeaderProps = SortableHeader | NonSortableHeader;
+type HeaderProps = SortableHeader | NonSortableHeader | SortableItemHeader;
 
 export const Header = (props: HeaderProps) => {
 	const { theme } = useUnistyles();
@@ -40,7 +50,6 @@ export const Header = (props: HeaderProps) => {
 		<View
 			style={{
 				paddingHorizontal: 5,
-				backgroundColor: theme.colors.background,
 				flexDirection: "row",
 				height: 40,
 				zIndex: 3,
@@ -108,7 +117,7 @@ export const Header = (props: HeaderProps) => {
 							onPress={() => props.sortFunc(props.sortText[i])}
 							key={i}
 							style={{
-								color: theme.colors.selected,
+								color: theme.colors.font,
 								textAlign: "center",
 								marginHorizontal: 5,
 								fontSize: 9,
@@ -117,7 +126,7 @@ export const Header = (props: HeaderProps) => {
 								height: 18,
 								paddingTop: 1.8,
 								borderRadius: 4,
-								borderColor: theme.colors.accent,
+								borderColor: theme.colors.selected,
 								borderWidth: 1,
 							}}>
 							{props.sortText[i]}
@@ -137,7 +146,7 @@ export const Header = (props: HeaderProps) => {
 								height: 18,
 								paddingTop: 1.8,
 								borderRadius: 4,
-								borderColor: theme.colors.accent,
+								borderColor: theme.colors.primary,
 								borderWidth: 1,
 							}}>
 							{props.sortText[i]}
