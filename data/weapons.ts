@@ -199,4 +199,41 @@ export const heroWeapons: { [key: string]: Hero } = {
 		weaponName: "Biquette",
 		weaponImage: require("../images/weapons/320px-Billy_Weapon.png"),
 	},
+	"65": {
+		id: 65,
+		name: "Venator",
+		weaponName: "Biquette",
+		weaponImage: require("../images/weapons/320px-Billy_Weapon.png"),
+	},
+	"76": {
+		id: 76,
+		name: "Billy",
+		weaponName: "Biquette",
+		weaponImage: require("../images/weapons/320px-Billy_Weapon.png"),
+	},
+	"77": {
+		id: 77,
+		name: "Apollo",
+		weaponName: "Biquette",
+		weaponImage: require("../images/weapons/320px-Billy_Weapon.png"),
+	},
+	"79": {
+		id: 79,
+		name: "Billy",
+		weaponName: "Biquette",
+		weaponImage: require("../images/weapons/320px-Billy_Weapon.png"),
+	},
+	"80": {
+		id: 80,
+		name: "Billy",
+		weaponName: "Biquette",
+		weaponImage: require("../images/weapons/320px-Billy_Weapon.png"),
+	},
+
+	"81": {
+		id: 81,
+		name: "Apollo",
+		weaponName: "Biquette",
+		weaponImage: require("../images/weapons/320px-Billy_Weapon.png"),
+	},
 };

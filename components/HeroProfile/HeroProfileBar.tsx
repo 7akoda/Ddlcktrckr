@@ -30,8 +30,6 @@ export const HeroProfileBar = ({ id }: Props) => {
 					height="40"
 					color={"theme.colors.accent"}
 				/>
-
-				<Image style={styles.heroWeapon} source={heroWeapons[id].weaponImage} />
 			</View>
 		</>
 	);

@@ -96,7 +96,7 @@ export const HeroPlayerList = ({ id }: Props) => {
 				renderItem={({ item }) => (
 					<View style={styles.heroListItem}>
 						<Image
-							source={{ uri: item.profilePicture }}
+							source={item.profilePicture}
 							style={{
 								width: 30,
 								height: 30,

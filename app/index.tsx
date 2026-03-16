@@ -2,18 +2,17 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { HeroList } from "@/components/HeroList";
 import { HeroPlayerList } from "@/components/HeroPlayerList";
 import { HeroProfile } from "@/components/HeroProfile";
-import { useState } from "react";
-import { Link } from "expo-router";
-import { useFonts } from "@expo-google-fonts/eb-garamond";
+import { useEffect, useState } from "react";
+import { EBGaramond_400Regular } from "@expo-google-fonts/eb-garamond/400Regular";
+import { EBGaramond_600SemiBold } from "@expo-google-fonts/eb-garamond/600SemiBold";
+import { EBGaramond_800ExtraBold } from "@expo-google-fonts/eb-garamond/800ExtraBold";
+import { useFonts } from "@expo-google-fonts/eb-garamond/useFonts";
 import { Shader1 } from "@/components/Shader";
-import {
-	EBGaramond_400Regular,
-	EBGaramond_600SemiBold,
-	EBGaramond_800ExtraBold,
-} from "@expo-google-fonts/eb-garamond";
 import { useUnistyles } from "react-native-unistyles";
 import { ItemList } from "@/components/ItemList";
-import { View, Image } from "react-native";
+import { View, TextInput, Image } from "react-native";
+
+import React from "react";
 
 export default function Index() {
 	const { theme, rt } = useUnistyles();

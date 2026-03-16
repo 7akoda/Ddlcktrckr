@@ -20,9 +20,9 @@ export const createPlayerHeroStatsQueryOptions = (id: string) => ({
 	},
 });
 
-export const createHeroDataByIdQueryOptions = (id: number) => ({
-	queryKey: ["heroDataById", id] as [string, number],
-	queryFn: async ({ queryKey }: { queryKey: [string, number] }) => {
+export const createHeroDataByIdQueryOptions = (id: string) => ({
+	queryKey: ["heroDataById", id] as [string, string],
+	queryFn: async ({ queryKey }: { queryKey: [string, string] }) => {
 		const [_key, playerId] = queryKey;
 		return getHeroDataById(playerId);
 	},

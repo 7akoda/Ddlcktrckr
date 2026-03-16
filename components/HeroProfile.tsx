@@ -46,7 +46,7 @@ export const HeroProfile = ({ id }: Props) => {
 		});
 	};
 	const { heroDataById, itemDataById, isIdError, isIdLoading, idError } =
-		useHeroDataById(id);
+		useHeroDataById(String(id));
 	if (isIdLoading) return <LoadingIcon />;
 
 	if (isIdError) return <CustomText>{String(idError)}</CustomText>;
@@ -73,11 +73,10 @@ export const HeroProfile = ({ id }: Props) => {
 			return abilityInspect;
 		}
 	});
-
 	return (
 		<View>
 			<Header back={true} sortable={false} />
-			<View
+			{/* <View
 				style={{
 					position: "absolute",
 					width: "90%",
@@ -85,7 +84,8 @@ export const HeroProfile = ({ id }: Props) => {
 					height: screenHeight,
 				}}>
 				<DDLKSvg></DDLKSvg>
-			</View>
+			</View> */}
+
 			<ScrollView
 				showsVerticalScrollIndicator={false}
 				style={{
@@ -134,7 +134,7 @@ export const HeroProfile = ({ id }: Props) => {
 							{
 								backgroundColor: theme.colors.background,
 								width: "100%",
-								height: screenHeight,
+								height: "120%",
 								zIndex: 3,
 								position: "absolute",
 							},

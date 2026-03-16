@@ -48,6 +48,7 @@ const styles = StyleSheet.create((theme) => ({
 	},
 	abilityText: {
 		color: theme.colors.font,
+		fontFamily: theme.fontFamily.semiBold,
 		fontSize: 10,
 		alignSelf: "center",
 		width: 60,

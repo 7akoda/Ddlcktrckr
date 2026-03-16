@@ -16,7 +16,9 @@ export const HeroLore = ({ id }: Props) => {
 		setIsLoreExpanded(!isLoreExpanded);
 	};
 
-	const { heroDataById, isIdError, isIdLoading, idError } = useHeroDataById(id);
+	const { heroDataById, isIdError, isIdLoading, idError } = useHeroDataById(
+		String(id)
+	);
 
 	if (isIdLoading) return <LoadingIcon />;
 
@@ -34,17 +36,17 @@ export const HeroLore = ({ id }: Props) => {
 					]}>
 					<CustomText
 						ellipsizeMode="clip"
-						numberOfLines={isLoreExpanded ? undefined : 5}
+						numberOfLines={isLoreExpanded ? undefined : 10}
 						onLayout={(e) => {
 							const { height } = e.nativeEvent.layout;
-							if (height >= 88) {
+							if (heroDataById.description.lore.length > 588) {
 								setIsOverflowing(true);
 							} else {
 								setIsOverflowing(false);
 							}
 						}}
 						suppressHighlighting
-						style={[styles.loreText, { color: theme.colors.font }]}>
+						style={[styles.loreText]}>
 						{heroDataById.description.lore}
 					</CustomText>
 
@@ -70,7 +72,7 @@ const styles = StyleSheet.create((theme) => ({
 		padding: 12,
 		fontSize: 12,
 		alignSelf: "center",
-		textAlign: "center",
+		textAlign: "left",
 		fontFamily: theme.fontFamily.regular,
 	},
 

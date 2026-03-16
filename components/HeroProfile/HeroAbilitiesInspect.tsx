@@ -1,11 +1,13 @@
 import { useHeroDataById } from "@/hooks/useHeroDataById";
 import { LoadingIcon } from "../LoadingIcon";
 import { CustomText } from "../CustomText";
-import { Dimensions, View } from "react-native";
+import { Dimensions, Pressable, View } from "react-native";
 import { useUnistyles } from "react-native-unistyles";
 import { heroMoves } from "../../data/moves";
 import { Image } from "react-native";
 import { StyleSheet } from "react-native-unistyles";
+import { AbilityDetails } from "./AbilityDetails";
+import { useState } from "react";
 type Props = {
 	id: number;
 	match: any;
@@ -14,7 +16,12 @@ type Props = {
 
 export const HeroAbilitiesInspect = ({ id, match, abilityInspect }: Props) => {
 	const { theme } = useUnistyles();
-	const { itemDataById, isIdError, isIdLoading, idError } = useHeroDataById(id);
+	const [upgrade, setUpgrade] = useState();
+	const [upgradeSelected, setUpgradeSelected] = useState(-1);
+
+	const { heroDataById, isIdError, isIdLoading, idError } = useHeroDataById(
+		String(id)
+	);
 	if (isIdLoading) return <LoadingIcon />;
 	if (isIdError) return <CustomText>{String(idError)}</CustomText>;
 	const formatDesc = (desc: string) => {
@@ -22,6 +29,7 @@ export const HeroAbilitiesInspect = ({ id, match, abilityInspect }: Props) => {
 			.replace(/<[^>]*>/g, "")
 			.replace(/&nbsp;/g, " ")
 			.replace(/&amp;/g, "&")
+			.replace(/.A/g, ". A")
 			.replace(/&lt;/g, "<")
 			.replace(/&gt;/g, ">")
 			.replace(/&quot;/g, '"')
@@ -39,20 +47,17 @@ export const HeroAbilitiesInspect = ({ id, match, abilityInspect }: Props) => {
 			.trim();
 	};
 
-	const matchedHero = heroMoves.find((hero) => {
-		return hero.id == id;
-	});
 	const numbers = [1, 2, 5];
 
-	const signatures = [
-		"signature1",
-		"signature2",
-		"signature3",
-		"signature4",
-	] as const;
-
-	const upgrades = matchedHero?.[signatures[abilityInspect]]?.upgrades ?? [];
-
+	const upgradeArray = match.upgrades.map((bonus: any, index: number) => {
+		return bonus.property_upgrades;
+	}); // upgrades are in ^ 0 1 2	 index positions
+	const upgrades = upgradeArray.map((upgrade: any) => {
+		return upgrade;
+	});
+	const upgradesIndexOne = upgrades[0].concat(upgrades[1]);
+	const upgradesIndexTwo = upgrades[0].concat(upgrades[1], upgrades[2]);
+	console.log(upgrade);
 	return (
 		<View
 			style={{
@@ -62,8 +67,9 @@ export const HeroAbilitiesInspect = ({ id, match, abilityInspect }: Props) => {
 				alignSelf: "center",
 				borderRadius: 4,
 				borderWidth: 2,
-				borderColor: theme.colors.primary,
+				borderColor: theme.colors.bannerFont,
 			}}>
+			<AbilityDetails upgrade={upgrade} match={match} />
 			<CustomText
 				style={{
 					zIndex: 6,
@@ -72,26 +78,31 @@ export const HeroAbilitiesInspect = ({ id, match, abilityInspect }: Props) => {
 					fontFamily: theme.fontFamily.regular,
 					fontSize: 12,
 					padding: 8,
-					margin: 12,
+					marginHorizontal: 12,
+					marginBottom: 12,
+					marginTop: 3,
 					borderWidth: 2,
 					borderRadius: 4,
 					borderColor: theme.colors.accent,
 				}}>
 				{match.description.desc
 					? formatDesc(match.description.desc)
-					: "No description available"}
+					: formatDesc(match.tooltip_details.info_sections[0].loc_string)}
 			</CustomText>
 			<View
 				style={{
 					flexDirection: "row",
 					marginBottom: 12,
+					alignSelf: "center",
+					justifyContent: "space-evenly",
+					width: 345,
 				}}>
 				{numbers.map((num) => {
 					return (
 						<View
 							key={num}
 							style={{
-								width: 116.6,
+								width: 110,
 								flexDirection: "row",
 								justifyContent: "center",
 							}}>
@@ -117,23 +128,75 @@ export const HeroAbilitiesInspect = ({ id, match, abilityInspect }: Props) => {
 					);
 				})}
 			</View>
+
 			<View
 				style={{
 					flexDirection: "row",
 					alignSelf: "center",
+					justifyContent: "space-evenly",
+					width: 345,
+					marginBottom: 4,
 				}}>
-				<View style={{ flexDirection: "row", alignSelf: "center" }}>
-					{upgrades.map((upgrade) => (
+				{upgrades.map((uMap: any, index: number) => {
+					return (
 						<View
-							key={upgrade}
-							style={{
-								flexDirection: "row",
-								alignSelf: "center",
-							}}>
-							<CustomText style={styles.inspectAbility}>{upgrade}</CustomText>
+							key={index}
+							style={
+								index <= upgradeSelected
+									? styles.inspectAbilitySelected
+									: styles.inspectAbility
+							}>
+							<Pressable
+								style={{ width: 110, height: 70, alignContent: "center" }}
+								onPress={() =>
+									index == upgradeSelected && upgradeSelected == 2
+										? (setUpgrade(
+												upgradesIndexOne.map((i: any) => {
+													return { name: i.name, bonus: i.bonus };
+												})
+										  ),
+										  setUpgradeSelected(1))
+										: index == upgradeSelected && upgradeSelected == 1
+										? (setUpgrade(
+												upgrades[0].map((i: any) => {
+													return { name: i.name, bonus: i.bonus };
+												})
+										  ),
+										  setUpgradeSelected(0))
+										: index == upgradeSelected && upgradeSelected == 0
+										? (setUpgrade(undefined), setUpgradeSelected(-1))
+										: index == 0
+										? (setUpgrade(
+												upgrades[0].map((i: any) => {
+													return { name: i.name, bonus: i.bonus };
+												})
+										  ),
+										  setUpgradeSelected(0))
+										: index == 1
+										? (setUpgrade(
+												upgradesIndexOne.map((i: any) => {
+													return { name: i.name, bonus: i.bonus };
+												})
+										  ),
+										  setUpgradeSelected(1))
+										: (setUpgrade(
+												upgradesIndexTwo.map((i: any) => {
+													return { name: i.name, bonus: i.bonus };
+												})
+										  ),
+										  setUpgradeSelected(2))
+								}>
+								{uMap.map((u: any, index: number) => {
+									return (
+										<CustomText style={styles.inspectAbilityText} key={index}>
+											{u.name} {u.bonus}
+										</CustomText>
+									);
+								})}
+							</Pressable>
 						</View>
-					))}
-				</View>
+					);
+				})}
 			</View>
 		</View>
 	);
@@ -143,17 +206,40 @@ const styles = StyleSheet.create((theme) => ({
 	inspectAbility: {
 		zIndex: 6,
 		textAlign: "center",
-		color: theme.colors.font,
+		flexDirection: "column",
+		backgroundColor: theme.colors.primary,
 		fontSize: 11,
-		width: 116.6,
-		minHeight: 70,
-		paddingRight: 6,
-		paddingLeft: 6,
+		width: 110,
+		height: 70,
 		paddingTop: 4,
 		paddingBottom: 4,
 		borderWidth: 1,
 		borderRadius: 4,
 		borderColor: theme.colors.primary,
+		fontFamily: theme.fontFamily.regular,
+	},
+	inspectAbilitySelected: {
+		zIndex: 6,
+		textAlign: "center",
+		flexDirection: "column",
+		backgroundColor: theme.colors.primary,
+		fontSize: 11,
+		width: 110,
+		height: 70,
+		paddingTop: 4,
+		paddingBottom: 4,
+		borderWidth: 1,
+		borderRadius: 4,
+		borderColor: theme.colors.accent,
+		fontFamily: theme.fontFamily.regular,
+	},
+	inspectAbilityText: {
+		zIndex: 6,
+		alignSelf: "center",
+		textAlign: "center",
+		flexDirection: "column",
+		color: theme.colors.font,
+		fontSize: 9,
 		fontFamily: theme.fontFamily.regular,
 	},
 }));

@@ -4,7 +4,7 @@ import {
 	createItemDataByIdQueryOptions,
 } from "@/queryOptions/createHeroQueryOptions";
 
-export const useHeroDataById = (id: number) => {
+export const useHeroDataById = (id: string) => {
 	const heroDataById = useQuery(createHeroDataByIdQueryOptions(id));
 	const itemDataById = useQuery(createItemDataByIdQueryOptions(id));
 
