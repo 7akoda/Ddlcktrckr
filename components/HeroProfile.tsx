@@ -118,6 +118,7 @@ export const HeroProfile = ({ id }: Props) => {
 						position: "absolute",
 						width: "100%",
 						height: screenHeight,
+						top: -40,
 					}}>
 					<Animated.View style={[{ zIndex: 4 }, animatedContentStyle]}>
 						<HeroAbilitiesInspect

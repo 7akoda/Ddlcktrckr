@@ -73,7 +73,7 @@ export const ItemList = () => {
 								alignSelf: "center",
 								borderRadius: 4,
 								borderWidth: 2,
-								borderColor: theme.colors.accent,
+								borderColor: theme.colors.primary,
 							}}
 						/>
 						<Link
@@ -119,7 +119,8 @@ const styles = StyleSheet.create((theme) => ({
 		paddingHorizontal: 8,
 		marginVertical: 1,
 		overflow: "hidden",
-		borderWidth: 1,
+		borderWidth: 2,
+		borderColor: theme.colors.primary,
 	},
 	heroText: {
 		color: theme.colors.font,

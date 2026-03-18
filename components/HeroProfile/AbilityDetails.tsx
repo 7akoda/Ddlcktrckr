@@ -11,15 +11,9 @@ export const AbilityDetails = ({ match, upgrade }: Props) => {
 	const Cooldown = match.properties.AbilityCooldown;
 	const duration = match.properties.AbilityDuration;
 	const castRange = match.properties.AbilityCastRange;
-	const castDelay = match.properties.AbilityCastDelay;
-	const channelTime = match.properties.AbilityChannelTime;
 	const abilityCharges = match.properties.AbilityCharges;
 	const abilityChargesCooldown = match.properties.AbilityCooldownBetweenCharge;
-	const weaponPower = match.properties.WeaponPower;
-	const damage = match.properties.Damage;
-	const slowPercent = match.properties.SlowPercent;
-	const slowDuration = match.properties.SlowDuration;
-	const healOnHit = match.properties.HealOnHit;
+
 	const Radius = match.properties.Radius;
 
 	const foundUpgrade = (detail: any) => {

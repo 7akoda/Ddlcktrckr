@@ -24,16 +24,18 @@ export const HeroAbilitiesInspect = ({ id, match, abilityInspect }: Props) => {
 	);
 	if (isIdLoading) return <LoadingIcon />;
 	if (isIdError) return <CustomText>{String(idError)}</CustomText>;
+
 	const formatDesc = (desc: string) => {
 		return desc
 			.replace(/<[^>]*>/g, "")
+			.replace(/\.([^\s])/g, ". $1")
+			.replace(/<br>/g, "<br>")
 			.replace(/&nbsp;/g, " ")
 			.replace(/&amp;/g, "&")
-			.replace(/.A/g, ". A")
 			.replace(/&lt;/g, "<")
 			.replace(/&gt;/g, ">")
 			.replace(/&quot;/g, '"')
-			.replace(/{g:citadel_binding:'Attack'}/g, "Attack ")
+			.replace(/{g:citadel_binding:'Attack'}/g, " Attack ")
 			.replace(/{g:citadel_binding:'AltCast'}/g, "Alt Cast ")
 			.replace(/{g:citadel_binding:'MoveForward'}/g, "Move forward ")
 			.replace(/{g:citadel_binding:'MoveDown'}/g, "Move down ")
@@ -57,7 +59,60 @@ export const HeroAbilitiesInspect = ({ id, match, abilityInspect }: Props) => {
 	});
 	const upgradesIndexOne = upgrades[0].concat(upgrades[1]);
 	const upgradesIndexTwo = upgrades[0].concat(upgrades[1], upgrades[2]);
-	console.log(upgrade);
+
+	let propertyArray = Object.entries(match?.properties).map(([key, value]) => {
+		return [key, value];
+	});
+
+	const abilityPropertyFormatter = (abilityName: string) => {
+		abilityName = abilityName.replace("Ability", "");
+		return abilityName;
+	};
+
+	const valueNumberizer = (value: string) => {
+		let newvalue;
+		value = String(value);
+		newvalue = value.replace(/[^0-9.-]/g, "");
+		return Number(newvalue);
+	};
+	const impProps1 =
+		match.tooltip_details?.info_sections?.[0]?.properties_block?.[0]
+			?.properties;
+	const impProps2 =
+		match.tooltip_details?.info_sections?.[0]?.properties_block?.[1]
+			?.properties;
+	const impProps3 =
+		match.tooltip_details?.info_sections?.[1]?.properties_block?.[0]
+			?.properties;
+
+	let importantProperties;
+	if (impProps2 !== undefined && impProps3 !== undefined) {
+		importantProperties = impProps1.concat(impProps2, impProps3);
+	} else if (impProps2 == undefined && impProps3 !== undefined) {
+		importantProperties = impProps1.concat(impProps3);
+	} else if (impProps2 !== undefined && impProps3 == undefined) {
+		importantProperties = impProps1.concat(impProps2);
+	} else if (impProps2 == undefined && impProps3 == undefined) {
+		importantProperties = impProps1;
+	}
+	importantProperties = importantProperties.map((importantProperty: any) => {
+		return importantProperty.important_property;
+	});
+
+	importantProperties = importantProperties.map((importantProperty: any) => {
+		return importantProperty == "StatusEffectStun"
+			? "StunDuration"
+			: importantProperty;
+	});
+
+	propertyArray = propertyArray.filter((p: any) =>
+		importantProperties.some((m: any) => p[0] == m)
+	);
+
+	propertyArray = propertyArray.filter((p: any) => p[1]?.value > 0);
+
+	// console.log(match.tooltip_details?.info_sections?.[0]?.basic_properties);
+
 	return (
 		<View
 			style={{
@@ -67,19 +122,20 @@ export const HeroAbilitiesInspect = ({ id, match, abilityInspect }: Props) => {
 				alignSelf: "center",
 				borderRadius: 4,
 				borderWidth: 2,
-				borderColor: theme.colors.bannerFont,
+				borderColor: theme.colors.secondary,
 			}}>
 			<AbilityDetails upgrade={upgrade} match={match} />
 			<CustomText
 				style={{
+					width: 322,
 					zIndex: 6,
-					textAlign: "center",
+					textAlign: "left",
 					color: theme.colors.font,
 					fontFamily: theme.fontFamily.regular,
 					fontSize: 12,
 					padding: 8,
 					marginHorizontal: 12,
-					marginBottom: 12,
+					marginBottom: 6,
 					marginTop: 3,
 					borderWidth: 2,
 					borderRadius: 4,
@@ -91,8 +147,66 @@ export const HeroAbilitiesInspect = ({ id, match, abilityInspect }: Props) => {
 			</CustomText>
 			<View
 				style={{
+					width: 320,
+					minHeight: 50,
+					flexDirection: "column",
+					marginBottom: 6,
+					alignSelf: "center",
+					marginLeft: 12,
+					marginRight: 6,
+				}}>
+				<View
+					style={{
+						flexDirection: "row",
+						width: 320,
+						flexWrap: "wrap",
+					}}>
+					{propertyArray.map((ability: any, index) => {
+						return (
+							<View
+								key={index}
+								style={{
+									minWidth: 100,
+									height: 50,
+									borderWidth: 2,
+									flex: 1,
+									borderRadius: 4,
+									marginTop: 6,
+									marginRight: 6,
+									backgroundColor: theme.colors.primary,
+									borderColor: theme.colors.secondary,
+									flexDirection: "column",
+									alignSelf: "center",
+									justifyContent: "center",
+								}}>
+								<CustomText
+									style={{
+										color: theme.colors.font,
+										fontSize: 9,
+										fontFamily: theme.fontFamily.regular,
+										textAlign: "center",
+									}}>
+									{abilityPropertyFormatter(ability[0])}
+								</CustomText>
+								<CustomText
+									style={{
+										color: theme.colors.font,
+										fontSize: 9,
+										fontFamily: theme.fontFamily.regular,
+										textAlign: "center",
+									}}>
+									{ability[1].value}
+								</CustomText>
+							</View>
+						);
+					})}
+				</View>
+			</View>
+			<View
+				style={{
 					flexDirection: "row",
-					marginBottom: 12,
+
+					marginBottom: 6,
 					alignSelf: "center",
 					justifyContent: "space-evenly",
 					width: 345,
