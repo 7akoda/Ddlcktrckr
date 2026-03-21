@@ -8,6 +8,10 @@ import { Image } from "react-native";
 import { StyleSheet } from "react-native-unistyles";
 import { AbilityDetails } from "./AbilityDetails";
 import { useState } from "react";
+import {
+	cleanDecimals,
+	cleanDescription,
+} from "@/api/decimaldescriptionTransform";
 type Props = {
 	id: number;
 	match: any;
@@ -48,15 +52,25 @@ export const HeroAbilitiesInspect = ({ id, match, abilityInspect }: Props) => {
 			.replace(/\s+/g, " ")
 			.trim();
 	};
-
 	const numbers = [1, 2, 5];
-
+	const sinclairUltUpgrade = [
+		[{ name: cleanDescription(match.description.t1_desc) }],
+		[{ name: cleanDescription(match.description.t2_desc) }],
+		[{ name: cleanDescription(match.description.t3_desc) }],
+	];
 	const upgradeArray = match.upgrades.map((bonus: any, index: number) => {
 		return bonus.property_upgrades;
 	}); // upgrades are in ^ 0 1 2	 index positions
-	const upgrades = upgradeArray.map((upgrade: any) => {
+	let upgrades = upgradeArray.map((upgrade: any) => {
 		return upgrade;
 	});
+
+	if (
+		(upgrades[0].length == 0, upgrades[1].length == 0, upgrades[2].length == 0)
+	) {
+		upgrades = sinclairUltUpgrade;
+	}
+
 	const upgradesIndexOne = upgrades[0].concat(upgrades[1]);
 	const upgradesIndexTwo = upgrades[0].concat(upgrades[1], upgrades[2]);
 
@@ -75,42 +89,107 @@ export const HeroAbilitiesInspect = ({ id, match, abilityInspect }: Props) => {
 		newvalue = value.replace(/[^0-9.-]/g, "");
 		return Number(newvalue);
 	};
-	const impProps1 =
+	const impPropsInf0_1 =
 		match.tooltip_details?.info_sections?.[0]?.properties_block?.[0]
 			?.properties;
-	const impProps2 =
+	const impPropInf0_2 =
 		match.tooltip_details?.info_sections?.[0]?.properties_block?.[1]
 			?.properties;
-	const impProps3 =
-		match.tooltip_details?.info_sections?.[1]?.properties_block?.[0]
+	const impPropsInf0_3 =
+		match.tooltip_details?.info_sections?.[0]?.properties_block?.[2]
 			?.properties;
 
-	let importantProperties;
-	if (impProps2 !== undefined && impProps3 !== undefined) {
-		importantProperties = impProps1.concat(impProps2, impProps3);
-	} else if (impProps2 == undefined && impProps3 !== undefined) {
-		importantProperties = impProps1.concat(impProps3);
-	} else if (impProps2 !== undefined && impProps3 == undefined) {
-		importantProperties = impProps1.concat(impProps2);
-	} else if (impProps2 == undefined && impProps3 == undefined) {
-		importantProperties = impProps1;
+	const impPropsInf1_0 =
+		match.tooltip_details?.info_sections?.[1]?.properties_block?.[0]
+			?.properties;
+	const impPropsInf1_1 =
+		match.tooltip_details?.info_sections?.[1]?.properties_block?.[1]
+			?.properties;
+	const impPropsInf2_0 =
+		match.tooltip_details?.info_sections?.[2]?.properties_block?.[0]
+			?.properties;
+	const impPropsInf2_1 =
+		match.tooltip_details?.info_sections?.[2]?.properties_block?.[1]
+			?.properties;
+
+	let impPropsArray = [
+		impPropsInf0_1,
+		impPropInf0_2,
+		impPropsInf0_3,
+		impPropsInf1_0,
+		impPropsInf1_1,
+		impPropsInf2_0,
+		impPropsInf2_1,
+	].flat();
+
+	const basicPropsArr1 =
+		match.tooltip_details?.info_sections?.[0]?.basic_properties;
+	const basicPropsArr2 =
+		match.tooltip_details?.info_sections?.[1]?.basic_properties;
+	const basicPropsArr3 =
+		match.tooltip_details?.info_sections?.[2]?.basic_properties;
+
+	let importantProperties = [];
+
+	if (basicPropsArr3 && !basicPropsArr1 && !basicPropsArr2) {
+		const basicProps = basicPropsArr3.map((property: any) => {
+			return { important_property: property };
+		});
+		importantProperties = basicProps ? basicProps : [];
 	}
+	if (basicPropsArr1) {
+		const basicProps = basicPropsArr1.map((property: any) => {
+			return { important_property: property };
+		});
+		importantProperties = basicProps ? basicProps : [];
+	}
+	if (basicPropsArr2) {
+		const basicProps = basicPropsArr2.map((property: any) => {
+			return { important_property: property };
+		});
+		importantProperties = basicProps ? basicProps : [];
+	}
+
+	if (basicPropsArr1 && basicPropsArr2) {
+		const basicProps = basicPropsArr2
+			.concat(basicPropsArr1)
+			.map((property: any) => {
+				return { important_property: property };
+			});
+		importantProperties = basicProps ? basicProps : [];
+	}
+
+	impPropsArray = impPropsArray.filter((property: any) => {
+		return property !== undefined;
+	});
+	importantProperties = importantProperties.concat(impPropsArray);
+
 	importantProperties = importantProperties.map((importantProperty: any) => {
-		return importantProperty.important_property;
+		return importantProperty.important_property.slice(0, 12) == "StatusEffect"
+			? { important_property: importantProperty.status_effect_value }
+			: importantProperty;
 	});
 
 	importantProperties = importantProperties.map((importantProperty: any) => {
-		return importantProperty == "StatusEffectStun"
-			? "StunDuration"
-			: importantProperty;
+		return importantProperty.important_property;
 	});
 
 	propertyArray = propertyArray.filter((p: any) =>
 		importantProperties.some((m: any) => p[0] == m)
 	);
 
-	propertyArray = propertyArray.filter((p: any) => p[1]?.value > 0);
+	propertyArray.map((p: any) => {
+		return p[1].scale_function?.specific_stat_scale_type == "ELightMeleeDamage"
+			? (p[1].value =
+					heroDataById.starting_stats.light_melee_damage.value *
+					p[1].scale_function.stat_scale)
+			: p;
+	});
 
+	propertyArray = propertyArray.filter(
+		(p: any) =>
+			valueNumberizer(p[1]?.value) !== 0 && valueNumberizer(p[1]?.value) !== -1
+	);
 	// console.log(match.tooltip_details?.info_sections?.[0]?.basic_properties);
 
 	return (
@@ -195,7 +274,7 @@ export const HeroAbilitiesInspect = ({ id, match, abilityInspect }: Props) => {
 										fontFamily: theme.fontFamily.regular,
 										textAlign: "center",
 									}}>
-									{ability[1].value}
+									{cleanDecimals(valueNumberizer(ability[1].value))}
 								</CustomText>
 							</View>
 						);

@@ -14,7 +14,10 @@ export const AbilityDetails = ({ match, upgrade }: Props) => {
 	const abilityCharges = match.properties.AbilityCharges;
 	const abilityChargesCooldown = match.properties.AbilityCooldownBetweenCharge;
 
-	const Radius = match.properties.Radius;
+	let Radius =
+		match.name == "Disengaging Sigil"
+			? match.properties.SigilRadius
+			: match.properties.Radius;
 
 	const foundUpgrade = (detail: any) => {
 		return upgrade?.find((u: any) => u.name == detail);
