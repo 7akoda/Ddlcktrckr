@@ -5,8 +5,11 @@ export const cleanDescription = (desc: string) => {
 
 	let superCleaned = cleaned.replace(/{g:citadel_binding:'Reload'}/, "reload");
 
+	superCleaned = superCleaned.replace(
+		/{g:citadel_binding:'Ability3'}/,
+		"Ability 3 button"
+	);
 	superCleaned = superCleaned.replace(/[.]/g, ".\n");
-
 	superCleaned = superCleaned.replace(/<[^>]+>/g, "");
 
 	try {
@@ -17,6 +20,95 @@ export const cleanDescription = (desc: string) => {
 	superCleaned = superCleaned.replace(/\s+/g, " ").trim();
 
 	return superCleaned;
+};
+
+export const cleanUpgrade = (desc: string) => {
+	if (!desc) return "";
+
+	let cleaned = desc.replace(/<svg[\s\S]*?<\/svg>/gi, "");
+
+	let superCleaned = cleaned.replace(/{g:citadel_binding:'Reload'}/, "reload");
+
+	superCleaned = superCleaned.replace(/\.0/g, "");
+	superCleaned = superCleaned.replace(/<[^>]+>/g, "");
+
+	try {
+		const { decode } = require("he");
+		superCleaned = decode(superCleaned);
+	} catch {}
+
+	superCleaned = superCleaned.replace(/\s+/g, " ").trim();
+	superCleaned = superCleaned.replace(/ On/g, "\n On");
+
+	return superCleaned;
+};
+
+export const cleanPropertyName = (property: string) => {
+	return property == "AbilityCooldown"
+		? "Cooldown"
+		: property == "AbilityDuration"
+		? "Duration"
+		: property == "BonusHealthRegen"
+		? "Health Regen"
+		: property == "BonusMaxHealth"
+		? "Max Health"
+		: property == "StunDuration"
+		? "Stun Duration"
+		: property == "MeleeResistReduction"
+		? "Melee Resist"
+		: property == "DashRange"
+		? "Dash Range"
+		: property == "BonusDamagePercent"
+		? "Bonus Damage"
+		: property == "AbilityCastRange"
+		? "Cast Range"
+		: property == "DPS"
+		? "Damage Per Second"
+		: property == "GrenadeCount"
+		? "Bomb Count"
+		: property == "HealAmount"
+		? "Heal Amount"
+		: property == "BuffDuration"
+		? "Buff Duration"
+		: property == "AbilityLifestealPercentHero"
+		? "Spirit Lifesteal"
+		: property == "HealingFactor"
+		? "Lifesteal"
+		: property == "NonHeroHealingFactor"
+		? "Lifesteal vs Non-Heroes"
+		: property == "RegenIncomingDamagePercent"
+		? "Damage Regenerated"
+		: property == "RegenIncomingDamageDuration"
+		? "Regeneration Time"
+		: property == "SlowPercent"
+		? "Move Speed"
+		: property == "SlowDuration"
+		? "Slow Duration"
+		: property == "ParryWindow"
+		? "Invulnerability Duration"
+		: property == "MeleeResistReductionDuration"
+		? "Melee Resist Reduction Duration"
+		: property == "BaseDamage"
+		? "Base Damage"
+		: property == "MaxStabs"
+		? "Max Lunges"
+		: property == "PerfectDamage"
+		? "Perfect Damage"
+		: property == "MaxDamageBeforePerfect"
+		? "Max Hold Damage"
+		: property == "DelayedDamage"
+		? "Delayed Damage"
+		: property == "DebuffDuration"
+		? "Debuff Duration"
+		: property == "LowHealthEnemyThreshold"
+		? "Delayed Damage"
+		: property;
+};
+export const valueNumberizer = (value: string) => {
+	let newvalue;
+	value = String(value);
+	newvalue = value.replace(/[^0-9.-]/g, "");
+	return Number(newvalue);
 };
 
 export const cleanDecimals = (scale: number) => {

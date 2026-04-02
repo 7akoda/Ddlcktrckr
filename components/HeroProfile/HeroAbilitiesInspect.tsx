@@ -11,6 +11,9 @@ import { useState } from "react";
 import {
 	cleanDecimals,
 	cleanDescription,
+	cleanPropertyName,
+	cleanUpgrade,
+	valueNumberizer,
 } from "@/api/decimaldescriptionTransform";
 type Props = {
 	id: number;
@@ -20,7 +23,7 @@ type Props = {
 
 export const HeroAbilitiesInspect = ({ id, match, abilityInspect }: Props) => {
 	const { theme } = useUnistyles();
-	const [upgrade, setUpgrade] = useState();
+	const [upgrade, setUpgrade] = useState([]);
 	const [upgradeSelected, setUpgradeSelected] = useState(-1);
 
 	const { heroDataById, isIdError, isIdLoading, idError } = useHeroDataById(
@@ -29,29 +32,11 @@ export const HeroAbilitiesInspect = ({ id, match, abilityInspect }: Props) => {
 	if (isIdLoading) return <LoadingIcon />;
 	if (isIdError) return <CustomText>{String(idError)}</CustomText>;
 
-	const formatDesc = (desc: string) => {
-		return desc
-			.replace(/<[^>]*>/g, "")
-			.replace(/\.([^\s])/g, ". $1")
-			.replace(/<br>/g, "<br>")
-			.replace(/&nbsp;/g, " ")
-			.replace(/&amp;/g, "&")
-			.replace(/&lt;/g, "<")
-			.replace(/&gt;/g, ">")
-			.replace(/&quot;/g, '"')
-			.replace(/{g:citadel_binding:'Attack'}/g, " Attack ")
-			.replace(/{g:citadel_binding:'AltCast'}/g, "Alt Cast ")
-			.replace(/{g:citadel_binding:'MoveForward'}/g, "Move forward ")
-			.replace(/{g:citadel_binding:'MoveDown'}/g, "Move down ")
-			.replace(/{g:citadel_binding:'Mantle'}/g, " mantle ")
-			.replace(/orAttack/, "or Attack")
-			.replace(/{g:citadel_binding:'Ability1'}/g, " Ability 1 ")
-			.replace(/{g:citadel_binding:'Ability2'}/g, "Ability 2 ")
-			.replace(/{g:citadel_binding:'Ability3'}/g, "Ability 3 ")
-			.replace(/{g:citadel_binding:'Ability4'}/g, "Ability 4 ")
-			.replace(/\s+/g, " ")
-			.trim();
-	};
+	const rawProperties = Object.entries(match?.properties).map(
+		([key, value]) => {
+			return [key, value];
+		}
+	);
 	const numbers = [1, 2, 5];
 	const sinclairUltUpgrade = [
 		[{ name: cleanDescription(match.description.t1_desc) }],
@@ -60,7 +45,8 @@ export const HeroAbilitiesInspect = ({ id, match, abilityInspect }: Props) => {
 	];
 	const upgradeArray = match.upgrades.map((bonus: any, index: number) => {
 		return bonus.property_upgrades;
-	}); // upgrades are in ^ 0 1 2	 index positions
+	});
+
 	let upgrades = upgradeArray.map((upgrade: any) => {
 		return upgrade;
 	});
@@ -73,22 +59,10 @@ export const HeroAbilitiesInspect = ({ id, match, abilityInspect }: Props) => {
 
 	const upgradesIndexOne = upgrades[0].concat(upgrades[1]);
 	const upgradesIndexTwo = upgrades[0].concat(upgrades[1], upgrades[2]);
-
 	let propertyArray = Object.entries(match?.properties).map(([key, value]) => {
 		return [key, value];
 	});
 
-	const abilityPropertyFormatter = (abilityName: string) => {
-		abilityName = abilityName.replace("Ability", "");
-		return abilityName;
-	};
-
-	const valueNumberizer = (value: string) => {
-		let newvalue;
-		value = String(value);
-		newvalue = value.replace(/[^0-9.-]/g, "");
-		return Number(newvalue);
-	};
 	const impPropsInf0_1 =
 		match.tooltip_details?.info_sections?.[0]?.properties_block?.[0]
 			?.properties;
@@ -98,7 +72,6 @@ export const HeroAbilitiesInspect = ({ id, match, abilityInspect }: Props) => {
 	const impPropsInf0_3 =
 		match.tooltip_details?.info_sections?.[0]?.properties_block?.[2]
 			?.properties;
-
 	const impPropsInf1_0 =
 		match.tooltip_details?.info_sections?.[1]?.properties_block?.[0]
 			?.properties;
@@ -175,7 +148,7 @@ export const HeroAbilitiesInspect = ({ id, match, abilityInspect }: Props) => {
 	});
 
 	propertyArray = propertyArray.filter((p: any) =>
-		importantProperties.some((m: any) => p[0] == m)
+		importantProperties.some((m: any) => p[0] == m && p[0] !== "SigilRadius")
 	);
 
 	propertyArray.map((p: any) => {
@@ -190,6 +163,18 @@ export const HeroAbilitiesInspect = ({ id, match, abilityInspect }: Props) => {
 		(p: any) =>
 			valueNumberizer(p[1]?.value) !== 0 && valueNumberizer(p[1]?.value) !== -1
 	);
+	if (upgrade !== undefined && upgrade) {
+		const shit = propertyArray.map((propertyOMG: any) => {
+			return upgrade.find((up: any) => {
+				return up.name == propertyOMG[0];
+			});
+		});
+		console.log(shit);
+	}
+
+	const upgradeRelationArray = upgrades.map((up: any) => {
+		return rawProperties.find((u: any) => up[0].name == u[0]);
+	});
 	// console.log(match.tooltip_details?.info_sections?.[0]?.basic_properties);
 
 	return (
@@ -221,8 +206,8 @@ export const HeroAbilitiesInspect = ({ id, match, abilityInspect }: Props) => {
 					borderColor: theme.colors.accent,
 				}}>
 				{match.description.desc
-					? formatDesc(match.description.desc)
-					: formatDesc(match.tooltip_details.info_sections[0].loc_string)}
+					? cleanDescription(match.description.desc)
+					: cleanDescription(match.tooltip_details.info_sections[0].loc_string)}
 			</CustomText>
 			<View
 				style={{
@@ -265,7 +250,7 @@ export const HeroAbilitiesInspect = ({ id, match, abilityInspect }: Props) => {
 										fontFamily: theme.fontFamily.regular,
 										textAlign: "center",
 									}}>
-									{abilityPropertyFormatter(ability[0])}
+									{ability[1].label}
 								</CustomText>
 								<CustomText
 									style={{
@@ -274,7 +259,9 @@ export const HeroAbilitiesInspect = ({ id, match, abilityInspect }: Props) => {
 										fontFamily: theme.fontFamily.regular,
 										textAlign: "center",
 									}}>
+									{ability[1].prefix}
 									{cleanDecimals(valueNumberizer(ability[1].value))}
+									{ability[1].postfix}
 								</CustomText>
 							</View>
 						);
@@ -284,7 +271,6 @@ export const HeroAbilitiesInspect = ({ id, match, abilityInspect }: Props) => {
 			<View
 				style={{
 					flexDirection: "row",
-
 					marginBottom: 6,
 					alignSelf: "center",
 					justifyContent: "space-evenly",
@@ -379,13 +365,31 @@ export const HeroAbilitiesInspect = ({ id, match, abilityInspect }: Props) => {
 										  ),
 										  setUpgradeSelected(2))
 								}>
-								{uMap.map((u: any, index: number) => {
-									return (
-										<CustomText style={styles.inspectAbilityText} key={index}>
-											{u.name} {u.bonus}
-										</CustomText>
-									);
-								})}
+								{match.description.t1_desc && index + 1 == 1 ? (
+									<CustomText style={styles.inspectAbilityText}>
+										{cleanUpgrade(match.description.t1_desc)}
+									</CustomText>
+								) : match.description.t2_desc && index + 1 == 2 ? (
+									<CustomText style={styles.inspectAbilityText}>
+										{cleanUpgrade(match.description.t2_desc)}
+									</CustomText>
+								) : match.description.t3_desc && index + 1 == 3 ? (
+									<CustomText style={styles.inspectAbilityText}>
+										{cleanUpgrade(match.description.t3_desc)}
+									</CustomText>
+								) : (
+									uMap.map((u: any, index1: number) => {
+										return (
+											<CustomText
+												style={styles.inspectAbilityText}
+												key={index1}>
+												{valueNumberizer(u.bonus)}
+												{upgradeRelationArray[index][1].postfix}{" "}
+												{upgradeRelationArray[index][1].label}
+											</CustomText>
+										);
+									})
+								)}
 							</Pressable>
 						</View>
 					);
@@ -434,5 +438,6 @@ const styles = StyleSheet.create((theme) => ({
 		color: theme.colors.font,
 		fontSize: 9,
 		fontFamily: theme.fontFamily.regular,
+		marginHorizontal: 5,
 	},
 }));
