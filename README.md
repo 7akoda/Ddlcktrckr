@@ -2,4 +2,8 @@ Ddlcktrckr fetches live and historical data from the Deadlock API and visualizes
 
 Using React Native, Reanimated, RNSkia, TanStack Query, Unistyles, etc.
 
+Pictured below are screenshots from the Hero page, a screen recording would not do the shaders justice.
+
+Currently still in development.
+
 <div><img src="images//mdImages/mdWraith.png" width="45%"><img src="images//mdImages/mdVictor.png" width="45%"></div>
