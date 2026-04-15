@@ -45,6 +45,7 @@ export const HeroProfile = ({ id }: Props) => {
 			return newVal;
 		});
 	};
+
 	const { heroDataById, itemDataById, isIdError, isIdLoading, idError } =
 		useHeroDataById(String(id));
 	if (isIdLoading) return <LoadingIcon />;

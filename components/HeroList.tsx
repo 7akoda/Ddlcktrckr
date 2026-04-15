@@ -10,12 +10,13 @@ import { CustomText } from "./CustomText";
 import { LoadingIcon } from "./LoadingIcon";
 import { useHeroData } from "@/hooks/useHeroData";
 import { BlurView } from "expo-blur";
+import { SettingsPopUp } from "./settingsPopup";
 
 export const HeroList = () => {
 	const [sort, setSort] = useState("Winrate");
-
+	const [settings, setSettings] = useState(false);
 	const { theme, rt } = useUnistyles();
-
+	console.log(settings);
 	const { heroData, error, isLoading, isError } = useHeroData();
 
 	if (isLoading) {
@@ -60,6 +61,7 @@ export const HeroList = () => {
 				sortText={["Pickrate", "Winrate"]}
 				sortAmount={2}
 				itemType={false}
+				setSettings={setSettings}
 			/>
 			<FlatList
 				data={sorted}
@@ -123,6 +125,7 @@ export const HeroList = () => {
 						)}
 					</BlurView>
 				)}></FlatList>
+			{<SettingsPopUp setSettings={setSettings} settings={settings} />}
 		</View>
 	);
 };

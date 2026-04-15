@@ -13,6 +13,7 @@ import { VitalitySvg } from "./svgComponents/VitalitySvg";
 import { WeaponSvg } from "./svgComponents/WeaponSvg";
 import { PulsingPressable } from "./PulsingPressable";
 import { BlurView } from "expo-blur";
+import { Dispatch, SetStateAction, useState } from "react";
 
 type SortableHeader = {
 	back: boolean;
@@ -22,6 +23,7 @@ type SortableHeader = {
 	sortAmount: number;
 	sort: string;
 	itemType: false;
+	setSettings: Dispatch<SetStateAction<boolean>>;
 };
 
 type SortableItemHeader = {
@@ -34,11 +36,13 @@ type SortableItemHeader = {
 	sort: string;
 	itemList: boolean;
 	itemType: string;
+	setSettings: Dispatch<SetStateAction<boolean>>;
 };
 
 type NonSortableHeader = {
 	back: boolean;
 	sortable: false;
+	setSettings: Dispatch<SetStateAction<boolean>>;
 };
 
 type HeaderProps = SortableHeader | NonSortableHeader | SortableItemHeader;
@@ -59,7 +63,7 @@ export const Header = (props: HeaderProps) => {
 				<ArrowLeft
 					size={20}
 					color={theme.colors.accent}
-					style={{ alignSelf: "center", paddingLeft: 30 }}
+					style={{ alignSelf: "center", paddingLeft: 30, paddingVertical: 5 }}
 					onPress={() => router.back()}
 				/>
 			)}
@@ -153,23 +157,17 @@ export const Header = (props: HeaderProps) => {
 						</CustomText>
 					)
 				)}
-			{props.sortable && props.sortAmount > 4 && (
-				<ArrowDownWideNarrow
-					size={20}
-					color={theme.colors.accent}
-					style={{ alignSelf: "center", paddingRight: 30 }}
-				/>
-			)}
 
 			<Search
 				size={20}
 				color={theme.colors.accent}
-				style={{ alignSelf: "center", paddingRight: 30 }}
+				style={{ alignSelf: "center", paddingRight: 30, paddingVertical: 5 }}
 			/>
 			<Settings
 				size={20}
 				color={theme.colors.accent}
-				style={{ alignSelf: "center", paddingRight: 30 }}
+				style={{ alignSelf: "center", paddingRight: 30, paddingVertical: 5 }}
+				onPress={() => props.setSettings((prev) => !prev)}
 			/>
 		</View>
 	);

@@ -11,7 +11,6 @@ import { useState } from "react";
 import {
 	cleanDecimals,
 	cleanDescription,
-	cleanPropertyName,
 	cleanUpgrade,
 	valueNumberizer,
 } from "@/api/decimaldescriptionTransform";
@@ -25,7 +24,6 @@ export const HeroAbilitiesInspect = ({ id, match, abilityInspect }: Props) => {
 	const { theme } = useUnistyles();
 	const [upgrade, setUpgrade] = useState([]);
 	const [upgradeSelected, setUpgradeSelected] = useState(-1);
-	console.log(upgrade);
 
 	const { heroDataById, isIdError, isIdLoading, idError } = useHeroDataById(
 		String(id)
@@ -39,6 +37,10 @@ export const HeroAbilitiesInspect = ({ id, match, abilityInspect }: Props) => {
 		}
 	);
 	const numbers = [1, 2, 5];
+
+	const foundUpgrade = (detail: any) => {
+		return upgrade?.find((u: any) => u.name == detail);
+	};
 
 	const sinclairUltUpgrade = [
 		[{ name: cleanDescription(match.description.t1_desc) }],
@@ -172,15 +174,11 @@ export const HeroAbilitiesInspect = ({ id, match, abilityInspect }: Props) => {
 				return up.name == propertyOMG[0];
 			});
 		});
-		console.log(shit);
 	}
-
+	console.log(upgrade);
 	const upgradeRelationArray = upgrades.map((up: any) => {
 		return rawProperties.find((u: any) => up[0].name == u[0]);
 	});
-
-	// console.log(match.tooltip_details?.info_sections?.[0]?.basic_properties);
-
 	return (
 		<View
 			style={{
@@ -257,14 +255,17 @@ export const HeroAbilitiesInspect = ({ id, match, abilityInspect }: Props) => {
 									{ability[1].label}
 								</CustomText>
 								<CustomText
-									style={{
-										color: theme.colors.font,
-										fontSize: 9,
-										fontFamily: theme.fontFamily.regular,
-										textAlign: "center",
-									}}>
+									style={
+										foundUpgrade([ability[0]]) !== undefined
+											? styles.upgradedPropertyText
+											: styles.propertyText
+									}>
 									{ability[1].prefix == "{s:sign}" ? "+" : ability[1].prefix}
-									{cleanDecimals(valueNumberizer(ability[1].value))}
+									{foundUpgrade(ability[0]) !== undefined &&
+									ability[1] !== undefined
+										? cleanDecimals(valueNumberizer(ability[1].value)) +
+										  valueNumberizer(foundUpgrade(ability[0]).bonus)
+										: cleanDecimals(valueNumberizer(ability[1].value))}
 									{ability[1]?.postfix == " m" ? "m" : ability[1]?.postfix}
 								</CustomText>
 							</View>
@@ -445,5 +446,22 @@ const styles = StyleSheet.create((theme) => ({
 		fontSize: 9,
 		fontFamily: theme.fontFamily.regular,
 		marginHorizontal: 5,
+	},
+	propertyText: {
+		color: theme.colors.font,
+		fontSize: 9,
+		fontFamily: theme.fontFamily.regular,
+		textAlign: "center",
+		padding: 0.5,
+	},
+	upgradedPropertyText: {
+		color: theme.colors.font,
+		fontSize: 9,
+		fontFamily: theme.fontFamily.regular,
+		textAlign: "center",
+		borderBottomColor: theme.colors.accent,
+		borderWidth: 0.5,
+		borderColor: theme.colors.background,
+		alignSelf: "center",
 	},
 }));

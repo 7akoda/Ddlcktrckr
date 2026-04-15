@@ -9,6 +9,16 @@ export const cleanDescription = (desc: string) => {
 		/{g:citadel_binding:'Ability3'}/,
 		"Ability 3 button"
 	);
+
+	superCleaned = superCleaned.replace(
+		/{g:citadel_binding:'MoveForward'}/,
+		" forward "
+	);
+
+	superCleaned = superCleaned.replace(
+		/{g:citadel_binding:'AltCast'}/,
+		" Alt cast "
+	);
 	superCleaned = superCleaned.replace(/[.]/g, ".\n");
 	superCleaned = superCleaned.replace(/<[^>]+>/g, "");
 
@@ -43,68 +53,7 @@ export const cleanUpgrade = (desc: string) => {
 	return superCleaned;
 };
 
-export const cleanPropertyName = (property: string) => {
-	return property == "AbilityCooldown"
-		? "Cooldown"
-		: property == "AbilityDuration"
-		? "Duration"
-		: property == "BonusHealthRegen"
-		? "Health Regen"
-		: property == "BonusMaxHealth"
-		? "Max Health"
-		: property == "StunDuration"
-		? "Stun Duration"
-		: property == "MeleeResistReduction"
-		? "Melee Resist"
-		: property == "DashRange"
-		? "Dash Range"
-		: property == "BonusDamagePercent"
-		? "Bonus Damage"
-		: property == "AbilityCastRange"
-		? "Cast Range"
-		: property == "DPS"
-		? "Damage Per Second"
-		: property == "GrenadeCount"
-		? "Bomb Count"
-		: property == "HealAmount"
-		? "Heal Amount"
-		: property == "BuffDuration"
-		? "Buff Duration"
-		: property == "AbilityLifestealPercentHero"
-		? "Spirit Lifesteal"
-		: property == "HealingFactor"
-		? "Lifesteal"
-		: property == "NonHeroHealingFactor"
-		? "Lifesteal vs Non-Heroes"
-		: property == "RegenIncomingDamagePercent"
-		? "Damage Regenerated"
-		: property == "RegenIncomingDamageDuration"
-		? "Regeneration Time"
-		: property == "SlowPercent"
-		? "Move Speed"
-		: property == "SlowDuration"
-		? "Slow Duration"
-		: property == "ParryWindow"
-		? "Invulnerability Duration"
-		: property == "MeleeResistReductionDuration"
-		? "Melee Resist Reduction Duration"
-		: property == "BaseDamage"
-		? "Base Damage"
-		: property == "MaxStabs"
-		? "Max Lunges"
-		: property == "PerfectDamage"
-		? "Perfect Damage"
-		: property == "MaxDamageBeforePerfect"
-		? "Max Hold Damage"
-		: property == "DelayedDamage"
-		? "Delayed Damage"
-		: property == "DebuffDuration"
-		? "Debuff Duration"
-		: property == "LowHealthEnemyThreshold"
-		? "Delayed Damage"
-		: property;
-};
-export const valueNumberizer = (value: string) => {
+export const valueNumberizer = (value: string): number => {
 	let newvalue;
 	value = String(value);
 	newvalue = value.replace(/[^0-9.-]/g, "");
@@ -122,7 +71,7 @@ export const cleanDecimals = (scale: number) => {
 		filterScale.length <= 3 ||
 		(filterScale.length == 4 && filterScale[3] == "0")
 	) {
-		return scale;
+		return Number(scale);
 	} else if (
 		filterScale.length > 10 &&
 		filterScale[4] == "0" &&
@@ -132,16 +81,17 @@ export const cleanDecimals = (scale: number) => {
 		filterScale[8] == "0" &&
 		filterScale[9] == "0"
 	) {
-		return scale.toFixed(0);
+		return Number(scale.toFixed(0));
 	} else {
 		for (let i = 2; i < filterScale.length; i++) {
 			if (filterScale[i + 1] == "9") {
-				return scale.toFixed(i - 1);
+				return Number(scale.toFixed(i - 1));
 			} else if (filterScale[i + 1] !== "0" && filterScale[i + 1] !== "9") {
-				return scale.toFixed(i);
+				return Number(scale.toFixed(i));
 			}
 		}
 	}
+	return scale;
 };
 
 export const cleanDetailDecimals = (value: string) => {
