@@ -143,3 +143,23 @@ export const cleanDecimals = (scale: number) => {
 		}
 	}
 };
+
+export const cleanDetailDecimals = (value: string) => {
+	value = String(value);
+	value = value.replace(/(\.\d*?[1-9])0+$|\.0+$/, "$1");
+	return value;
+};
+
+export const detailsValueNumberizer = (value: string) => {
+	let newvalue;
+	value = String(value);
+	newvalue = value.replace(/[^0-9.+-]/g, "");
+	return Number(newvalue);
+};
+
+export const detailsBonusNumberizer = (value: string) => {
+	let newvalue;
+	value = String(value);
+	newvalue = value.replace(/[^0-9.]/g, "");
+	return Number(newvalue);
+};

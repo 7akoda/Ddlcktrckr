@@ -2,6 +2,11 @@ import { View, Image } from "react-native";
 import { useUnistyles } from "react-native-unistyles";
 import { CustomText } from "../CustomText";
 import { StyleSheet } from "react-native-unistyles";
+import {
+	cleanDetailDecimals,
+	detailsBonusNumberizer,
+	detailsValueNumberizer,
+} from "@/api/decimaldescriptionTransform";
 type Props = {
 	match: any;
 	upgrade: any;
@@ -23,38 +28,17 @@ export const AbilityDetails = ({ match, upgrade }: Props) => {
 		return upgrade?.find((u: any) => u.name == detail);
 	};
 
-	const cleanDetailDecimals = (value: string) => {
-		value = String(value);
-		value = value.replace(/(\.\d*?[1-9])0+$|\.0+$/, "$1");
-		return value;
-	};
-
-	const valueNumberizer = (value: string) => {
-		let newvalue;
-		value = String(value);
-		newvalue = value.replace(/[^0-9.]/g, "");
-		newvalue = newvalue.replace(/[\+\-]/g, "");
-		return Number(newvalue);
-	};
-
 	return (
 		<View style={{ flexDirection: "row", marginTop: 3 }}>
-			<View
-				style={{
-					width: 115,
-					flexDirection: "column",
-					height: 20,
-					justifyContent: "center",
-				}}>
+			<View style={styles.groupDetails}>
 				<View
 					style={{
 						flexDirection: "row",
 						alignSelf: "center",
 						height: 10,
 					}}>
-					{castRange?.value !== "0" &&
-					castRange?.value !== undefined &&
-					castRange?.value !== null ? (
+					{detailsValueNumberizer(castRange?.value) > 0 &&
+					castRange?.value !== undefined ? (
 						<View
 							style={{
 								flexDirection: "row",
@@ -76,16 +60,17 @@ export const AbilityDetails = ({ match, upgrade }: Props) => {
 										: styles.text
 								}>
 								{foundUpgrade("AbilityCastRange") !== undefined
-									? valueNumberizer(castRange.value) +
-									  valueNumberizer(foundUpgrade("AbilityCastRange").bonus) +
+									? detailsValueNumberizer(castRange.value) +
+									  detailsValueNumberizer(
+											foundUpgrade("AbilityCastRange").bonus
+									  ) +
 									  castRange.postfix
 									: castRange.value}
 							</CustomText>
 						</View>
 					) : null}
-					{Radius?.value !== "0" &&
-					Radius?.value !== undefined &&
-					Radius?.value !== null ? (
+					{detailsValueNumberizer(Radius?.value) > 0 &&
+					Radius?.value !== undefined ? (
 						<View style={{ flexDirection: "row" }}>
 							<Image
 								style={{
@@ -103,8 +88,8 @@ export const AbilityDetails = ({ match, upgrade }: Props) => {
 										: styles.text
 								}>
 								{foundUpgrade("Radius") !== undefined
-									? valueNumberizer(Radius.value) +
-									  valueNumberizer(foundUpgrade("Radius").bonus) +
+									? detailsValueNumberizer(Radius.value) +
+									  detailsValueNumberizer(foundUpgrade("Radius").bonus) +
 									  Radius.postfix
 									: Radius.value}
 							</CustomText>
@@ -112,22 +97,15 @@ export const AbilityDetails = ({ match, upgrade }: Props) => {
 					) : null}
 				</View>
 			</View>
-			<View
-				style={{
-					width: 115,
-					flexDirection: "column",
-					height: 20,
-					justifyContent: "center",
-				}}>
+			<View style={styles.groupDetails}>
 				<View
 					style={{
 						flexDirection: "row",
 						height: 10,
 						alignSelf: "center",
 					}}>
-					{abilityCharges?.value !== "0" &&
-					abilityCharges?.value !== undefined &&
-					abilityCharges?.value !== null ? (
+					{detailsValueNumberizer(abilityCharges?.value) > 0 &&
+					abilityCharges?.value !== undefined ? (
 						<View
 							style={{
 								flexDirection: "row",
@@ -149,16 +127,14 @@ export const AbilityDetails = ({ match, upgrade }: Props) => {
 										: styles.text
 								}>
 								{foundUpgrade("AbilityCharges") !== undefined
-									? valueNumberizer(abilityCharges.value) +
-									  valueNumberizer(foundUpgrade("AbilityCharges").bonus)
+									? detailsValueNumberizer(abilityCharges.value) +
+									  detailsValueNumberizer(foundUpgrade("AbilityCharges").bonus)
 									: abilityCharges.value}
 							</CustomText>
 						</View>
 					) : null}
-					{abilityChargesCooldown?.value !== "0" &&
-					abilityChargesCooldown?.value !== "-1.0" &&
-					abilityChargesCooldown?.value !== undefined &&
-					abilityChargesCooldown?.value !== null ? (
+					{detailsValueNumberizer(abilityChargesCooldown?.value) > 0 &&
+					abilityChargesCooldown?.value !== undefined ? (
 						<View style={{ flexDirection: "row" }}>
 							<Image
 								style={{
@@ -176,32 +152,27 @@ export const AbilityDetails = ({ match, upgrade }: Props) => {
 										: styles.text
 								}>
 								{foundUpgrade("AbilityChargesCooldown") !== undefined
-									? valueNumberizer(abilityChargesCooldown.value) +
-									  valueNumberizer(
-											foundUpgrade("AbilityChargesCooldown").bonus
+									? detailsValueNumberizer(abilityChargesCooldown.value) +
+									  detailsValueNumberizer(
+											foundUpgrade("AbilityChargesCooldown").bonus +
+												abilityChargesCooldown.postfix
 									  )
-									: abilityChargesCooldown.value}
+									: abilityChargesCooldown.value +
+									  abilityChargesCooldown.postfix}
 							</CustomText>
 						</View>
 					) : null}
 				</View>
 			</View>
-			<View
-				style={{
-					width: 115,
-					flexDirection: "column",
-					height: 20,
-					justifyContent: "center",
-				}}>
+			<View style={styles.groupDetails}>
 				<View
 					style={{
 						flexDirection: "row",
 						height: 10,
 						alignSelf: "center",
 					}}>
-					{duration?.value !== "0" &&
-					duration?.value !== undefined &&
-					duration?.value !== null ? (
+					{detailsValueNumberizer(duration?.value) > 0 &&
+					duration?.value !== undefined ? (
 						<View
 							style={{
 								flexDirection: "row",
@@ -223,15 +194,19 @@ export const AbilityDetails = ({ match, upgrade }: Props) => {
 										: styles.text
 								}>
 								{foundUpgrade("AbilityDuration") !== undefined
-									? valueNumberizer(cleanDetailDecimals(duration?.value)) +
-									  valueNumberizer(foundUpgrade("AbilityDuration").bonus)
-									: duration.value}
+									? detailsValueNumberizer(
+											cleanDetailDecimals(duration?.value)
+									  ) +
+									  detailsValueNumberizer(
+											foundUpgrade("AbilityDuration").bonus
+									  ) +
+									  duration.postfix
+									: duration.value + duration.postfix}
 							</CustomText>
 						</View>
 					) : null}
-					{Cooldown?.value !== "0" &&
-					Cooldown?.value !== undefined &&
-					Cooldown?.value !== null ? (
+					{detailsValueNumberizer(Cooldown?.value) > 0 &&
+					Cooldown?.value !== undefined ? (
 						<View
 							style={{
 								flexDirection: "row",
@@ -254,11 +229,16 @@ export const AbilityDetails = ({ match, upgrade }: Props) => {
 										: styles.text
 								}>
 								{foundUpgrade("AbilityCooldown") !== undefined
-									? valueNumberizer(cleanDetailDecimals(Cooldown?.value)) -
-									  valueNumberizer(foundUpgrade("AbilityCooldown").bonus) +
+									? detailsValueNumberizer(
+											cleanDetailDecimals(Cooldown?.value)
+									  ) -
+									  detailsBonusNumberizer(
+											foundUpgrade("AbilityCooldown").bonus
+									  ) +
 									  Cooldown?.postfix
-									: valueNumberizer(cleanDetailDecimals(Cooldown?.value)) +
-									  Cooldown?.postfix}
+									: detailsValueNumberizer(
+											cleanDetailDecimals(Cooldown?.value)
+									  ) + Cooldown?.postfix}
 							</CustomText>
 						</View>
 					) : null}
@@ -286,5 +266,11 @@ const styles = StyleSheet.create((theme) => ({
 		borderBottomColor: theme.colors.accent,
 		borderWidth: 0.5,
 		borderColor: theme.colors.background,
+	},
+	groupDetails: {
+		width: 115,
+		flexDirection: "column",
+		height: 20,
+		justifyContent: "center",
 	},
 }));

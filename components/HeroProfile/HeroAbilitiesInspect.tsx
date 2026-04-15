@@ -25,6 +25,7 @@ export const HeroAbilitiesInspect = ({ id, match, abilityInspect }: Props) => {
 	const { theme } = useUnistyles();
 	const [upgrade, setUpgrade] = useState([]);
 	const [upgradeSelected, setUpgradeSelected] = useState(-1);
+	console.log(upgrade);
 
 	const { heroDataById, isIdError, isIdLoading, idError } = useHeroDataById(
 		String(id)
@@ -38,6 +39,7 @@ export const HeroAbilitiesInspect = ({ id, match, abilityInspect }: Props) => {
 		}
 	);
 	const numbers = [1, 2, 5];
+
 	const sinclairUltUpgrade = [
 		[{ name: cleanDescription(match.description.t1_desc) }],
 		[{ name: cleanDescription(match.description.t2_desc) }],
@@ -163,6 +165,7 @@ export const HeroAbilitiesInspect = ({ id, match, abilityInspect }: Props) => {
 		(p: any) =>
 			valueNumberizer(p[1]?.value) !== 0 && valueNumberizer(p[1]?.value) !== -1
 	);
+
 	if (upgrade !== undefined && upgrade) {
 		const shit = propertyArray.map((propertyOMG: any) => {
 			return upgrade.find((up: any) => {
@@ -175,6 +178,7 @@ export const HeroAbilitiesInspect = ({ id, match, abilityInspect }: Props) => {
 	const upgradeRelationArray = upgrades.map((up: any) => {
 		return rawProperties.find((u: any) => up[0].name == u[0]);
 	});
+
 	// console.log(match.tooltip_details?.info_sections?.[0]?.basic_properties);
 
 	return (
@@ -259,9 +263,9 @@ export const HeroAbilitiesInspect = ({ id, match, abilityInspect }: Props) => {
 										fontFamily: theme.fontFamily.regular,
 										textAlign: "center",
 									}}>
-									{ability[1].prefix}
+									{ability[1].prefix == "{s:sign}" ? "+" : ability[1].prefix}
 									{cleanDecimals(valueNumberizer(ability[1].value))}
-									{ability[1].postfix}
+									{ability[1]?.postfix == " m" ? "m" : ability[1]?.postfix}
 								</CustomText>
 							</View>
 						);
@@ -343,7 +347,7 @@ export const HeroAbilitiesInspect = ({ id, match, abilityInspect }: Props) => {
 										  ),
 										  setUpgradeSelected(0))
 										: index == upgradeSelected && upgradeSelected == 0
-										? (setUpgrade(undefined), setUpgradeSelected(-1))
+										? (setUpgrade([]), setUpgradeSelected(-1))
 										: index == 0
 										? (setUpgrade(
 												upgrades[0].map((i: any) => {
@@ -384,7 +388,9 @@ export const HeroAbilitiesInspect = ({ id, match, abilityInspect }: Props) => {
 												style={styles.inspectAbilityText}
 												key={index1}>
 												{valueNumberizer(u.bonus)}
-												{upgradeRelationArray[index][1].postfix}{" "}
+												{upgradeRelationArray[index][1].postfix == " m"
+													? "m"
+													: upgradeRelationArray[index][1].postfix}{" "}
 												{upgradeRelationArray[index][1].label}
 											</CustomText>
 										);
