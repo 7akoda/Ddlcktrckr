@@ -2,7 +2,7 @@ import { View, Image, Pressable, Dimensions, ScrollView } from "react-native";
 import { useUnistyles, StyleSheet } from "react-native-unistyles";
 import { DDLKSvg } from "./svgComponents/DDLKSvg";
 import { Header } from "./Header";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import Animated, {
 	useAnimatedStyle,
 	useSharedValue,
@@ -15,6 +15,7 @@ import { HeroAbilitiesInspect } from "./HeroProfile/HeroAbilitiesInspect";
 import { useHeroDataById } from "@/hooks/useHeroDataById";
 import { LoadingIcon } from "./LoadingIcon";
 import { CustomText } from "./CustomText";
+import { SettingsPopUp } from "./settingsPopup";
 
 type Props = {
 	id: number;
@@ -25,6 +26,8 @@ export const HeroProfile = ({ id }: Props) => {
 	const screenHeight = Dimensions.get("window").height;
 	const [abilityPressed, setAbilityPressed] = useState(false);
 	const [selectedAbilityIndex, setSelectedAbilityIndex] = useState<any>();
+	const [settings, setSettings] = useState(false);
+
 	const opacity = useSharedValue(0);
 	const scale = useSharedValue(0.8);
 	const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
@@ -76,7 +79,7 @@ export const HeroProfile = ({ id }: Props) => {
 	});
 	return (
 		<View>
-			<Header back={true} sortable={false} />
+			<Header back={true} sortable={false} setSettings={setSettings} />
 			{/* <View
 				style={{
 					position: "absolute",
@@ -144,6 +147,19 @@ export const HeroProfile = ({ id }: Props) => {
 						]}></AnimatedPressable>
 				</View>
 			) : null}
+			{settings && (
+				<>
+					<Pressable
+						onPress={() => setSettings((prev) => !prev)}
+						style={{
+							position: "absolute",
+							width: "100%",
+							height: "120%",
+							zIndex: 15,
+						}}></Pressable>
+					<SettingsPopUp setSettings={setSettings} settings={settings} />
+				</>
+			)}
 		</View>
 	);
 };

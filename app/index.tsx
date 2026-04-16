@@ -31,15 +31,15 @@ export default function Index() {
 				{rt.themeName === "dark" ? (
 					<>
 						<Image
-							style={{ width: 1800, height: 900, opacity: 0.15 }}
-							source={require("../images/background_Corner.jpeg")}></Image>
+							style={{ width: 1390, height: 900, opacity: 0.2 }}
+							source={require("../images/Background_Buildings.png")}></Image>
 					</>
 				) : rt.themeName === "light" ? (
 					<Image
 						style={{
 							width: 1390,
 							height: 900,
-							opacity: 0.2,
+							opacity: 0.4,
 						}}
 						source={require("../images/Background_Buildings_Light.png")}></Image>
 				) : null}

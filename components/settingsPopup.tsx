@@ -1,5 +1,17 @@
-import { View, Image, Pressable, Dimensions, ScrollView } from "react-native";
-import { useUnistyles, StyleSheet } from "react-native-unistyles";
+import {
+	View,
+	Image,
+	Pressable,
+	Dimensions,
+	ScrollView,
+	Switch,
+	Button,
+} from "react-native";
+import {
+	useUnistyles,
+	StyleSheet,
+	UnistylesRuntime,
+} from "react-native-unistyles";
 import { DDLKSvg } from "./svgComponents/DDLKSvg";
 import { Header } from "./Header";
 import { Dispatch, SetStateAction, useState } from "react";
@@ -16,18 +28,18 @@ type props = {
 	settings: boolean;
 };
 export const SettingsPopUp = ({ setSettings, settings }: props) => {
-	const { theme } = useUnistyles();
-	const [handle, setHandle] = useState(true);
-	const screenHeight = Dimensions.get("window").height;
+	const { theme, rt } = useUnistyles();
 	const opacity = useSharedValue(0);
 	const scale = useSharedValue(0.8);
 	const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+	const [isEnabled, setIsEnabled] = useState(false);
 	const animatedOverlayStyle = useAnimatedStyle(() => ({
 		opacity: opacity.value,
 	}));
 	const animatedContentStyle = useAnimatedStyle(() => ({
 		transform: [{ scale: scale.value }],
 	}));
+	const toggleSwitch = () => setIsEnabled((prev) => !prev);
 
 	const handleShade = () => {
 		const newVal = settings;
@@ -37,26 +49,88 @@ export const SettingsPopUp = ({ setSettings, settings }: props) => {
 		});
 		return newVal;
 	};
-	settings && handleShade();
 
+	settings && handleShade();
 	return (
 		<View
 			style={{
 				justifyContent: "center",
 				position: "absolute",
 				width: "100%",
-				height: screenHeight,
-				top: -40,
+				height: "100%",
 			}}>
-			<Animated.View
-				style={[{ zIndex: 4 }, animatedContentStyle]}></Animated.View>
+			<Animated.View style={[{ zIndex: 16 }, animatedContentStyle]}>
+				<View
+					style={[
+						{
+							backgroundColor: theme.colors.background,
+							width: 335,
+							height: 400,
+							zIndex: 16,
+							alignSelf: "center",
+							borderRadius: 4,
+							borderWidth: 2,
+							borderColor: theme.colors.secondary,
+						},
+						{ opacity: settings ? 1 : 0 },
+					]}>
+					<View
+						style={{
+							justifyContent: "center",
+							alignSelf: "center",
+							marginTop: 20,
+						}}>
+						<View
+							style={{
+								flexDirection: "row",
+								width: 335,
+							}}>
+							<CustomText
+								style={{
+									marginLeft: 25,
+									alignSelf: "center",
+									fontSize: 22,
+									color: theme.colors.font,
+								}}>
+								Dark Mode
+							</CustomText>
+							<View style={{ flex: 1 }} />
+							<Button
+								title={"dark mode"}
+								onPress={() => UnistylesRuntime.setTheme("dark")}
+							/>
+						</View>
+						<View
+							style={{
+								flexDirection: "row",
+								width: 335,
+							}}>
+							<CustomText
+								style={{
+									marginLeft: 25,
+									alignSelf: "center",
+									fontSize: 22,
+									color: theme.colors.font,
+								}}>
+								Light Mode
+							</CustomText>
+							<View style={{ flex: 1 }} />
+							<Button
+								title={"light mode"}
+								onPress={() => UnistylesRuntime.setTheme("light")}
+							/>
+						</View>
+					</View>
+				</View>
+			</Animated.View>
 			<AnimatedPressable
+				onPress={() => handleShade()}
 				style={[
 					{
 						backgroundColor: theme.colors.background,
 						width: "100%",
 						height: "120%",
-						zIndex: 3,
+						zIndex: 12,
 						position: "absolute",
 					},
 					animatedOverlayStyle,

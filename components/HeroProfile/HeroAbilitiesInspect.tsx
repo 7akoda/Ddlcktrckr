@@ -460,7 +460,7 @@ const styles = StyleSheet.create((theme) => ({
 		fontFamily: theme.fontFamily.regular,
 		textAlign: "center",
 		borderBottomColor: theme.colors.accent,
-		borderWidth: 0.5,
+		borderBottomWidth: 0.5,
 		borderColor: theme.colors.background,
 		alignSelf: "center",
 	},

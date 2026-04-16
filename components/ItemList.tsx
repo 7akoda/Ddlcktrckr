@@ -9,10 +9,12 @@ import { LoadingIcon } from "./LoadingIcon";
 import { ItemImages } from "@/data/items";
 import { BlurView } from "expo-blur";
 import { useItemData } from "@/hooks/useItemData";
+import { SettingsPopUp } from "./settingsPopup";
 
 export const ItemList = () => {
 	const [sort, setSort] = useState("");
 	const [itemType, setItemType] = useState("");
+	const [settings, setSettings] = useState(false);
 
 	const { theme, rt } = useUnistyles();
 
@@ -56,6 +58,7 @@ export const ItemList = () => {
 				sortText={["800", "1600", "3200", "6400"]}
 				back={false}
 				sortable={true}
+				setSettings={setSettings}
 			/>
 
 			<FlatList
@@ -99,6 +102,19 @@ export const ItemList = () => {
 						</View>
 					</BlurView>
 				)}></FlatList>
+			{settings && (
+				<>
+					<Pressable
+						onPress={() => setSettings((prev) => !prev)}
+						style={{
+							position: "absolute",
+							width: "100%",
+							height: "120%",
+							zIndex: 15,
+						}}></Pressable>
+					<SettingsPopUp setSettings={setSettings} settings={settings} />
+				</>
+			)}
 		</View>
 	);
 };

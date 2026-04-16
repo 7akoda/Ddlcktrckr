@@ -63,6 +63,7 @@ export const HeroList = () => {
 				itemType={false}
 				setSettings={setSettings}
 			/>
+
 			<FlatList
 				data={sorted}
 				renderItem={({ item }) => (
@@ -125,7 +126,19 @@ export const HeroList = () => {
 						)}
 					</BlurView>
 				)}></FlatList>
-			{<SettingsPopUp setSettings={setSettings} settings={settings} />}
+			{settings && (
+				<>
+					<Pressable
+						onPress={() => setSettings((prev) => !prev)}
+						style={{
+							position: "absolute",
+							width: "100%",
+							height: "120%",
+							zIndex: 15,
+						}}></Pressable>
+					<SettingsPopUp setSettings={setSettings} settings={settings} />
+				</>
+			)}
 		</View>
 	);
 };
@@ -169,5 +182,6 @@ const styles = StyleSheet.create((theme) => ({
 	},
 	primaryView: {
 		height: "100%",
+		zIndex: 11,
 	},
 }));
