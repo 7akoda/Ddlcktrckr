@@ -23,15 +23,18 @@ import { LoadingIcon } from "./LoadingIcon";
 import { useHeroDataById } from "@/hooks/useHeroDataById";
 import { useHeroData } from "@/hooks/useHeroData";
 import { usePlayerHeroData } from "@/hooks/usePlayerHeroData";
-
+import * as Linking from "expo-linking";
+import { SettingsPopUp } from "./settingsPopup";
+import { BlurView } from "expo-blur";
 type Props = {
 	id: string;
+	steamAuth: () => void;
 };
 
-export const HeroPlayerList = ({ id }: Props) => {
-	const [sort, setSort] = useState(true);
-	const { theme } = useUnistyles();
-
+export const HeroPlayerList = ({ id, steamAuth }: Props) => {
+	const [sort, setSort] = useState("Winrate");
+	const [settings, setSettings] = useState(false);
+	const { theme, rt } = useUnistyles();
 	const { playerStats, isIdError, isIdLoading, idError } =
 		usePlayerHeroData(id);
 
@@ -48,7 +51,7 @@ export const HeroPlayerList = ({ id }: Props) => {
 
 	const totalMatches = playerStats.reduce(
 		(sum: number, player: PlayerHeroStats) => sum + player.matches_played,
-		0
+		0,
 	);
 
 	const heroes = playerStats.map((player: PlayerHeroStats) => {
@@ -59,6 +62,7 @@ export const HeroPlayerList = ({ id }: Props) => {
 			? ((player.wins / player.matches_played) * 100).toFixed(2)
 			: null;
 		const pickRate = ((player.matches_played / totalMatches) * 100).toFixed(2);
+		console.log(pickRate);
 		return { ...player, name, profilePicture, winRate, pickRate };
 	});
 
@@ -66,47 +70,56 @@ export const HeroPlayerList = ({ id }: Props) => {
 		.slice()
 		.sort(
 			(a: { matches_played: number }, b: { matches_played: number }) =>
-				b.matches_played - a.matches_played
+				b.matches_played - a.matches_played,
 		);
 
 	const sortedByWinRate = heroes
 		.slice()
 		.sort(
-			(a: { winRate: number }, b: { winRate: number }) => b.winRate - a.winRate
+			(a: { winRate: number }, b: { winRate: number }) => b.winRate - a.winRate,
 		);
 
 	let sorted: any[] = [];
 
-	if (sort === true) {
+	if (sort === "Winrate") {
 		sorted = sortedByWinRate;
-	} else if (sort === false) {
+	} else if (sort === "Pickrate") {
 		sorted = sortedByMostPlayed;
 	}
+	const handleSort = (value: string) => {
+		sort == value ? setSort("") : setSort(value);
+	};
 
 	return (
-		<View style={styles.backgroundView}>
+		<View style={styles.primaryView}>
 			<Header
+				setSettings={setSettings}
+				itemType={false}
 				back={false}
+				sort={sort}
 				sortable={true}
-				sortList={() => setSort(!sort)}
-				sortText={sort ? "Winrate" : "Pickrate"}
+				sortFunc={(value) => handleSort(value)}
+				sortText={["Winrate", "Pickrate"]}
+				variant="sortable"
 			/>
 			<FlatList
 				data={sorted}
 				renderItem={({ item }) => (
-					<View style={styles.heroListItem}>
+					<BlurView
+						intensity={0}
+						tint={rt.themeName === "dark" ? "dark" : "light"}
+						style={styles.heroListItem}>
 						<Image
-							source={item.profilePicture}
+							source={{ uri: item.profilePicture }}
 							style={{
 								width: 30,
 								height: 30,
 								alignSelf: "center",
 								borderRadius: 4,
 								borderWidth: 2,
-								borderColor: theme.colors.accent,
+								borderColor: theme.colors.primary,
 							}}
 						/>
-
 						<Link
 							href={{
 								pathname: `/[id]`,
@@ -123,14 +136,13 @@ export const HeroPlayerList = ({ id }: Props) => {
 								)}
 							</Pressable>
 						</Link>
-
 						<View style={{ flex: 1 }} />
-
-						{sort == true ? (
-							<View style={{ height: 10, alignSelf: "center" }}>
+						{sort == "Winrate" ? (
+							<View style={{ height: 15, alignSelf: "center" }}>
 								<Progress.Bar
 									progress={item.winRate / 100}
 									width={100}
+									height={5}
 									color={theme.colors.accent}
 								/>
 								<CustomText style={styles.percentText}>
@@ -138,13 +150,15 @@ export const HeroPlayerList = ({ id }: Props) => {
 								</CustomText>
 							</View>
 						) : (
-							<View style={{ height: 30, alignSelf: "center" }}>
+							<View
+								style={{ height: 15, alignSelf: "flex-start", marginTop: 1 }}>
 								<CustomText style={styles.infoText}>
 									Matches played: {item.matches_played}
 								</CustomText>
 								<Progress.Bar
 									progress={item.matches_played / totalMatches}
 									width={100}
+									height={5}
 									color={theme.colors.accent}
 								/>
 								<CustomText style={styles.percentText}>
@@ -152,8 +166,25 @@ export const HeroPlayerList = ({ id }: Props) => {
 								</CustomText>
 							</View>
 						)}
-					</View>
+					</BlurView>
 				)}></FlatList>
+			{settings && (
+				<>
+					<Pressable
+						onPress={() => setSettings((prev) => !prev)}
+						style={{
+							position: "absolute",
+							width: "100%",
+							height: "120%",
+							zIndex: 15,
+						}}></Pressable>
+					<SettingsPopUp
+						setSettings={setSettings}
+						settings={settings}
+						steamAuth={steamAuth}
+					/>
+				</>
+			)}
 		</View>
 	);
 };
@@ -168,16 +199,18 @@ const styles = StyleSheet.create((theme) => ({
 		alignSelf: "center",
 		color: theme.colors.font,
 		fontSize: 8,
+		fontFamily: theme.fontFamily.regular,
 	},
 	heroListItem: {
 		alignSelf: "center",
 		flexDirection: "row",
-		backgroundColor: theme.colors.primary,
 		borderRadius: 4,
-		width: 300,
-		height: 40,
+		width: 330,
+		height: 40.25,
 		paddingHorizontal: 8,
 		marginVertical: 1,
+		overflow: "hidden",
+		borderWidth: 1,
 	},
 	heroText: {
 		color: theme.colors.font,
@@ -197,8 +230,8 @@ const styles = StyleSheet.create((theme) => ({
 		alignSelf: "center",
 		margin: 10,
 	},
-	backgroundView: {
-		backgroundColor: theme.colors.background,
-		paddingBottom: 50,
+	primaryView: {
+		height: "100%",
+		zIndex: 11,
 	},
 }));

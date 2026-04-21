@@ -1,10 +1,4 @@
-import {
-	View,
-	Pressable,
-	Dimensions,
-	ScrollView,
-	useWindowDimensions,
-} from "react-native";
+import { View, Pressable, Dimensions, useWindowDimensions } from "react-native";
 import { Image } from "expo-image";
 import { useUnistyles, StyleSheet } from "react-native-unistyles";
 import { Header } from "./Header";
@@ -65,11 +59,11 @@ export const ItemProfile = ({ itemId }: Props) => {
 		);
 	}
 	const innateSection = foundItem.tooltip_sections.find(
-		(section: any) => section.section_type === "innate"
+		(section: any) => section.section_type === "innate",
 	);
 
 	const passiveSection = foundItem.tooltip_sections.filter(
-		(section: any) => section.section_type == "passive"
+		(section: any) => section.section_type == "passive",
 	);
 	let passiveLengthBoolean = false;
 	if (passiveSection) {
@@ -78,7 +72,7 @@ export const ItemProfile = ({ itemId }: Props) => {
 		}
 	}
 	const activeSection = foundItem.tooltip_sections.find(
-		(section: any) => section.section_type === "active"
+		(section: any) => section.section_type === "active",
 	);
 	let activeLengthBoolean = false;
 	if (activeSection) {
@@ -95,7 +89,7 @@ export const ItemProfile = ({ itemId }: Props) => {
 	});
 
 	const passiveSectionFound = foundItem.tooltip_sections.find(
-		(section: any) => section.section_type == "passive"
+		(section: any) => section.section_type == "passive",
 	);
 
 	const hasUnNamed = !!unNamedSection;
@@ -111,14 +105,14 @@ export const ItemProfile = ({ itemId }: Props) => {
 		passive: foundItem?.description?.passive
 			? cleanDescription(foundItem.description.passive)
 			: passiveSection[0]?.section_attributes?.[0]?.loc_string
-			? cleanDescription(passiveSection[0]?.section_attributes[0].loc_string)
-			: null,
+				? cleanDescription(passiveSection[0]?.section_attributes[0].loc_string)
+				: null,
 
 		active: foundItem?.description?.active
 			? cleanDescription(foundItem.description.active)
 			: activeSection?.section_attributes?.[0]?.loc_string
-			? cleanDescription(activeSection.section_attributes[0].loc_string)
-			: null,
+				? cleanDescription(activeSection.section_attributes[0].loc_string)
+				: null,
 
 		unNamed: unNamedSection?.section_attributes?.[0]?.loc_string
 			? cleanDescription(unNamedSection.section_attributes[0].loc_string)
@@ -135,15 +129,15 @@ export const ItemProfile = ({ itemId }: Props) => {
 	const hasDescription = Object.values(description).some(Boolean);
 
 	const allItemsForImages = Object.values(ItemImages).flatMap((category) =>
-		Object.values(category).flat()
+		Object.values(category).flat(),
 	);
 
 	const foundItemForImages = allItemsForImages.find(
-		(item) => item.Name === itemId
+		(item) => item.Name === itemId,
 	);
 	return (
 		<View>
-			<Header back={true} sortable={false} />
+			<Header variant="nonSortable" back={true} sortable={false} />
 			<View
 				style={{
 					position: "absolute",
@@ -317,12 +311,12 @@ export const ItemProfile = ({ itemId }: Props) => {
 								{description.passive
 									? description.passive
 									: description.desc && description.unNamed
-									? description.unNamed
-									: description.desc && !description.unNamed
-									? description.desc
-									: !description.passive && description.active
-									? description.active
-									: null}
+										? description.unNamed
+										: description.desc && !description.unNamed
+											? description.desc
+											: !description.passive && description.active
+												? description.active
+												: null}
 							</CustomText>
 						</BlurView>
 					) : null}
@@ -400,12 +394,12 @@ export const ItemProfile = ({ itemId }: Props) => {
 									{activeLengthBoolean
 										? description.active2
 										: description.active
-										? description.active
-										: description.passive2
-										? description.passive2
-										: description.desc
-										? description.desc
-										: description.unNamed}
+											? description.active
+											: description.passive2
+												? description.passive2
+												: description.desc
+													? description.desc
+													: description.unNamed}
 								</CustomText>
 							</BlurView>
 							<BlurView
@@ -518,7 +512,7 @@ export const ItemProfile = ({ itemId }: Props) => {
 											)}
 										</View>
 									);
-								}
+								},
 							)}
 						</BlurView>
 					) : null}

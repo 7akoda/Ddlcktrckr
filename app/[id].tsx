@@ -19,6 +19,7 @@ export default function Id() {
 
 	if (isIdError) return <CustomText>{String(idError)}</CustomText>;
 	console.log(id);
+
 	return (
 		<>
 			<SafeAreaView style={{ flex: 1 }}>

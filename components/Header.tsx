@@ -20,19 +20,19 @@ type SortableHeader = {
 	sortable: true;
 	sortFunc: (value: string) => void;
 	sortText: string[];
-	sortAmount: number;
 	sort: string;
 	itemType: false;
 	setSettings: Dispatch<SetStateAction<boolean>>;
+	variant: "sortable";
 };
 
 type SortableItemHeader = {
+	variant: "sortableItem";
 	back: boolean;
 	sortable: true;
 	sortFunc: (value: string) => void;
 	typeFunc: (value: string) => void;
 	sortText: string[];
-	sortAmount: number;
 	sort: string;
 	itemList: boolean;
 	itemType: string;
@@ -40,9 +40,9 @@ type SortableItemHeader = {
 };
 
 type NonSortableHeader = {
+	variant: "nonSortable";
 	back: boolean;
 	sortable: false;
-	setSettings: Dispatch<SetStateAction<boolean>>;
 };
 
 type HeaderProps = SortableHeader | NonSortableHeader | SortableItemHeader;
@@ -67,7 +67,7 @@ export const Header = (props: HeaderProps) => {
 					onPress={() => router.back()}
 				/>
 			)}
-			{props.sortable && props.itemList && (
+			{props.variant == "sortableItem" ? (
 				<View
 					style={{
 						alignSelf: "center",
@@ -111,64 +111,77 @@ export const Header = (props: HeaderProps) => {
 						<WeaponSvg fill={"#FF9900"} />
 					</PulsingPressable>
 				</View>
-			)}
+			) : null}
 			<View style={{ flex: 1 }}></View>
-			{props.sortable &&
-				Array.from({ length: props.sortAmount }, (_, i) =>
-					props.sort == props.sortText[i] ? (
-						<CustomText
-							suppressHighlighting
-							onPress={() => props.sortFunc(props.sortText[i])}
-							key={i}
-							style={{
-								color: theme.colors.font,
-								textAlign: "center",
-								marginHorizontal: 5,
-								fontSize: 9,
-								alignSelf: "center",
-								width: 35,
-								height: 18,
-								paddingTop: 1.8,
-								borderRadius: 4,
-								borderColor: theme.colors.selected,
-								borderWidth: 1,
-							}}>
-							{props.sortText[i]}
-						</CustomText>
-					) : (
-						<CustomText
-							suppressHighlighting
-							onPress={() => props.sortFunc(props.sortText[i])}
-							key={i}
-							style={{
-								color: theme.colors.font,
-								textAlign: "center",
-								marginHorizontal: 5,
-								fontSize: 9,
-								alignSelf: "center",
-								width: 35,
-								height: 18,
-								paddingTop: 1.8,
-								borderRadius: 4,
-								borderColor: theme.colors.primary,
-								borderWidth: 1,
-							}}>
-							{props.sortText[i]}
-						</CustomText>
+			{props.variant !== "nonSortable"
+				? props.sortText.map((text, i) =>
+						props.sort == props.sortText[i] ? (
+							<CustomText
+								suppressHighlighting
+								onPress={() => props.sortFunc(text)}
+								key={i}
+								style={{
+									color: theme.colors.font,
+									textAlign: "center",
+									marginHorizontal: 5,
+									fontSize: 9,
+									alignSelf: "center",
+									width: 35,
+									height: 18,
+									paddingTop: 1.8,
+									borderRadius: 4,
+									borderColor: theme.colors.selected,
+									borderWidth: 1,
+								}}>
+								{props.sortText[i]}
+							</CustomText>
+						) : (
+							<CustomText
+								suppressHighlighting
+								onPress={() => props.sortFunc(text)}
+								key={i}
+								style={{
+									color: theme.colors.font,
+									textAlign: "center",
+									marginHorizontal: 5,
+									fontSize: 9,
+									alignSelf: "center",
+									width: 35,
+									height: 18,
+									paddingTop: 1.8,
+									borderRadius: 4,
+									borderColor: theme.colors.primary,
+									borderWidth: 1,
+								}}>
+								{props.sortText[i]}
+							</CustomText>
+						),
 					)
-				)}
+				: null}
+			{props.variant !== "nonSortable" ? (
+				<>
+					<Search
+						size={20}
+						color={theme.colors.accent}
+						style={{
+							alignSelf: "center",
+							paddingRight: 30,
+							paddingVertical: 5,
+						}}
+					/>
 
-			<Search
-				size={20}
-				color={theme.colors.accent}
-				style={{ alignSelf: "center", paddingRight: 30, paddingVertical: 5 }}
-			/>
-			<Settings
-				size={20}
-				color={theme.colors.accent}
-				style={{ alignSelf: "center", paddingRight: 30, paddingVertical: 5 }}
-				onPress={() => props.setSettings((prev) => !prev)}
-			/>
+					<Settings
+						size={20}
+						color={theme.colors.accent}
+						style={{
+							alignSelf: "center",
+							paddingRight: 30,
+							paddingVertical: 5,
+						}}
+						onPress={() => props.setSettings((prev: boolean) => !prev)}
+					/>
+				</>
+			) : null}
 		</View>
 	);
 };

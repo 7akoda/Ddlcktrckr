@@ -3,7 +3,6 @@ import {
 	Image,
 	Pressable,
 	Dimensions,
-	ScrollView,
 	Switch,
 	Button,
 } from "react-native";
@@ -23,11 +22,14 @@ import Animated, {
 import { useHeroDataById } from "@/hooks/useHeroDataById";
 import { LoadingIcon } from "./LoadingIcon";
 import { CustomText } from "./CustomText";
+
 type props = {
 	setSettings: Dispatch<SetStateAction<boolean>>;
 	settings: boolean;
+	steamAuth: () => void;
 };
-export const SettingsPopUp = ({ setSettings, settings }: props) => {
+
+export const SettingsPopUp = ({ setSettings, settings, steamAuth }: props) => {
 	const { theme, rt } = useUnistyles();
 	const opacity = useSharedValue(0);
 	const scale = useSharedValue(0.8);
@@ -51,6 +53,7 @@ export const SettingsPopUp = ({ setSettings, settings }: props) => {
 	};
 
 	settings && handleShade();
+
 	return (
 		<View
 			style={{
@@ -80,6 +83,21 @@ export const SettingsPopUp = ({ setSettings, settings }: props) => {
 							alignSelf: "center",
 							marginTop: 20,
 						}}>
+						<View
+							style={{
+								flexDirection: "row",
+								width: 335,
+							}}>
+							<CustomText
+								style={{
+									marginLeft: 25,
+									alignSelf: "center",
+									fontSize: 22,
+									color: theme.colors.font,
+								}}></CustomText>
+							<View style={{ flex: 1 }} />
+							<Button title={"Sign in with Steam"} onPress={steamAuth} />
+						</View>
 						<View
 							style={{
 								flexDirection: "row",

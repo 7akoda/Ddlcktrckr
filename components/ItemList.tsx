@@ -10,8 +10,10 @@ import { ItemImages } from "@/data/items";
 import { BlurView } from "expo-blur";
 import { useItemData } from "@/hooks/useItemData";
 import { SettingsPopUp } from "./settingsPopup";
-
-export const ItemList = () => {
+type Props = {
+	steamAuth: () => void;
+};
+export const ItemList = ({ steamAuth }: Props) => {
 	const [sort, setSort] = useState("");
 	const [itemType, setItemType] = useState("");
 	const [settings, setSettings] = useState(false);
@@ -35,7 +37,7 @@ export const ItemList = () => {
 	const activeTiers = tierMap[sort as keyof typeof tierMap] ?? [];
 
 	const sorted = activeTypes.flatMap((type) =>
-		activeTiers.flatMap((tier) => ItemImages[type][tier])
+		activeTiers.flatMap((tier) => ItemImages[type][tier]),
 	);
 
 	const handleSort = (value: string) => {
@@ -49,11 +51,11 @@ export const ItemList = () => {
 	return (
 		<View style={styles.primaryView}>
 			<Header
+				variant="sortableItem"
 				itemType={itemType}
 				typeFunc={(value) => handleTypePress(value)}
 				itemList={true}
 				sort={sort}
-				sortAmount={4}
 				sortFunc={(value) => handleSort(value)}
 				sortText={["800", "1600", "3200", "6400"]}
 				back={false}
@@ -63,6 +65,7 @@ export const ItemList = () => {
 
 			<FlatList
 				data={sorted}
+				keyExtractor={(item) => item.Name}
 				renderItem={({ item }) => (
 					<BlurView
 						style={styles.heroListItem}
@@ -112,7 +115,11 @@ export const ItemList = () => {
 							height: "120%",
 							zIndex: 15,
 						}}></Pressable>
-					<SettingsPopUp setSettings={setSettings} settings={settings} />
+					<SettingsPopUp
+						steamAuth={steamAuth}
+						setSettings={setSettings}
+						settings={settings}
+					/>
 				</>
 			)}
 		</View>

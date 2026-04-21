@@ -66,7 +66,7 @@ export const HeroProfile = ({ id }: Props) => {
 
 	heroMoves.map((moves, index) => {
 		const matchedItem = itemDataById.find(
-			(item: any) => item.class_name === moves
+			(item: any) => item.class_name === moves,
 		);
 
 		if (
@@ -79,7 +79,7 @@ export const HeroProfile = ({ id }: Props) => {
 	});
 	return (
 		<View>
-			<Header back={true} sortable={false} setSettings={setSettings} />
+			<Header variant="nonSortable" back={true} sortable={false} />
 			{/* <View
 				style={{
 					position: "absolute",
@@ -100,7 +100,7 @@ export const HeroProfile = ({ id }: Props) => {
 				<View style={styles.itemView}>
 					{heroMoves.map((moves, index) => {
 						const matchedItem = itemDataById.find(
-							(item: any) => item.class_name === moves
+							(item: any) => item.class_name === moves,
 						);
 						return (
 							<HeroAbilities
@@ -157,7 +157,6 @@ export const HeroProfile = ({ id }: Props) => {
 							height: "120%",
 							zIndex: 15,
 						}}></Pressable>
-					<SettingsPopUp setSettings={setSettings} settings={settings} />
 				</>
 			)}
 		</View>

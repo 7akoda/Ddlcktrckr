@@ -11,8 +11,11 @@ import { LoadingIcon } from "./LoadingIcon";
 import { useHeroData } from "@/hooks/useHeroData";
 import { BlurView } from "expo-blur";
 import { SettingsPopUp } from "./settingsPopup";
+type Props = {
+	steamAuth: () => void;
+};
 
-export const HeroList = () => {
+export const HeroList = ({ steamAuth }: Props) => {
 	const [sort, setSort] = useState("Winrate");
 	const [settings, setSettings] = useState(false);
 	const { theme, rt } = useUnistyles();
@@ -54,18 +57,19 @@ export const HeroList = () => {
 	return (
 		<View style={styles.primaryView}>
 			<Header
+				variant="sortable"
 				sort={sort}
 				back={false}
 				sortable={true}
 				sortFunc={(value) => handleSort(value)}
 				sortText={["Pickrate", "Winrate"]}
-				sortAmount={2}
 				itemType={false}
 				setSettings={setSettings}
 			/>
 
 			<FlatList
 				data={sorted}
+				keyExtractor={(item) => item.id.toString()}
 				renderItem={({ item }) => (
 					<BlurView
 						intensity={0}
@@ -136,7 +140,11 @@ export const HeroList = () => {
 							height: "120%",
 							zIndex: 15,
 						}}></Pressable>
-					<SettingsPopUp setSettings={setSettings} settings={settings} />
+					<SettingsPopUp
+						steamAuth={steamAuth}
+						setSettings={setSettings}
+						settings={settings}
+					/>
 				</>
 			)}
 		</View>
