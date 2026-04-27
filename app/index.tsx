@@ -73,9 +73,9 @@ export default function Index() {
 						source={require("../images/Background_Buildings_Light.png")}></Image>
 				) : null}
 			</View>
-			{/* <HeroList steamAuth={handleLogin} /> */}
+			<HeroList steamAuth={handleLogin} />
 			{/* <ItemList steamAuth={handleLogin} /> */}
-			<HeroPlayerList id={data} steamAuth={handleLogin} />
+			{/* <HeroPlayerList id={data} steamAuth={handleLogin} /> */}
 		</SafeAreaView>
 	);
 }
