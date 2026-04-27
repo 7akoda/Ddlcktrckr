@@ -1,4 +1,4 @@
-import { View, Pressable, Dimensions, useWindowDimensions } from "react-native";
+import { View, Pressable, Dimensions } from "react-native";
 import { Image } from "expo-image";
 import { useUnistyles, StyleSheet } from "react-native-unistyles";
 import { Header } from "./Header";
@@ -9,18 +9,12 @@ import { CooldownSvg } from "./svgComponents/CooldownSvg";
 import { useItemData } from "@/hooks/useItemData";
 import { Link } from "expo-router";
 import { BlurView } from "expo-blur";
-import { useEffect, useState } from "react";
-import { ItemIcon } from "./ItemIcon";
 import React from "react";
-import {
-	cleanDecimals,
-	cleanDescription,
-} from "@/api/decimaldescriptionTransform";
+import { cleanDescription } from "@/api/decimaldescriptionTransform";
 import { ActiveData } from "@/api/itemActive";
 import { InnateData } from "@/api/itemInnate";
 import { PassiveData } from "@/api/itemPassive";
 import { UnNamedData } from "@/api/itemUnNamed";
-import { Shader1 } from "./Shader";
 import { DDLKSvg } from "./svgComponents/DDLKSvg";
 type Props = {
 	itemId: string[] | string;
@@ -28,23 +22,9 @@ type Props = {
 
 export const ItemProfile = ({ itemId }: Props) => {
 	const { theme, rt } = useUnistyles();
-	const { width, height } = useWindowDimensions();
-	const [particleColor, setParticleColor] = useState<string>("#FF9900");
 	const { itemData, isError, isLoading, error } = useItemData();
 	const foundItem = itemData?.find((item: any) => item.name === itemId);
 	const screenHeight = Dimensions.get("window").height;
-
-	useEffect(() => {
-		if (!foundItem) return;
-
-		if (foundItem.item_slot_type == "spirit") {
-			setParticleColor("#CE90FF");
-		} else if (foundItem.item_slot_type == "vitality") {
-			setParticleColor("#00FF99");
-		} else {
-			setParticleColor("#FF9900");
-		}
-	}, [foundItem?.item_slot_type]);
 
 	if (isLoading) {
 		return <LoadingIcon />;

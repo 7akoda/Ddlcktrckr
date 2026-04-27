@@ -1,10 +1,13 @@
 import { useItemData } from "@/hooks/useItemData";
-import { cleanDecimals } from "./decimaldescriptionTransform";
-import { View, Image } from "react-native";
+import { View } from "react-native";
 import { CustomText } from "@/components/CustomText";
 import { LoadingIcon } from "@/components/LoadingIcon";
-import React, { useEffect } from "react";
+import React from "react";
 import { useUnistyles } from "react-native-unistyles";
+import { getStatusEffect } from "./getStatusEffect";
+import { getScaleType } from "./getScaleType";
+import { getValue } from "./getValue";
+import { getPostfix, getPrefix } from "./getFix";
 
 interface MultipleArrays {
 	passiveArrays: true;
@@ -36,10 +39,10 @@ export const PassiveData = (props: SingleArray | MultipleArrays) => {
 
 	const foundItem = itemData?.find((item: any) => item.name === props.itemId);
 	const passiveSection = foundItem.tooltip_sections.filter(
-		(section: any) => section.section_type == "passive"
+		(section: any) => section.section_type == "passive",
 	);
 	const passiveSectionFound = foundItem.tooltip_sections.find(
-		(section: any) => section.section_type === "passive"
+		(section: any) => section.section_type === "passive",
 	);
 	let passiveProps;
 	if (passiveSection) {
@@ -77,7 +80,7 @@ export const PassiveData = (props: SingleArray | MultipleArrays) => {
 							key !== "AbilityCooldown" &&
 							key !== "AbilityChargeUpTime")
 					);
-				})
+				}),
 			);
 		} else {
 			passiveProps = [
@@ -107,116 +110,6 @@ export const PassiveData = (props: SingleArray | MultipleArrays) => {
 		}
 	}
 	const uniqueProps = Array.from(new Set(passiveProps));
-	const getStatusEffect = (key: string) => {
-		return key == "StatusEffectEMP" ? (
-			<CustomText
-				key={key}
-				style={{
-					color: theme.colors.font,
-					fontSize: 12,
-					fontFamily: theme.fontFamily.regular,
-				}}>
-				Silenced Status Effect
-			</CustomText>
-		) : key == "StatusEffectDisarmed" ? (
-			<CustomText
-				key={key}
-				style={{
-					color: theme.colors.font,
-					fontSize: 12,
-					fontFamily: theme.fontFamily.regular,
-				}}>
-				Disarmed Status Effect
-			</CustomText>
-		) : key == "StatusEffectStun" ? (
-			<CustomText
-				key={key}
-				style={{
-					color: theme.colors.font,
-					fontSize: 12,
-					fontFamily: theme.fontFamily.regular,
-				}}>
-				Stun Status Effect
-			</CustomText>
-		) : key == "StatusEffectInvisible" ? (
-			<CustomText
-				key={key}
-				style={{
-					color: theme.colors.font,
-					fontSize: 12,
-					fontFamily: theme.fontFamily.regular,
-				}}>
-				Invisible Status Effect
-			</CustomText>
-		) : null;
-	};
-
-	const getPostfix = (postfix: string, value: string, prop: any) => {
-		return (postfix == "m" &&
-			prop.css_class === "move_speed" &&
-			value[value.length - 1] == "m") ||
-			(postfix[0] == " " && prop.css_class === "move_speed")
-			? "/s"
-			: postfix == value[value.length - 1] ||
-			  postfix[postfix.length - 1] == value[value.length - 1]
-			? ""
-			: postfix[0] == " "
-			? postfix.slice(1)
-			: postfix;
-	};
-
-	const getValue = (value: string, postfix: string) => {
-		return value[value.length - 1] == postfix[0] &&
-			postfix !== value[value.length - 1]
-			? value.slice(0, value.length - 1)
-			: value;
-	};
-
-	const getPrefix = (prefix: string, value: string) => {
-		return prefix == value[0]
-			? ""
-			: value[0] == "-"
-			? ""
-			: prefix === "{s:sign}"
-			? "+"
-			: prefix;
-	};
-
-	const getScaleType = (scale: number, scaleType: string) => {
-		return (
-			<>
-				{scaleType == "ETechPower" ? (
-					<CustomText
-						style={{
-							color: "#CE90FF",
-							fontSize: 12,
-							fontFamily: theme.fontFamily.regular,
-						}}>
-						{" "}
-						<Image
-							source={require("../images/25px-Spirit_scaling.png")}
-							style={{ width: 12, height: 10 }}
-						/>
-						x{cleanDecimals(scale)}
-					</CustomText>
-				) : scaleType == "ELevelUpBoons" ? (
-					<CustomText
-						style={{
-							color: "#00FF99",
-							fontSize: 12,
-							fontFamily: theme.fontFamily.regular,
-						}}>
-						{" "}
-						<Image
-							source={require("../images/20px-Boon_scaling.png")}
-							style={{ width: 12, height: 10 }}
-						/>
-						x{cleanDecimals(scale)}
-					</CustomText>
-				) : null}
-			</>
-		);
-	};
 
 	const getpassiveStats = (property: string[]) => {
 		let passiveStats;
@@ -300,7 +193,7 @@ export const PassiveData = (props: SingleArray | MultipleArrays) => {
 							</React.Fragment>
 						);
 					}
-				}
+				},
 			);
 		}
 		return passiveStats;

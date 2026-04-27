@@ -62,20 +62,19 @@ export const HeroPlayerList = ({ id, steamAuth }: Props) => {
 			? ((player.wins / player.matches_played) * 100).toFixed(2)
 			: null;
 		const pickRate = ((player.matches_played / totalMatches) * 100).toFixed(2);
-		console.log(pickRate);
 		return { ...player, name, profilePicture, winRate, pickRate };
 	});
 
 	const sortedByMostPlayed = heroes
 		.slice()
-		.sort(
+		.toSorted(
 			(a: { matches_played: number }, b: { matches_played: number }) =>
 				b.matches_played - a.matches_played,
 		);
 
 	const sortedByWinRate = heroes
 		.slice()
-		.sort(
+		.toSorted(
 			(a: { winRate: number }, b: { winRate: number }) => b.winRate - a.winRate,
 		);
 

@@ -1,10 +1,13 @@
 import { useItemData } from "@/hooks/useItemData";
-import { cleanDecimals } from "./decimaldescriptionTransform";
 import { View, Image } from "react-native";
 import { CustomText } from "@/components/CustomText";
 import { LoadingIcon } from "@/components/LoadingIcon";
-import React, { useEffect } from "react";
+import React from "react";
 import { useUnistyles } from "react-native-unistyles";
+import { getValue } from "./getValue";
+import { getPostfix, getPrefix } from "./getFix";
+import { getScaleType } from "./getScaleType";
+import { getStatusEffect } from "./getStatusEffect";
 
 interface SingleArray {
 	itemId: string | string[];
@@ -37,7 +40,7 @@ export const ActiveData = (props: SingleArray | MultipleArrays) => {
 	const foundItem = itemData?.find((item: any) => item.name === props.itemId);
 
 	const activeSection = foundItem.tooltip_sections.find(
-		(section: any) => section.section_type === "active"
+		(section: any) => section.section_type === "active",
 	);
 	let activeProps;
 	if (activeSection) {
@@ -70,7 +73,7 @@ export const ActiveData = (props: SingleArray | MultipleArrays) => {
 							key !== "InterruptCooldown" &&
 							key !== "AbilityCooldown")
 					);
-				})
+				}),
 			);
 		} else
 			activeProps = [
@@ -96,116 +99,6 @@ export const ActiveData = (props: SingleArray | MultipleArrays) => {
 
 	const uniqueProps = Array.from(new Set(activeProps));
 	console.log(uniqueProps);
-	const getStatusEffect = (key: string) => {
-		return key == "StatusEffectEMP" ? (
-			<CustomText
-				key={key}
-				style={{
-					color: theme.colors.font,
-					fontSize: 12,
-					fontFamily: theme.fontFamily.regular,
-				}}>
-				Silenced Status Effect
-			</CustomText>
-		) : key == "StatusEffectDisarmed" ? (
-			<CustomText
-				key={key}
-				style={{
-					color: theme.colors.font,
-					fontSize: 12,
-					fontFamily: theme.fontFamily.regular,
-				}}>
-				Disarmed Status Effect
-			</CustomText>
-		) : key == "StatusEffectStun" ? (
-			<CustomText
-				key={key}
-				style={{
-					color: theme.colors.font,
-					fontSize: 12,
-					fontFamily: theme.fontFamily.regular,
-				}}>
-				Stun Status Effect
-			</CustomText>
-		) : key == "StatusEffectInvisible" ? (
-			<CustomText
-				key={key}
-				style={{
-					color: theme.colors.font,
-					fontSize: 12,
-					fontFamily: theme.fontFamily.regular,
-				}}>
-				Invisible Status Effect
-			</CustomText>
-		) : null;
-	};
-
-	const getPostfix = (postfix: string, value: string, prop: any) => {
-		return (postfix == "m" &&
-			prop.css_class === "move_speed" &&
-			value[value.length - 1] == "m") ||
-			(postfix[0] == " " && prop.css_class === "move_speed")
-			? "/s"
-			: postfix == value[value.length - 1] ||
-			  postfix[postfix.length - 1] == value[value.length - 1]
-			? ""
-			: postfix[0] == " "
-			? postfix.slice(1)
-			: postfix;
-	};
-
-	const getValue = (value: string, postfix: string) => {
-		return value[value.length - 1] == postfix[0] &&
-			postfix !== value[value.length - 1]
-			? value.slice(0, value.length - 1)
-			: value;
-	};
-
-	const getPrefix = (prefix: string, value: string) => {
-		return prefix == value[0]
-			? ""
-			: value[0] == "-"
-			? ""
-			: prefix === "{s:sign}"
-			? "+"
-			: prefix;
-	};
-
-	const getScaleType = (scale: number, scaleType: string) => {
-		return (
-			<>
-				{scaleType == "ETechPower" ? (
-					<CustomText
-						style={{
-							color: "#CE90FF",
-							fontSize: 12,
-							fontFamily: theme.fontFamily.regular,
-						}}>
-						{" "}
-						<Image
-							source={require("../images/25px-Spirit_scaling.png")}
-							style={{ width: 12, height: 10 }}
-						/>
-						x{cleanDecimals(scale)}
-					</CustomText>
-				) : scaleType == "ELevelUpBoons" ? (
-					<CustomText
-						style={{
-							color: "#00FF99",
-							fontSize: 12,
-							fontFamily: theme.fontFamily.regular,
-						}}>
-						{" "}
-						<Image
-							source={require("../images/20px-Boon_scaling.png")}
-							style={{ width: 12, height: 10 }}
-						/>
-						x{cleanDecimals(scale)}
-					</CustomText>
-				) : null}
-			</>
-		);
-	};
 
 	const getActiveStats = (property: string[]) => {
 		let activeStats;
@@ -229,7 +122,7 @@ export const ActiveData = (props: SingleArray | MultipleArrays) => {
 						const label = String(prop.label);
 						const prefix = prop.prefix == undefined ? "" : prop.prefix;
 						const valueData = getValue(value, postfix);
-						const pfixData = getPostfix(postfix, value, prop);
+						const pfixData = getPostfix(postfix, value, property);
 						const prfixData = getPrefix(prefix, value);
 						const scaleData = getScaleType(scale, scaleType);
 						return (
@@ -248,7 +141,7 @@ export const ActiveData = (props: SingleArray | MultipleArrays) => {
 							</React.Fragment>
 						);
 					}
-				}
+				},
 			);
 		} else {
 			activeStats = uniqueProps.map((key, index: number) => {
@@ -268,7 +161,7 @@ export const ActiveData = (props: SingleArray | MultipleArrays) => {
 					const label = String(prop.label);
 					const prefix = prop.prefix == undefined ? "" : prop.prefix;
 					const valueData = getValue(value, postfix);
-					const pfixData = getPostfix(postfix, value, prop);
+					const pfixData = getPostfix(postfix, value, property);
 					const prfixData = getPrefix(prefix, value);
 					const scaleData = getScaleType(scale, scaleType);
 					return (

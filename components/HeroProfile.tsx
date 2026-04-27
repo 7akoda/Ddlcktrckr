@@ -62,21 +62,6 @@ export const HeroProfile = ({ id }: Props) => {
 		heroDataById.items.signature4,
 	];
 
-	let abilityInspect = 0;
-
-	heroMoves.map((moves, index) => {
-		const matchedItem = itemDataById.find(
-			(item: any) => item.class_name === moves,
-		);
-
-		if (
-			selectedAbilityIndex &&
-			selectedAbilityIndex.class_name == matchedItem.class_name
-		) {
-			abilityInspect = index;
-			return abilityInspect;
-		}
-	});
 	return (
 		<View>
 			<Header variant="nonSortable" back={true} sortable={false} />
@@ -126,7 +111,7 @@ export const HeroProfile = ({ id }: Props) => {
 					}}>
 					<Animated.View style={[{ zIndex: 4 }, animatedContentStyle]}>
 						<HeroAbilitiesInspect
-							abilityInspect={abilityInspect}
+							abilityInspect={selectedAbilityIndex}
 							match={selectedAbilityIndex}
 							id={id}
 						/>

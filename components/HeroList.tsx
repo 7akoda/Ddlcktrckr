@@ -14,12 +14,12 @@ import { SettingsPopUp } from "./settingsPopup";
 type Props = {
 	steamAuth: () => void;
 };
+type sort = "Winrate" | "Pickrate";
 
 export const HeroList = ({ steamAuth }: Props) => {
-	const [sort, setSort] = useState("Winrate");
+	const [sort, setSort] = useState<sort>("Winrate");
 	const [settings, setSettings] = useState(false);
 	const { theme, rt } = useUnistyles();
-	console.log(settings);
 	const { heroData, error, isLoading, isError } = useHeroData();
 
 	if (isLoading) {
@@ -35,25 +35,19 @@ export const HeroList = ({ steamAuth }: Props) => {
 		);
 	}
 
-	let sorted: any[] = [];
-
 	const heroList = Array.isArray(heroData) ? heroData : [];
 
 	const totalHeroPicks = heroList.reduce((sum, hero) => sum + hero.matches, 0);
 
-	const sortedWinrate = heroList.slice().sort((a, b) => b.winRate - a.winRate);
-	const sortedPopular = heroList.slice().sort((a, b) => b.matches - a.matches);
-
-	if (sort === "Winrate") {
-		sorted = sortedWinrate;
-	} else if (sort === "Pickrate") {
-		sorted = sortedPopular;
-	}
-
-	const handleSort = (value: string) => {
-		sort == value ? setSort("") : setSort(value);
+	const sortMap = {
+		Winrate: (a: any, b: any) => b.winRate - a.winRate,
+		Pickrate: (a: any, b: any) => b.matches - a.matches,
 	};
+	const sorted = sort ? [...heroList].sort(sortMap[sort]) : heroList;
 
+	const handleSort = () => {
+		setSort(sort === "Winrate" ? "Pickrate" : "Winrate");
+	};
 	return (
 		<View style={styles.primaryView}>
 			<Header
@@ -61,7 +55,7 @@ export const HeroList = ({ steamAuth }: Props) => {
 				sort={sort}
 				back={false}
 				sortable={true}
-				sortFunc={(value) => handleSort(value)}
+				sortFunc={() => handleSort()}
 				sortText={["Pickrate", "Winrate"]}
 				itemType={false}
 				setSettings={setSettings}
