@@ -1,4 +1,4 @@
-import { View, Image, FlatList, Pressable } from "react-native";
+import { View, Image, Pressable } from "react-native";
 import * as Progress from "react-native-progress";
 import { useState } from "react";
 import { StyleSheet } from "react-native-unistyles";
@@ -10,6 +10,8 @@ import { LoadingIcon } from "./LoadingIcon";
 import { useHeroData } from "@/hooks/useHeroData";
 import { BlurView } from "expo-blur";
 import { SettingsPopUp } from "./settingsPopup";
+import { FlashList } from "@shopify/flash-list";
+
 type Props = {
 	steamAuth: () => void;
 };
@@ -60,7 +62,7 @@ export const HeroList = ({ steamAuth }: Props) => {
 				setSettings={setSettings}
 			/>
 
-			<FlatList
+			<FlashList
 				data={sorted}
 				keyExtractor={(item) => item.id.toString()}
 				renderItem={({ item }) => (
@@ -122,7 +124,7 @@ export const HeroList = ({ steamAuth }: Props) => {
 							</View>
 						)}
 					</BlurView>
-				)}></FlatList>
+				)}></FlashList>
 			{settings && (
 				<>
 					<Pressable

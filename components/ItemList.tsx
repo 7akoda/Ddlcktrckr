@@ -1,4 +1,4 @@
-import { View, Image, FlatList, Pressable } from "react-native";
+import { View, Image, Pressable } from "react-native";
 import { useState } from "react";
 import { StyleSheet } from "react-native-unistyles";
 import { useUnistyles } from "react-native-unistyles";
@@ -8,6 +8,7 @@ import { CustomText } from "./CustomText";
 import { ItemImages } from "@/data/items";
 import { BlurView } from "expo-blur";
 import { SettingsPopUp } from "./settingsPopup";
+import { FlashList } from "@shopify/flash-list";
 
 type Props = {
 	steamAuth: () => void;
@@ -63,7 +64,7 @@ export const ItemList = ({ steamAuth }: Props) => {
 				setSettings={setSettings}
 			/>
 
-			<FlatList
+			<FlashList
 				data={sorted}
 				keyExtractor={(item) => item.Name}
 				renderItem={({ item }) => (
@@ -104,7 +105,7 @@ export const ItemList = ({ steamAuth }: Props) => {
 							<CustomText style={styles.percentText}></CustomText>
 						</View>
 					</BlurView>
-				)}></FlatList>
+				)}></FlashList>
 			{settings && (
 				<>
 					<Pressable
