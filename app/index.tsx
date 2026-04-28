@@ -13,6 +13,7 @@ import { View, TextInput, Image, Button } from "react-native";
 import * as WebBrowser from "expo-web-browser";
 import * as Linking from "expo-linking";
 import React from "react";
+import { BottomNavBar } from "@/components/BottomNavBar";
 
 export default function Index() {
 	const { theme, rt } = useUnistyles();
@@ -52,6 +53,7 @@ export default function Index() {
 			console.log(id);
 		}
 	};
+	const [selected, setSelected] = useState("World");
 
 	return (
 		<SafeAreaView style={{ flex: 1 }}>
@@ -73,9 +75,15 @@ export default function Index() {
 						source={require("../images/Background_Buildings_Light.png")}></Image>
 				) : null}
 			</View>
-			<HeroList steamAuth={handleLogin} />
-			{/* <ItemList steamAuth={handleLogin} /> */}
-			{/* <HeroPlayerList id={data} steamAuth={handleLogin} /> */}
+			{selected === "User" ? (
+				<HeroPlayerList id={data} steamAuth={handleLogin} />
+			) : selected === "Items" ? (
+				<ItemList steamAuth={handleLogin} />
+			) : (
+				<HeroList steamAuth={handleLogin} />
+			)}
+
+			<BottomNavBar selected={selected} setSelected={setSelected} />
 		</SafeAreaView>
 	);
 }
