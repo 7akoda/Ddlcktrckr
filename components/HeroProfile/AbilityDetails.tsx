@@ -7,12 +7,12 @@ import {
 	detailsBonusNumberizer,
 	detailsValueNumberizer,
 } from "@/api/decimaldescriptionTransform";
+
 type Props = {
 	match: any;
 	upgrade: any;
 };
 export const AbilityDetails = ({ match, upgrade }: Props) => {
-	const { theme, rt } = useUnistyles();
 	const Cooldown = match.properties.AbilityCooldown;
 	const duration = match.properties.AbilityDuration;
 	const castRange = match.properties.AbilityCastRange;
@@ -61,10 +61,10 @@ export const AbilityDetails = ({ match, upgrade }: Props) => {
 								}>
 								{foundUpgrade("AbilityCastRange") !== undefined
 									? detailsValueNumberizer(castRange.value) +
-									  detailsValueNumberizer(
-											foundUpgrade("AbilityCastRange").bonus
-									  ) +
-									  castRange.postfix
+										detailsValueNumberizer(
+											foundUpgrade("AbilityCastRange").bonus,
+										) +
+										castRange.postfix
 									: castRange.value}
 							</CustomText>
 						</View>
@@ -89,8 +89,8 @@ export const AbilityDetails = ({ match, upgrade }: Props) => {
 								}>
 								{foundUpgrade("Radius") !== undefined
 									? detailsValueNumberizer(Radius.value) +
-									  detailsValueNumberizer(foundUpgrade("Radius").bonus) +
-									  Radius.postfix
+										detailsValueNumberizer(foundUpgrade("Radius").bonus) +
+										Radius.postfix
 									: Radius.value}
 							</CustomText>
 						</View>
@@ -128,7 +128,7 @@ export const AbilityDetails = ({ match, upgrade }: Props) => {
 								}>
 								{foundUpgrade("AbilityCharges") !== undefined
 									? detailsValueNumberizer(abilityCharges.value) +
-									  detailsValueNumberizer(foundUpgrade("AbilityCharges").bonus)
+										detailsValueNumberizer(foundUpgrade("AbilityCharges").bonus)
 									: abilityCharges.value}
 							</CustomText>
 						</View>
@@ -153,12 +153,12 @@ export const AbilityDetails = ({ match, upgrade }: Props) => {
 								}>
 								{foundUpgrade("AbilityChargesCooldown") !== undefined
 									? detailsValueNumberizer(abilityChargesCooldown.value) +
-									  detailsValueNumberizer(
+										detailsValueNumberizer(
 											foundUpgrade("AbilityChargesCooldown").bonus +
-												abilityChargesCooldown.postfix
-									  )
+												abilityChargesCooldown.postfix,
+										)
 									: abilityChargesCooldown.value +
-									  abilityChargesCooldown.postfix}
+										abilityChargesCooldown.postfix}
 							</CustomText>
 						</View>
 					) : null}
@@ -195,12 +195,12 @@ export const AbilityDetails = ({ match, upgrade }: Props) => {
 								}>
 								{foundUpgrade("AbilityDuration") !== undefined
 									? detailsValueNumberizer(
-											cleanDetailDecimals(duration?.value)
-									  ) +
-									  detailsValueNumberizer(
-											foundUpgrade("AbilityDuration").bonus
-									  ) +
-									  duration.postfix
+											cleanDetailDecimals(duration?.value),
+										) +
+										detailsValueNumberizer(
+											foundUpgrade("AbilityDuration").bonus,
+										) +
+										duration.postfix
 									: duration.value + duration.postfix}
 							</CustomText>
 						</View>
@@ -230,15 +230,15 @@ export const AbilityDetails = ({ match, upgrade }: Props) => {
 								}>
 								{foundUpgrade("AbilityCooldown") !== undefined
 									? detailsValueNumberizer(
-											cleanDetailDecimals(Cooldown?.value)
-									  ) -
-									  detailsBonusNumberizer(
-											foundUpgrade("AbilityCooldown").bonus
-									  ) +
-									  Cooldown?.postfix
+											cleanDetailDecimals(Cooldown?.value),
+										) -
+										detailsBonusNumberizer(
+											foundUpgrade("AbilityCooldown").bonus,
+										) +
+										Cooldown?.postfix
 									: detailsValueNumberizer(
-											cleanDetailDecimals(Cooldown?.value)
-									  ) + Cooldown?.postfix}
+											cleanDetailDecimals(Cooldown?.value),
+										) + Cooldown?.postfix}
 							</CustomText>
 						</View>
 					) : null}

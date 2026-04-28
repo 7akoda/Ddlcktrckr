@@ -1,13 +1,10 @@
 import * as React from "react";
 import Svg, { Defs, Path } from "react-native-svg";
-import { useUnistyles } from "react-native-unistyles";
 type Props = {
 	fill: string;
 };
 
 export const WeaponSvg = ({ fill }: Props) => {
-	const { theme } = useUnistyles();
-
 	return (
 		<Svg
 			id="Layer_1"

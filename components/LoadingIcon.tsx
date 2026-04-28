@@ -7,7 +7,7 @@ import Animated, {
 	withTiming,
 } from "react-native-reanimated";
 import { useUnistyles } from "react-native-unistyles";
-import Svg, { Defs, Path } from "react-native-svg";
+import Svg, { Path } from "react-native-svg";
 import { StyleSheet } from "react-native-unistyles";
 import { useEffect } from "react";
 import { paths } from "@/data/loadingPaths";
@@ -26,10 +26,10 @@ export const LoadingIcon = () => {
 				opacity.value = withRepeat(
 					withSequence(
 						withTiming(1, { duration: 600 }),
-						withTiming(0.3, { duration: 600 })
+						withTiming(0.3, { duration: 600 }),
 					),
 					-1,
-					false
+					false,
 				);
 			}, delay);
 		});
@@ -45,7 +45,7 @@ export const LoadingIcon = () => {
 				preserveAspectRatio="xMidYMid meet">
 				{paths.map((d, i) => {
 					const animatedProps = useAnimatedProps(() => ({
-						opacity: opacities[i].value,
+						opacity: opacities[i]!.value,
 					}));
 					return (
 						<AnimatedPath

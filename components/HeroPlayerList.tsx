@@ -1,16 +1,4 @@
-import {
-	createEnrichedHeroQueryOptions,
-	createPlayerHeroStatsQueryOptions,
-} from "@/queryOptions/createHeroQueryOptions";
-import { useQuery } from "@tanstack/react-query";
-import {
-	View,
-	Image,
-	Text,
-	FlatList,
-	Pressable,
-	TouchableOpacity,
-} from "react-native";
+import { View, Image, FlatList, Pressable } from "react-native";
 import type { PlayerHeroStats } from "@/types/playerHeroStats";
 import { StyleSheet } from "react-native-unistyles";
 import { useUnistyles } from "react-native-unistyles";
@@ -20,10 +8,8 @@ import { Link } from "expo-router";
 import { Header } from "@/components/Header";
 import { CustomText } from "./CustomText";
 import { LoadingIcon } from "./LoadingIcon";
-import { useHeroDataById } from "@/hooks/useHeroDataById";
 import { useHeroData } from "@/hooks/useHeroData";
 import { usePlayerHeroData } from "@/hooks/usePlayerHeroData";
-import * as Linking from "expo-linking";
 import { SettingsPopUp } from "./settingsPopup";
 import { BlurView } from "expo-blur";
 type Props = {

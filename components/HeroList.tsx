@@ -1,5 +1,4 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { View, Image, FlatList, Pressable, Text } from "react-native";
+import { View, Image, FlatList, Pressable } from "react-native";
 import * as Progress from "react-native-progress";
 import { useState } from "react";
 import { StyleSheet } from "react-native-unistyles";
@@ -183,7 +182,7 @@ const styles = StyleSheet.create((theme) => ({
 		margin: 10,
 	},
 	primaryView: {
-		height: "100%",
+		height: "94.3%",
 		zIndex: 11,
 	},
 }));

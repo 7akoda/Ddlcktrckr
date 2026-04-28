@@ -1,20 +1,8 @@
-import {
-	Canvas,
-	DashPathEffect,
-	DiscretePathEffect,
-	Group,
-	Line2DPathEffect,
-	Path,
-	processTransform2d,
-	rotate,
-	rotateY,
-	translate,
-} from "@shopify/react-native-skia";
+import { Canvas, Group, Path } from "@shopify/react-native-skia";
 import {
 	useAnimatedReaction,
 	useDerivedValue,
 	useSharedValue,
-	withDecay,
 	withDelay,
 	withRepeat,
 	withTiming,
@@ -32,10 +20,8 @@ interface IconProps {
 }
 
 export const ItemIcon = ({ itemColour }: IconProps) => {
-	const { theme } = useUnistyles(); //theming
-
-	const [size, setSize] = useState({ width: 0, height: 0 }); //state set to 0, 0
-	const scale = (size.width / 963.69) * 0.97; // scale = targetsize/ogsize
+	const [size, setSize] = useState({ width: 0, height: 0 });
+	const scale = (size.width / 963.69) * 0.97;
 
 	const progressEye = useSharedValue(0);
 	const progressSpin = useSharedValue(0);
@@ -52,7 +38,7 @@ export const ItemIcon = ({ itemColour }: IconProps) => {
 
 	useEffect(() => {
 		progressSpin.value = withSequence(
-			withRepeat(withDelay(4000, withTiming(360, { duration: 3000 })), -1)
+			withRepeat(withDelay(4000, withTiming(360, { duration: 3000 })), -1),
 		);
 
 		pathDraw.value = withDelay(500, withTiming(0, { duration: 1000 }));
@@ -63,16 +49,16 @@ export const ItemIcon = ({ itemColour }: IconProps) => {
 				withTiming(16, {
 					duration: 500,
 					easing: Easing.elastic(1),
-				})
+				}),
 			),
 			withDelay(
 				1000,
-				withTiming(-16, { duration: 500, easing: Easing.elastic(1) })
+				withTiming(-16, { duration: 500, easing: Easing.elastic(1) }),
 			),
 			withDelay(
 				1000,
-				withTiming(0, { duration: 500, easing: Easing.elastic(1) })
-			)
+				withTiming(0, { duration: 500, easing: Easing.elastic(1) }),
+			),
 		);
 	}, [progressSpin]);
 
@@ -142,9 +128,3 @@ export const ItemIcon = ({ itemColour }: IconProps) => {
 		</View>
 	);
 };
-
-const styles = StyleSheet.create((theme) => ({
-	flex: {
-		flex: 1,
-	},
-}));

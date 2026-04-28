@@ -60,13 +60,13 @@ export const Shader1 = () => {
 		[t],
 	);
 	const vertices = useSharedValue(defaultVertices);
-	const { theme, rt } = useUnistyles();
+	const { rt } = useUnistyles();
 	const newArray = [0, 1, 2];
 	const mix = (colour1: Vec3, colour2: Vec3, y: number) => {
 		const colour1Math = colour1.map((colour) => colour * (1 - y));
 		const colour2Math = colour2.map((colour) => colour * y);
 		const whatIReallyWant = newArray.map(
-			(i) => colour1Math[i] + colour2Math[i],
+			(i) => colour1Math[i]! + colour2Math[i]!,
 		);
 		return `rgb(${whatIReallyWant})`;
 	};
@@ -85,8 +85,8 @@ export const Shader1 = () => {
 				const isEdgeY = y === 0 || y === height;
 
 				return {
-					x: isEdgeX ? x : x + AX * noiseFns[i](timestamp / F, 0),
-					y: isEdgeY ? y : y + AY * noiseFns[i](0, timestamp / F),
+					x: isEdgeX ? x : x + AX * noiseFns[i]!(timestamp / F, 0),
+					y: isEdgeY ? y : y + AY * noiseFns[i]!(0, timestamp / F),
 				};
 			});
 
@@ -96,14 +96,14 @@ export const Shader1 = () => {
 							[63, 65, 64],
 							[31, 33, 32],
 							y / height +
-								(AY * noiseFns[i](0, timestamp / F) - -100) / (100 - -100),
+								(AY * noiseFns[i]!(0, timestamp / F) - -100) / (100 - -100),
 						)
 					: rt.themeName === "light"
 						? mix(
 								[230, 232, 226],
 								[165, 168, 160],
 								y / height +
-									(AY * noiseFns[i](0, timestamp / F) - -100) / (100 - -100),
+									(AY * noiseFns[i]!(0, timestamp / F) - -100) / (100 - -100),
 							)
 						: "";
 			});
