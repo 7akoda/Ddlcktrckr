@@ -1,8 +1,7 @@
-import { View, Image, Pressable, Dimensions, ScrollView } from "react-native";
+import { View, Pressable, Dimensions, ScrollView } from "react-native";
 import { useUnistyles, StyleSheet } from "react-native-unistyles";
-import { DDLKSvg } from "./svgComponents/DDLKSvg";
 import { Header } from "./Header";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import Animated, {
 	useAnimatedStyle,
 	useSharedValue,
@@ -15,7 +14,6 @@ import { HeroAbilitiesInspect } from "./HeroProfile/HeroAbilitiesInspect";
 import { useHeroDataById } from "@/hooks/useHeroDataById";
 import { LoadingIcon } from "./LoadingIcon";
 import { CustomText } from "./CustomText";
-import { SettingsPopUp } from "./settingsPopup";
 
 type Props = {
 	id: number;
@@ -27,7 +25,6 @@ export const HeroProfile = ({ id }: Props) => {
 	const [abilityPressed, setAbilityPressed] = useState(false);
 	const [selectedAbilityIndex, setSelectedAbilityIndex] = useState<any>();
 	const [settings, setSettings] = useState(false);
-
 	const opacity = useSharedValue(0);
 	const scale = useSharedValue(0.8);
 	const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
@@ -65,16 +62,6 @@ export const HeroProfile = ({ id }: Props) => {
 	return (
 		<View>
 			<Header variant="nonSortable" back={true} sortable={false} />
-			{/* <View
-				style={{
-					position: "absolute",
-					width: "90%",
-					alignSelf: "center",
-					height: screenHeight,
-				}}>
-				<DDLKSvg></DDLKSvg>
-			</View> */}
-
 			<ScrollView
 				showsVerticalScrollIndicator={false}
 				style={{
@@ -110,11 +97,7 @@ export const HeroProfile = ({ id }: Props) => {
 						top: -40,
 					}}>
 					<Animated.View style={[{ zIndex: 4 }, animatedContentStyle]}>
-						<HeroAbilitiesInspect
-							abilityInspect={selectedAbilityIndex}
-							match={selectedAbilityIndex}
-							id={id}
-						/>
+						<HeroAbilitiesInspect match={selectedAbilityIndex} id={id} />
 					</Animated.View>
 					<AnimatedPressable
 						onPress={() => {
