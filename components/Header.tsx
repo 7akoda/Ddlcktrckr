@@ -1,19 +1,21 @@
 import { router } from "expo-router";
 import {
-	Search,
+	Book,
+	BookOpen,
+	Globe,
+	SquareUserRound,
 	ArrowLeft,
 	Settings,
-	ArrowDownWideNarrow,
 } from "lucide-react-native";
-import { Pressable, View } from "react-native";
+
+import { View } from "react-native";
 import { useUnistyles } from "react-native-unistyles";
 import { CustomText } from "./CustomText";
 import { SpiritSvg } from "./svgComponents/SpiritSvg";
 import { VitalitySvg } from "./svgComponents/VitalitySvg";
 import { WeaponSvg } from "./svgComponents/WeaponSvg";
 import { PulsingPressable } from "./PulsingPressable";
-import { BlurView } from "expo-blur";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 
 type SortableHeader = {
 	back: boolean;
@@ -160,16 +162,6 @@ export const Header = (props: HeaderProps) => {
 				: null}
 			{props.variant !== "nonSortable" ? (
 				<>
-					<Search
-						size={20}
-						color={theme.colors.accent}
-						style={{
-							alignSelf: "center",
-							paddingRight: 30,
-							paddingVertical: 5,
-						}}
-					/>
-
 					<Settings
 						size={20}
 						color={theme.colors.accent}
