@@ -1,12 +1,5 @@
 import { router } from "expo-router";
-import {
-	Book,
-	BookOpen,
-	Globe,
-	SquareUserRound,
-	ArrowLeft,
-	Settings,
-} from "lucide-react-native";
+import { ArrowLeft, Settings } from "lucide-react-native";
 
 import { View } from "react-native";
 import { useUnistyles } from "react-native-unistyles";
