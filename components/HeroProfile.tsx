@@ -48,6 +48,7 @@ export const HeroProfile = ({ id }: Props) => {
 
 	const { heroDataById, itemDataById, isIdError, isIdLoading, idError } =
 		useHeroDataById(String(id));
+
 	if (isIdLoading) return <LoadingIcon />;
 
 	if (isIdError) return <CustomText>{String(idError)}</CustomText>;
