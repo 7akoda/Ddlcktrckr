@@ -1,6 +1,6 @@
-import { View, Image, FlatList, Pressable } from "react-native";
+import { View, Image, FlatList, Pressable, Button } from "react-native";
 import type { PlayerHeroStats } from "@/types/playerHeroStats";
-import { StyleSheet } from "react-native-unistyles";
+import { StyleSheet, UnistylesRuntime } from "react-native-unistyles";
 import { useUnistyles } from "react-native-unistyles";
 import * as Progress from "react-native-progress";
 import { useState } from "react";
@@ -10,20 +10,19 @@ import { CustomText } from "./CustomText";
 import { LoadingIcon } from "./LoadingIcon";
 import { useHeroData } from "@/hooks/useHeroData";
 import { usePlayerHeroData } from "@/hooks/usePlayerHeroData";
-import { SettingsPopUp } from "./settingsPopup";
 import { BlurView } from "expo-blur";
+import { Popup } from "./Popup";
 type Props = {
 	id: string;
-	steamAuth: () => void;
+	handleLogin: () => void;
 };
 
-export const HeroPlayerList = ({ id, steamAuth }: Props) => {
+export const HeroPlayerList = ({ id, handleLogin }: Props) => {
 	const [sort, setSort] = useState("Winrate");
 	const [settings, setSettings] = useState(false);
 	const { theme, rt } = useUnistyles();
 	const { playerStats, isIdError, isIdLoading, idError } =
 		usePlayerHeroData(id);
-
 	const { heroData, isError, error, isLoading } = useHeroData();
 
 	if (isLoading || isIdLoading) {
@@ -51,19 +50,11 @@ export const HeroPlayerList = ({ id, steamAuth }: Props) => {
 		return { ...player, name, profilePicture, winRate, pickRate };
 	});
 
-	const sortedByMostPlayed = heroes
-		.slice()
-		.toSorted(
-			(a: { matches_played: number }, b: { matches_played: number }) =>
-				b.matches_played - a.matches_played,
-		);
+	const sortedByMostPlayed = [...heroes].sort(
+		(a, b) => b.matches_played - a.matches_played,
+	);
 
-	const sortedByWinRate = heroes
-		.slice()
-		.toSorted(
-			(a: { winRate: number }, b: { winRate: number }) => b.winRate - a.winRate,
-		);
-
+	const sortedByWinRate = [...heroes].sort((a, b) => b.winRate - a.winRate);
 	let sorted: any[] = [];
 
 	if (sort === "Winrate") {
@@ -123,7 +114,7 @@ export const HeroPlayerList = ({ id, steamAuth }: Props) => {
 						</Link>
 						<View style={{ flex: 1 }} />
 						{sort == "Winrate" ? (
-							<View style={{ height: 15, alignSelf: "center" }}>
+							<View style={{ height: 15, marginTop: 9.5, alignSelf: "center" }}>
 								<Progress.Bar
 									progress={item.winRate / 100}
 									width={100}
@@ -136,7 +127,7 @@ export const HeroPlayerList = ({ id, steamAuth }: Props) => {
 							</View>
 						) : (
 							<View
-								style={{ height: 15, alignSelf: "flex-start", marginTop: 1 }}>
+								style={{ height: 15, alignSelf: "flex-start", marginTop: 6.5 }}>
 								<CustomText style={styles.infoText}>
 									Matches played: {item.matches_played}
 								</CustomText>
@@ -155,19 +146,58 @@ export const HeroPlayerList = ({ id, steamAuth }: Props) => {
 				)}></FlatList>
 			{settings && (
 				<>
-					<Pressable
-						onPress={() => setSettings((prev) => !prev)}
-						style={{
-							position: "absolute",
-							width: "100%",
-							height: "120%",
-							zIndex: 15,
-						}}></Pressable>
-					<SettingsPopUp
-						setSettings={setSettings}
+					<Popup
 						settings={settings}
-						steamAuth={steamAuth}
-					/>
+						handlePress={() => setSettings((prev) => !prev)}>
+						<View
+							style={{
+								flexDirection: "row",
+								width: 335,
+							}}>
+							<View style={{ flex: 1 }} />
+							<Button title={"Sign in with Steam"} onPress={handleLogin} />
+						</View>
+						<View
+							style={{
+								flexDirection: "row",
+								width: 335,
+							}}>
+							<CustomText
+								style={{
+									marginLeft: 25,
+									alignSelf: "center",
+									fontSize: 22,
+									color: theme.colors.font,
+								}}>
+								Dark Mode
+							</CustomText>
+							<View style={{ flex: 1 }} />
+							<Button
+								title={"dark mode"}
+								onPress={() => UnistylesRuntime.setTheme("dark")}
+							/>
+						</View>
+						<View
+							style={{
+								flexDirection: "row",
+								width: 335,
+							}}>
+							<CustomText
+								style={{
+									marginLeft: 25,
+									alignSelf: "center",
+									fontSize: 22,
+									color: theme.colors.font,
+								}}>
+								Light Mode
+							</CustomText>
+							<View style={{ flex: 1 }} />
+							<Button
+								title={"light mode"}
+								onPress={() => UnistylesRuntime.setTheme("light")}
+							/>
+						</View>
+					</Popup>
 				</>
 			)}
 		</View>
@@ -216,7 +246,6 @@ const styles = StyleSheet.create((theme) => ({
 		margin: 10,
 	},
 	primaryView: {
-		height: "100%",
-		zIndex: 11,
+		height: "94.3%",
 	},
 }));
