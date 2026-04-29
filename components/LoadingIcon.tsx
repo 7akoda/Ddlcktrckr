@@ -72,6 +72,5 @@ const styles = StyleSheet.create((theme) => ({
 		alignSelf: "center",
 		justifyContent: "center",
 		width: "100%",
-		zIndex: 1,
 	},
 }));
