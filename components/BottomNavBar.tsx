@@ -8,10 +8,22 @@ import { Dispatch, SetStateAction, useState } from "react";
 type BottomNavBarType = {
 	setSelected: Dispatch<SetStateAction<string>>;
 	selected: string;
+	setSettings: Dispatch<SetStateAction<boolean>>;
+	data: string;
 };
 
-export const BottomNavBar = ({ setSelected, selected }: BottomNavBarType) => {
+export const BottomNavBar = ({
+	setSelected,
+	selected,
+	setSettings,
+	data,
+}: BottomNavBarType) => {
 	const { theme, rt } = useUnistyles();
+
+	const handleNoAuth = () => {
+		setSelected("User");
+		setSettings(true);
+	};
 	return (
 		<BlurView
 			intensity={25}
@@ -24,7 +36,7 @@ export const BottomNavBar = ({ setSelected, selected }: BottomNavBarType) => {
 				flexDirection: "row",
 			}}>
 			<Pressable
-				onPress={() => setSelected("User")}
+				onPress={() => (data.length < 1 ? handleNoAuth() : setSelected("User"))}
 				style={{
 					width: "24.7%",
 					marginHorizontal: "4.3%",
