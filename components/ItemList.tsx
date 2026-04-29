@@ -1,14 +1,14 @@
-import { View, Image, Pressable } from "react-native";
+import { View, Image, Pressable, Button } from "react-native";
 import { useState } from "react";
-import { StyleSheet } from "react-native-unistyles";
+import { StyleSheet, UnistylesRuntime } from "react-native-unistyles";
 import { useUnistyles } from "react-native-unistyles";
 import { Link } from "expo-router";
 import { Header } from "./Header";
 import { CustomText } from "./CustomText";
 import { ItemImages } from "@/data/items";
 import { BlurView } from "expo-blur";
-import { SettingsPopUp } from "./settingsPopup";
 import { FlashList } from "@shopify/flash-list";
+import { Popup } from "./Popup";
 
 type Props = {
 	steamAuth: () => void;
@@ -108,19 +108,58 @@ export const ItemList = ({ steamAuth }: Props) => {
 				)}></FlashList>
 			{settings && (
 				<>
-					<Pressable
-						onPress={() => setSettings((prev) => !prev)}
-						style={{
-							position: "absolute",
-							width: "100%",
-							height: "120%",
-							zIndex: 15,
-						}}></Pressable>
-					<SettingsPopUp
-						steamAuth={steamAuth}
-						setSettings={setSettings}
-						settings={settings}
-					/>
+					<Popup
+						handlePress={() => setSettings((prev) => !prev)}
+						settings={settings}>
+						<View
+							style={{
+								flexDirection: "row",
+								width: 335,
+							}}>
+							<View style={{ flex: 1 }} />
+							<Button title={"Sign in with Steam"} onPress={steamAuth} />
+						</View>
+						<View
+							style={{
+								flexDirection: "row",
+								width: 335,
+							}}>
+							<CustomText
+								style={{
+									marginLeft: 25,
+									alignSelf: "center",
+									fontSize: 22,
+									color: theme.colors.font,
+								}}>
+								Dark Mode
+							</CustomText>
+							<View style={{ flex: 1 }} />
+							<Button
+								title={"dark mode"}
+								onPress={() => UnistylesRuntime.setTheme("dark")}
+							/>
+						</View>
+						<View
+							style={{
+								flexDirection: "row",
+								width: 335,
+							}}>
+							<CustomText
+								style={{
+									marginLeft: 25,
+									alignSelf: "center",
+									fontSize: 22,
+									color: theme.colors.font,
+								}}>
+								Light Mode
+							</CustomText>
+							<View style={{ flex: 1 }} />
+							<Button
+								title={"light mode"}
+								onPress={() => UnistylesRuntime.setTheme("light")}
+							/>
+						</View>
+					</Popup>
 				</>
 			)}
 		</View>
@@ -143,8 +182,7 @@ const styles = StyleSheet.create((theme) => ({
 		paddingHorizontal: 8,
 		marginVertical: 1,
 		overflow: "hidden",
-		borderWidth: 2,
-		borderColor: theme.colors.primary,
+		borderWidth: 1,
 	},
 	heroText: {
 		color: theme.colors.font,
