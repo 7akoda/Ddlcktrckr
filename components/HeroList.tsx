@@ -1,7 +1,7 @@
-import { View, Image, Pressable } from "react-native";
+import { View, Image, Pressable, Button } from "react-native";
 import * as Progress from "react-native-progress";
 import { useState } from "react";
-import { StyleSheet } from "react-native-unistyles";
+import { StyleSheet, UnistylesRuntime } from "react-native-unistyles";
 import { useUnistyles } from "react-native-unistyles";
 import { Link } from "expo-router";
 import { Header } from "./Header";
@@ -9,15 +9,16 @@ import { CustomText } from "./CustomText";
 import { LoadingIcon } from "./LoadingIcon";
 import { useHeroData } from "@/hooks/useHeroData";
 import { BlurView } from "expo-blur";
-import { SettingsPopUp } from "./settingsPopup";
 import { FlashList } from "@shopify/flash-list";
+import { Popup } from "./Popup";
+import { Circle, CircleDot } from "lucide-react-native";
 
 type Props = {
-	steamAuth: () => void;
+	handleLogin: () => void;
 };
 type sort = "Winrate" | "Pickrate";
 
-export const HeroList = ({ steamAuth }: Props) => {
+export const HeroList = ({ handleLogin }: Props) => {
 	const [sort, setSort] = useState<sort>("Winrate");
 	const [settings, setSettings] = useState(false);
 	const { theme, rt } = useUnistyles();
@@ -99,7 +100,12 @@ export const HeroList = ({ steamAuth }: Props) => {
 						</Link>
 						<View style={{ flex: 1 }} />
 						{sort == "Winrate" ? (
-							<View style={{ height: 15, alignSelf: "center" }}>
+							<View
+								style={{
+									marginTop: 9.5,
+									height: 15,
+									alignSelf: "center",
+								}}>
 								<Progress.Bar
 									progress={item.winRate / 100}
 									width={100}
@@ -111,7 +117,7 @@ export const HeroList = ({ steamAuth }: Props) => {
 								</CustomText>
 							</View>
 						) : (
-							<View style={{ height: 15, alignSelf: "center" }}>
+							<View style={{ marginTop: 9.5, height: 15, alignSelf: "center" }}>
 								<Progress.Bar
 									progress={item.matches / (totalHeroPicks / 12)}
 									width={100}
@@ -127,19 +133,110 @@ export const HeroList = ({ steamAuth }: Props) => {
 				)}></FlashList>
 			{settings && (
 				<>
-					<Pressable
-						onPress={() => setSettings((prev) => !prev)}
-						style={{
-							position: "absolute",
-							width: "100%",
-							height: "120%",
-							zIndex: 15,
-						}}></Pressable>
-					<SettingsPopUp
-						steamAuth={steamAuth}
-						setSettings={setSettings}
+					<Popup
 						settings={settings}
-					/>
+						handlePress={() => setSettings((prev) => !prev)}>
+						<Pressable
+							onPress={handleLogin}
+							style={{
+								backgroundColor: theme.colors.font,
+								width: 165,
+								height: 30,
+								alignSelf: "center",
+								borderRadius: 12,
+								borderWidth: 1,
+								borderColor: theme.colors.font,
+								justifyContent: "center",
+							}}>
+							<CustomText
+								style={{
+									color: theme.colors.background,
+									alignSelf: "center",
+									textAlign: "center",
+									fontSize: 18,
+								}}>
+								Sign in with Steam
+							</CustomText>
+						</Pressable>
+						<View
+							style={{
+								alignSelf: "center",
+								marginTop: 10,
+								width: 200,
+								backgroundColor: theme.colors.font,
+								height: 1,
+							}}></View>
+						<View
+							style={{
+								flexDirection: "row",
+								width: 200,
+								alignSelf: "center",
+							}}>
+							<CustomText
+								style={{
+									alignSelf: "center",
+									fontSize: 22,
+									color: theme.colors.font,
+								}}>
+								Dark Mode
+							</CustomText>
+							{rt.themeName === "dark" ? (
+								<CircleDot
+									style={{ marginLeft: 40, alignSelf: "center" }}
+									size={20}
+									strokeWidth={4}
+									color={theme.colors.font}
+									title={"dark mode"}
+								/>
+							) : (
+								<Circle
+									style={{ marginLeft: 40, alignSelf: "center" }}
+									size={20}
+									strokeWidth={4}
+									color={theme.colors.font}
+									title={"dark mode"}
+									onPress={() => UnistylesRuntime.setTheme("dark")}
+								/>
+							)}
+						</View>
+						<View
+							style={{
+								flexDirection: "row",
+								width: 200,
+								alignSelf: "center",
+							}}>
+							<CustomText
+								style={{
+									alignSelf: "center",
+									fontSize: 22,
+									color: theme.colors.font,
+								}}>
+								Light Mode
+							</CustomText>
+							{rt.themeName === "light" ? (
+								<CircleDot
+									style={{
+										marginLeft: 39,
+										alignSelf: "center",
+									}}
+									size={20}
+									strokeWidth={4}
+									color={theme.colors.font}
+								/>
+							) : (
+								<Circle
+									style={{
+										marginLeft: 36.5,
+										alignSelf: "center",
+									}}
+									size={20}
+									strokeWidth={4}
+									color={theme.colors.font}
+									onPress={() => UnistylesRuntime.setTheme("light")}
+								/>
+							)}
+						</View>
+					</Popup>
 				</>
 			)}
 		</View>
@@ -148,11 +245,9 @@ export const HeroList = ({ steamAuth }: Props) => {
 
 const styles = StyleSheet.create((theme) => ({
 	percentText: {
-		marginTop: 1,
 		alignSelf: "center",
 		color: theme.colors.font,
-		fontSize: 10,
-		fontFamily: theme.fontFamily.regular,
+		fontSize: 9,
 	},
 	heroListItem: {
 		alignSelf: "center",
@@ -185,6 +280,5 @@ const styles = StyleSheet.create((theme) => ({
 	},
 	primaryView: {
 		height: "94.3%",
-		zIndex: 11,
 	},
 }));
