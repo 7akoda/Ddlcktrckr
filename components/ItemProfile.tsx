@@ -116,7 +116,7 @@ export const ItemProfile = ({ itemId }: Props) => {
 		(item) => item.Name === itemId,
 	);
 	return (
-		<View>
+		<View style={{ height: "94.3%" }}>
 			<Header variant="nonSortable" back={true} sortable={false} />
 			<View
 				style={{
@@ -514,13 +514,14 @@ const styles = StyleSheet.create((theme) => ({
 		color: theme.colors.font,
 		fontSize: 12,
 		alignSelf: "center",
-		textDecorationLine: "underline",
+		marginTop: 0.5,
+		borderBottomWidth: 0.5,
+		borderBottomColor: theme.colors.font,
 	},
 	heroTextFade: {
 		color: theme.colors.font,
 		fontSize: 12,
 		alignSelf: "center",
 		opacity: 0.6,
-		textDecorationLine: "underline",
 	},
 }));
