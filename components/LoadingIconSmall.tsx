@@ -65,12 +65,13 @@ export const LoadingIconSmall = () => {
 
 const styles = StyleSheet.create((theme) => ({
 	background: {
-		position: "absolute",
 		alignSelf: "center",
-		top: 70,
+		position: "absolute",
 		opacity: 0.2,
-		width: "300%",
-		height: "300%",
+		bottom: 153,
+		left: 266,
+		width: "12%",
+		height: "12%",
 		zIndex: 1,
 	},
 }));
