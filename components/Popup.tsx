@@ -45,7 +45,7 @@ export const Popup = ({ settings, children, handlePress }: props) => {
 						{
 							backgroundColor: theme.colors.background,
 							width: 300,
-							height: 220,
+							height: 180,
 							zIndex: 16,
 							alignSelf: "center",
 							borderRadius: 4,
@@ -56,9 +56,10 @@ export const Popup = ({ settings, children, handlePress }: props) => {
 					]}>
 					<View
 						style={{
+							height: "100%",
+							width: "100%",
+
 							justifyContent: "center",
-							alignSelf: "center",
-							marginTop: 20,
 						}}>
 						{children}
 					</View>
