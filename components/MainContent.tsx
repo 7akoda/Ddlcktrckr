@@ -26,7 +26,7 @@ export const MainContent = ({
 	const { theme } = useUnistyles();
 	return (
 		<>
-			{selected === "User" && data.length < 1 ? (
+			{selected === "User" && data.length < 1 && settings ? (
 				<>
 					<HeroList handleLogin={handleLogin} />
 					<Popup settings={settings} handlePress={handleNoAuth}>
@@ -53,12 +53,12 @@ export const MainContent = ({
 									Sign in with Steam
 								</CustomText>
 							</Pressable>
-							<LoadingIconSmall />
 						</View>
+						<LoadingIconSmall />
 					</Popup>
 				</>
 			) : selected === "Items" ? (
-				<ItemList steamAuth={handleLogin} />
+				<ItemList handleLogin={handleLogin} />
 			) : selected === "User" && data.length > 1 ? (
 				<HeroPlayerList id={data} handleLogin={handleLogin} />
 			) : (
