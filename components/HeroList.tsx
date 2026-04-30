@@ -1,6 +1,6 @@
 import { View, Image, Pressable, Button } from "react-native";
 import * as Progress from "react-native-progress";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { StyleSheet, UnistylesRuntime } from "react-native-unistyles";
 import { useUnistyles } from "react-native-unistyles";
 import { Link } from "expo-router";
@@ -11,7 +11,9 @@ import { useHeroData } from "@/hooks/useHeroData";
 import { BlurView } from "expo-blur";
 import { FlashList } from "@shopify/flash-list";
 import { Popup } from "./Popup";
-import { Circle, CircleDot } from "lucide-react-native";
+import { Circle, CircleDot, Lightbulb, Moon, Sun } from "lucide-react-native";
+import { LoadingIconSmall } from "./LoadingIconSmall";
+import { SteamSvg } from "./svgComponents/SteamSVG";
 
 type Props = {
 	handleLogin: () => void;
@@ -23,7 +25,22 @@ export const HeroList = ({ handleLogin }: Props) => {
 	const [settings, setSettings] = useState(false);
 	const { theme, rt } = useUnistyles();
 	const { heroData, error, isLoading, isError } = useHeroData();
+	const heroList = Array.isArray(heroData) ? heroData : [];
 
+	const totalHeroPicks = heroList.reduce((sum, hero) => sum + hero.matches, 0);
+
+	const sortMap = {
+		Winrate: (a: any, b: any) => b.winRate - a.winRate,
+		Pickrate: (a: any, b: any) => b.matches - a.matches,
+	};
+	const sorted = useMemo(
+		() => (sort ? [...heroList].sort(sortMap[sort]) : heroList),
+		[sort, heroList],
+	);
+
+	const handleSort = () => {
+		setSort(sort === "Winrate" ? "Pickrate" : "Winrate");
+	};
 	if (isLoading) {
 		return <LoadingIcon />;
 	}
@@ -37,19 +54,7 @@ export const HeroList = ({ handleLogin }: Props) => {
 		);
 	}
 
-	const heroList = Array.isArray(heroData) ? heroData : [];
-
-	const totalHeroPicks = heroList.reduce((sum, hero) => sum + hero.matches, 0);
-
-	const sortMap = {
-		Winrate: (a: any, b: any) => b.winRate - a.winRate,
-		Pickrate: (a: any, b: any) => b.matches - a.matches,
-	};
-	const sorted = sort ? [...heroList].sort(sortMap[sort]) : heroList;
-
-	const handleSort = () => {
-		setSort(sort === "Winrate" ? "Pickrate" : "Winrate");
-	};
+	console.log(sorted.length);
 	return (
 		<View style={styles.primaryView}>
 			<Header
@@ -64,6 +69,7 @@ export const HeroList = ({ handleLogin }: Props) => {
 			/>
 
 			<FlashList
+				maintainVisibleContentPosition={{ disabled: true }}
 				data={sorted}
 				keyExtractor={(item) => item.id.toString()}
 				renderItem={({ item }) => (
@@ -131,114 +137,6 @@ export const HeroList = ({ handleLogin }: Props) => {
 						)}
 					</BlurView>
 				)}></FlashList>
-			{settings && (
-				<>
-					<Popup
-						settings={settings}
-						handlePress={() => setSettings((prev) => !prev)}>
-						<Pressable
-							onPress={handleLogin}
-							style={{
-								backgroundColor: theme.colors.font,
-								width: 165,
-								height: 30,
-								alignSelf: "center",
-								borderRadius: 12,
-								borderWidth: 1,
-								borderColor: theme.colors.font,
-								justifyContent: "center",
-							}}>
-							<CustomText
-								style={{
-									color: theme.colors.background,
-									alignSelf: "center",
-									textAlign: "center",
-									fontSize: 18,
-								}}>
-								Sign in with Steam
-							</CustomText>
-						</Pressable>
-						<View
-							style={{
-								alignSelf: "center",
-								marginTop: 10,
-								width: 200,
-								backgroundColor: theme.colors.font,
-								height: 1,
-							}}></View>
-						<View
-							style={{
-								flexDirection: "row",
-								width: 200,
-								alignSelf: "center",
-							}}>
-							<CustomText
-								style={{
-									alignSelf: "center",
-									fontSize: 22,
-									color: theme.colors.font,
-								}}>
-								Dark Mode
-							</CustomText>
-							{rt.themeName === "dark" ? (
-								<CircleDot
-									style={{ marginLeft: 40, alignSelf: "center" }}
-									size={20}
-									strokeWidth={4}
-									color={theme.colors.font}
-									title={"dark mode"}
-								/>
-							) : (
-								<Circle
-									style={{ marginLeft: 40, alignSelf: "center" }}
-									size={20}
-									strokeWidth={4}
-									color={theme.colors.font}
-									title={"dark mode"}
-									onPress={() => UnistylesRuntime.setTheme("dark")}
-								/>
-							)}
-						</View>
-						<View
-							style={{
-								flexDirection: "row",
-								width: 200,
-								alignSelf: "center",
-							}}>
-							<CustomText
-								style={{
-									alignSelf: "center",
-									fontSize: 22,
-									color: theme.colors.font,
-								}}>
-								Light Mode
-							</CustomText>
-							{rt.themeName === "light" ? (
-								<CircleDot
-									style={{
-										marginLeft: 39,
-										alignSelf: "center",
-									}}
-									size={20}
-									strokeWidth={4}
-									color={theme.colors.font}
-								/>
-							) : (
-								<Circle
-									style={{
-										marginLeft: 36.5,
-										alignSelf: "center",
-									}}
-									size={20}
-									strokeWidth={4}
-									color={theme.colors.font}
-									onPress={() => UnistylesRuntime.setTheme("light")}
-								/>
-							)}
-						</View>
-					</Popup>
-				</>
-			)}
 		</View>
 	);
 };
