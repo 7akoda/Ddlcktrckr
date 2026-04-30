@@ -1,8 +1,8 @@
 import { router } from "expo-router";
-import { ArrowLeft, Settings } from "lucide-react-native";
+import { ArrowLeft, Moon, Settings, Sun } from "lucide-react-native";
 
 import { View } from "react-native";
-import { useUnistyles } from "react-native-unistyles";
+import { UnistylesRuntime, useUnistyles } from "react-native-unistyles";
 import { CustomText } from "./CustomText";
 import { SpiritSvg } from "./svgComponents/SpiritSvg";
 import { VitalitySvg } from "./svgComponents/VitalitySvg";
@@ -43,7 +43,7 @@ type NonSortableHeader = {
 type HeaderProps = SortableHeader | NonSortableHeader | SortableItemHeader;
 
 export const Header = (props: HeaderProps) => {
-	const { theme } = useUnistyles();
+	const { theme, rt } = useUnistyles();
 
 	return (
 		<View
@@ -71,8 +71,8 @@ export const Header = (props: HeaderProps) => {
 					}}>
 					<PulsingPressable
 						style={{
-							height: 30,
-							width: 30,
+							height: 40,
+							width: 40,
 							alignSelf: "center",
 							alignItems: "center",
 							justifyContent: "center",
@@ -83,8 +83,8 @@ export const Header = (props: HeaderProps) => {
 					</PulsingPressable>
 					<PulsingPressable
 						style={{
-							height: 30,
-							width: 30,
+							height: 40,
+							width: 40,
 							alignSelf: "center",
 							alignItems: "center",
 							justifyContent: "center",
@@ -95,8 +95,8 @@ export const Header = (props: HeaderProps) => {
 					</PulsingPressable>
 					<PulsingPressable
 						style={{
-							height: 30,
-							width: 30,
+							height: 40,
+							width: 40,
 							alignSelf: "center",
 							alignItems: "center",
 							justifyContent: "center",
@@ -109,62 +109,60 @@ export const Header = (props: HeaderProps) => {
 			) : null}
 			<View style={{ flex: 1 }}></View>
 			{props.variant !== "nonSortable"
-				? props.sortText.map((text, i) =>
-						props.sort == props.sortText[i] ? (
-							<CustomText
-								suppressHighlighting
-								onPress={() => props.sortFunc(text)}
-								key={i}
-								style={{
-									color: theme.colors.font,
-									textAlign: "center",
-									marginHorizontal: 5,
-									fontSize: 9,
-									alignSelf: "center",
-									width: 35,
-									height: 18,
-									paddingTop: 1.8,
-									borderRadius: 4,
-									borderColor: theme.colors.selected,
-									borderWidth: 1,
-								}}>
-								{props.sortText[i]}
-							</CustomText>
-						) : (
-							<CustomText
-								suppressHighlighting
-								onPress={() => props.sortFunc(text)}
-								key={i}
-								style={{
-									color: theme.colors.font,
-									textAlign: "center",
-									marginHorizontal: 5,
-									fontSize: 9,
-									alignSelf: "center",
-									width: 35,
-									height: 18,
-									paddingTop: 1.8,
-									borderRadius: 4,
-									borderColor: theme.colors.primary,
-									borderWidth: 1,
-								}}>
-								{props.sortText[i]}
-							</CustomText>
-						),
-					)
+				? props.sortText.map((text, i) => (
+						<CustomText
+							suppressHighlighting
+							onPress={() => props.sortFunc(text)}
+							key={i}
+							style={{
+								color: theme.colors.font,
+								textAlign: "center",
+								marginHorizontal: 5,
+								fontSize: 9.5,
+								alignSelf: "center",
+								lineHeight: 20,
+								width: 40,
+								height: 23,
+								borderRadius: 4,
+								borderColor:
+									props.sort === text
+										? theme.colors.selected
+										: theme.colors.primary,
+								borderWidth: 1,
+							}}>
+							{text}
+						</CustomText>
+					))
 				: null}
+
 			{props.variant !== "nonSortable" ? (
 				<>
-					<Settings
-						size={20}
-						color={theme.colors.accent}
-						style={{
-							alignSelf: "center",
-							paddingRight: 30,
-							paddingVertical: 5,
-						}}
-						onPress={() => props.setSettings((prev: boolean) => !prev)}
-					/>
+					{rt.themeName === "light" ? (
+						<Moon
+							size={24}
+							color={theme.colors.accent}
+							style={{
+								alignSelf: "center",
+								paddingRight: 30,
+								paddingVertical: 5,
+							}}
+							onPress={() => UnistylesRuntime.setTheme("dark")}
+						/>
+					) : (
+						<Sun
+							size={24}
+							color={theme.colors.accent}
+							style={{
+								alignSelf: "center",
+								paddingRight: 30,
+								paddingVertical: 5,
+							}}
+							onPress={() => {
+								props.setSettings((prev) => !prev);
+								UnistylesRuntime.setTheme("light");
+							}}
+						/>
+					)}
 				</>
 			) : null}
 		</View>
