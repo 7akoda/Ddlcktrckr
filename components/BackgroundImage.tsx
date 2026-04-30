@@ -15,7 +15,7 @@ export const BackgroundImage = () => {
 					style={{
 						width: 1390,
 						height: 900,
-						opacity: 0.4,
+						opacity: 0.2,
 					}}
 					source={require("../images/Background_Buildings_Light.png")}></Image>
 			) : null}
