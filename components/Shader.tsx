@@ -77,6 +77,7 @@ export const Shader1 = () => {
 			: [mix([230, 232, 226], [165, 168, 160], 0.5)];
 
 	const vertexColour = useSharedValue(colors);
+
 	useEffect(() => {
 		let frameId: number;
 		const animate = (timestamp: number) => {
@@ -113,7 +114,7 @@ export const Shader1 = () => {
 
 		frameId = requestAnimationFrame(animate);
 		return () => cancelAnimationFrame(frameId);
-	}, []);
+	}, [rt.themeName]);
 	return (
 		<Canvas
 			style={{
