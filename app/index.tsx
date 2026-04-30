@@ -12,7 +12,7 @@ export default function Index() {
 	const [data, setData] = useState<string>("");
 	const [settings, setSettings] = useState(false);
 	const [selected, setSelected] = useState("World");
-
+	console.log(data);
 	if (data == null && selected == "User") {
 		() => setSettings(true);
 	}
