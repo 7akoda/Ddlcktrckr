@@ -1,6 +1,5 @@
 import { Canvas, Group, Path } from "@shopify/react-native-skia";
 import {
-	useAnimatedReaction,
 	useDerivedValue,
 	useSharedValue,
 	withDelay,
@@ -9,8 +8,7 @@ import {
 	Easing,
 	withSequence,
 } from "react-native-reanimated";
-import { useUnistyles } from "react-native-unistyles";
-import { StyleSheet } from "react-native-unistyles";
+
 import { useEffect, useState } from "react";
 import { paths, curvedPaths } from "@/data/loadingPaths";
 import { View } from "react-native";
