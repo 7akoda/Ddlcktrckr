@@ -14,6 +14,7 @@ import { Popup } from "./Popup";
 import { Circle, CircleDot, Lightbulb, Moon, Sun } from "lucide-react-native";
 import { LoadingIconSmall } from "./LoadingIconSmall";
 import { SteamSvg } from "./svgComponents/SteamSVG";
+import { ProgressBar } from "./ProgressBar";
 
 type Props = {
 	handleLogin: () => void;
@@ -22,7 +23,7 @@ type sort = "Winrate" | "Pickrate";
 
 export const HeroList = ({ handleLogin }: Props) => {
 	const [sort, setSort] = useState<sort>("Winrate");
-	const [settings, setSettings] = useState(false);
+	const [state, setState] = useState<boolean>(false);
 	const { theme, rt } = useUnistyles();
 	const { heroData, error, isLoading, isError } = useHeroData();
 	const heroList = Array.isArray(heroData) ? heroData : [];
@@ -41,6 +42,7 @@ export const HeroList = ({ handleLogin }: Props) => {
 	const handleSort = () => {
 		setSort(sort === "Winrate" ? "Pickrate" : "Winrate");
 	};
+
 	if (isLoading) {
 		return <LoadingIcon />;
 	}
@@ -54,10 +56,18 @@ export const HeroList = ({ handleLogin }: Props) => {
 		);
 	}
 
-	console.log(sorted.length);
+	const handleThemeChangeDark = () => {
+		UnistylesRuntime.setTheme("dark");
+	};
+
+	const handleThemeChangeLight = () => {
+		UnistylesRuntime.setTheme("light");
+	};
 	return (
 		<View style={styles.primaryView}>
 			<Header
+				handleThemeChangeDark={handleThemeChangeDark}
+				handleThemeChangeLight={handleThemeChangeLight}
 				variant="sortable"
 				sort={sort}
 				back={false}
@@ -65,14 +75,13 @@ export const HeroList = ({ handleLogin }: Props) => {
 				sortFunc={() => handleSort()}
 				sortText={["Pickrate", "Winrate"]}
 				itemType={false}
-				setSettings={setSettings}
 			/>
 
 			<FlashList
 				maintainVisibleContentPosition={{ disabled: true }}
 				data={sorted}
 				keyExtractor={(item) => item.id.toString()}
-				renderItem={({ item }) => (
+				renderItem={({ item, index }) => (
 					<BlurView
 						intensity={0}
 						tint={rt.themeName === "dark" ? "dark" : "light"}
@@ -112,24 +121,15 @@ export const HeroList = ({ handleLogin }: Props) => {
 									height: 15,
 									alignSelf: "center",
 								}}>
-								<Progress.Bar
-									progress={item.winRate / 100}
-									width={100}
-									height={5}
-									color={theme.colors.accent}
-								/>
+								<ProgressBar percent={-(index / (sorted.length - 1)) * 100} />
+
 								<CustomText style={styles.percentText}>
 									{item.winRate}%
 								</CustomText>
 							</View>
 						) : (
 							<View style={{ marginTop: 9.5, height: 15, alignSelf: "center" }}>
-								<Progress.Bar
-									progress={item.matches / (totalHeroPicks / 12)}
-									width={100}
-									height={5}
-									color={theme.colors.accent}
-								/>
+								<ProgressBar percent={-(index / (sorted.length - 1)) * 100} />
 								<CustomText style={styles.percentText}>
 									{item.popularity}%
 								</CustomText>
