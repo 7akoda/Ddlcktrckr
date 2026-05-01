@@ -1,5 +1,5 @@
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Shader1 } from "@/components/Shader";
 import * as WebBrowser from "expo-web-browser";
 import * as Linking from "expo-linking";
@@ -7,12 +7,17 @@ import React from "react";
 import { BottomNavBar } from "@/components/BottomNavBar";
 import { BackgroundImage } from "@/components/BackgroundImage";
 import { MainContent } from "@/components/MainContent";
+import { useUnistyles } from "react-native-unistyles";
+import { ItemIcon } from "@/components/ItemIcon";
+import { View } from "react-native";
 
 export default function Index() {
 	const [data, setData] = useState<string>("");
 	const [settings, setSettings] = useState(false);
 	const [selected, setSelected] = useState("World");
-	console.log(data);
+	const [ready, setReady] = useState(false);
+	const { theme, rt } = useUnistyles();
+
 	if (data == null && selected == "User") {
 		() => setSettings(true);
 	}
@@ -49,24 +54,35 @@ export default function Index() {
 		setSettings((prev) => !prev);
 		setSelected("World");
 	};
+	useEffect(() => {
+		setTimeout(() => {
+			setReady(true);
+		}, 7000);
+	}, []);
 
 	return (
-		<SafeAreaView style={{ flex: 1 }}>
-			<Shader1 />
-			<BackgroundImage />
-			<MainContent
-				data={data}
-				handleLogin={handleLogin}
-				handleNoAuth={handleNoAuth}
-				selected={selected}
-				settings={settings}
-			/>
-			<BottomNavBar
-				data={data}
-				setSettings={setSettings}
-				selected={selected}
-				setSelected={setSelected}
-			/>
+		<SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }}>
+			{ready == false ? (
+				<ItemIcon />
+			) : (
+				<>
+					<Shader1 />
+					<BackgroundImage />
+					<MainContent
+						data={data}
+						handleLogin={handleLogin}
+						handleNoAuth={handleNoAuth}
+						selected={selected}
+						settings={settings}
+					/>
+					<BottomNavBar
+						data={data}
+						setSettings={setSettings}
+						selected={selected}
+						setSelected={setSelected}
+					/>
+				</>
+			)}
 		</SafeAreaView>
 	);
 }
