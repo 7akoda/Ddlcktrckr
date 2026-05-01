@@ -60,6 +60,14 @@ export const ItemList = ({ handleLogin }: Props) => {
 		itemType !== value ? setItemType(value) : setItemType("");
 	};
 
+	const handleThemeChangeDark = () => {
+		UnistylesRuntime.setTheme("dark");
+	};
+
+	const handleThemeChangeLight = () => {
+		UnistylesRuntime.setTheme("light");
+	};
+
 	return (
 		<View style={styles.primaryView}>
 			<Header
@@ -72,7 +80,8 @@ export const ItemList = ({ handleLogin }: Props) => {
 				sortText={["800", "1600", "3200", "6400"]}
 				back={false}
 				sortable={true}
-				setSettings={setSettings}
+				handleThemeChangeDark={handleThemeChangeDark}
+				handleThemeChangeLight={handleThemeChangeLight}
 			/>
 
 			<FlashList
