@@ -14,6 +14,7 @@ import { BlurView } from "expo-blur";
 import { Popup } from "./Popup";
 import { FlashList } from "@shopify/flash-list";
 import { Circle, CircleDot } from "lucide-react-native";
+import { ProgressBar } from "./ProgressBar";
 type Props = {
 	id: string;
 	handleLogin: () => void;
@@ -69,10 +70,19 @@ export const HeroPlayerList = ({ id, handleLogin }: Props) => {
 		sort == value ? setSort("") : setSort(value);
 	};
 
+	const handleThemeChangeDark = () => {
+		UnistylesRuntime.setTheme("dark");
+	};
+
+	const handleThemeChangeLight = () => {
+		UnistylesRuntime.setTheme("light");
+	};
+
 	return (
 		<View style={styles.primaryView}>
 			<Header
-				setSettings={setSettings}
+				handleThemeChangeDark={handleThemeChangeDark}
+				handleThemeChangeLight={handleThemeChangeLight}
 				itemType={false}
 				back={false}
 				sort={sort}
@@ -85,7 +95,7 @@ export const HeroPlayerList = ({ id, handleLogin }: Props) => {
 				maintainVisibleContentPosition={{ disabled: true }}
 				data={sorted}
 				keyExtractor={(item) => item.hero_id.toString()}
-				renderItem={({ item }) => (
+				renderItem={({ item, index }) => (
 					<BlurView
 						intensity={0}
 						tint={rt.themeName === "dark" ? "dark" : "light"}
@@ -120,12 +130,8 @@ export const HeroPlayerList = ({ id, handleLogin }: Props) => {
 						<View style={{ flex: 1 }} />
 						{sort == "Winrate" ? (
 							<View style={{ height: 15, marginTop: 9.5, alignSelf: "center" }}>
-								<Progress.Bar
-									progress={item.winRate / 100}
-									width={100}
-									height={5}
-									color={theme.colors.accent}
-								/>
+								<ProgressBar percent={-(index / (sorted.length - 1)) * 100} />
+
 								<CustomText style={styles.percentText}>
 									{item.winRate}%
 								</CustomText>
@@ -136,12 +142,8 @@ export const HeroPlayerList = ({ id, handleLogin }: Props) => {
 								<CustomText style={styles.infoText}>
 									Matches played: {item.matches_played}
 								</CustomText>
-								<Progress.Bar
-									progress={item.matches_played / totalMatches}
-									width={100}
-									height={5}
-									color={theme.colors.accent}
-								/>
+								<ProgressBar percent={-(index / (sorted.length - 1)) * 100} />
+
 								<CustomText style={styles.percentText}>
 									{item.pickRate}%
 								</CustomText>
