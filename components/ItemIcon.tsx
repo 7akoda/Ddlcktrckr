@@ -12,15 +12,13 @@ import {
 import { useEffect, useState } from "react";
 import { paths, curvedPaths } from "@/data/loadingPaths";
 import { View } from "react-native";
+import { useUnistyles } from "react-native-unistyles";
+import { BackgroundImage } from "./BackgroundImage";
 
-interface IconProps {
-	itemColour: string;
-}
-
-export const ItemIcon = ({ itemColour }: IconProps) => {
+export const ItemIcon = () => {
 	const [size, setSize] = useState({ width: 0, height: 0 });
 	const scale = (size.width / 963.69) * 0.97;
-
+	const { theme, rt } = useUnistyles();
 	const progressEye = useSharedValue(0);
 	const progressSpin = useSharedValue(0);
 	const pathDraw = useSharedValue(1);
@@ -65,7 +63,6 @@ export const ItemIcon = ({ itemColour }: IconProps) => {
 			style={{
 				width: "100%",
 				height: "100%",
-				position: "absolute",
 			}}
 			onLayout={(e) =>
 				setSize({
@@ -92,8 +89,8 @@ export const ItemIcon = ({ itemColour }: IconProps) => {
 								<Path
 									key={i}
 									path={p}
-									opacity={0.1}
-									color={itemColour}
+									opacity={0.3}
+									color={theme.colors.accent}
 									style={"stroke"}
 									strokeWidth={7}
 									start={pathDraw}></Path>
@@ -104,8 +101,8 @@ export const ItemIcon = ({ itemColour }: IconProps) => {
 								<Path
 									key={i}
 									path={p}
-									opacity={0.1}
-									color={itemColour}
+									opacity={0.3}
+									color={theme.colors.accent}
 									strokeWidth={7}
 									style={"stroke"}
 									start={pathDraw}></Path>
@@ -114,8 +111,8 @@ export const ItemIcon = ({ itemColour }: IconProps) => {
 						<Group transform={derivedProgressEye}>
 							<Path
 								path="M371.14 481.87c2.49 145.45 218.85 145.43 221.32-.02-2.49-145.45-218.85-145.43-221.32.02zm110.67 69.5c-91.36-1.63-91.34-137.39 0-139.02 91.34 1.63 91.34 137.39 0 139.02z"
-								opacity={0.1}
-								color={itemColour}
+								opacity={0.3}
+								color={theme.colors.accent}
 								style={"stroke"}
 								strokeWidth={7}
 								start={pathDraw}></Path>
