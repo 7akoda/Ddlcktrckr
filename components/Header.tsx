@@ -17,8 +17,9 @@ type SortableHeader = {
 	sortText: string[];
 	sort: string;
 	itemType: false;
-	setSettings: Dispatch<SetStateAction<boolean>>;
 	variant: "sortable";
+	handleThemeChangeDark: () => void;
+	handleThemeChangeLight: () => void;
 };
 
 type SortableItemHeader = {
@@ -31,7 +32,8 @@ type SortableItemHeader = {
 	sort: string;
 	itemList: boolean;
 	itemType: string;
-	setSettings: Dispatch<SetStateAction<boolean>>;
+	handleThemeChangeDark: () => void;
+	handleThemeChangeLight: () => void;
 };
 
 type NonSortableHeader = {
@@ -146,7 +148,7 @@ export const Header = (props: HeaderProps) => {
 								paddingRight: 30,
 								paddingVertical: 5,
 							}}
-							onPress={() => UnistylesRuntime.setTheme("dark")}
+							onPress={props.handleThemeChangeDark}
 						/>
 					) : (
 						<Sun
@@ -157,10 +159,7 @@ export const Header = (props: HeaderProps) => {
 								paddingRight: 30,
 								paddingVertical: 5,
 							}}
-							onPress={() => {
-								props.setSettings((prev) => !prev);
-								UnistylesRuntime.setTheme("light");
-							}}
+							onPress={props.handleThemeChangeLight}
 						/>
 					)}
 				</>
