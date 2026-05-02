@@ -1,5 +1,4 @@
 import { View, Image, Pressable, Button } from "react-native";
-import * as Progress from "react-native-progress";
 import { useMemo, useState } from "react";
 import { StyleSheet, UnistylesRuntime } from "react-native-unistyles";
 import { useUnistyles } from "react-native-unistyles";
@@ -10,25 +9,13 @@ import { LoadingIcon } from "./LoadingIcon";
 import { useHeroData } from "@/hooks/useHeroData";
 import { BlurView } from "expo-blur";
 import { FlashList } from "@shopify/flash-list";
-import { Popup } from "./Popup";
-import { Circle, CircleDot, Lightbulb, Moon, Sun } from "lucide-react-native";
-import { LoadingIconSmall } from "./LoadingIconSmall";
-import { SteamSvg } from "./svgComponents/SteamSVG";
 import { ProgressBar } from "./ProgressBar";
-
-type Props = {
-	handleLogin: () => void;
-};
 type sort = "Winrate" | "Pickrate";
-
-export const HeroList = ({ handleLogin }: Props) => {
+export const HeroList = () => {
 	const [sort, setSort] = useState<sort>("Winrate");
-	const [state, setState] = useState<boolean>(false);
 	const { theme, rt } = useUnistyles();
 	const { heroData, error, isLoading, isError } = useHeroData();
 	const heroList = Array.isArray(heroData) ? heroData : [];
-
-	const totalHeroPicks = heroList.reduce((sum, hero) => sum + hero.matches, 0);
 
 	const sortMap = {
 		Winrate: (a: any, b: any) => b.winRate - a.winRate,
@@ -170,11 +157,6 @@ const styles = StyleSheet.create((theme) => ({
 		fontSize: 14,
 		alignSelf: "center",
 		opacity: 0.6,
-	},
-	sortButton: {
-		color: theme.colors.accent,
-		alignSelf: "center",
-		margin: 10,
 	},
 	primaryView: {
 		height: "94.3%",
