@@ -1,4 +1,4 @@
-import { View, Image, Pressable, Button } from "react-native";
+import { View, Image, Pressable } from "react-native";
 import { useMemo, useState } from "react";
 import { StyleSheet, UnistylesRuntime } from "react-native-unistyles";
 import { useUnistyles } from "react-native-unistyles";
@@ -8,14 +8,8 @@ import { CustomText } from "./CustomText";
 import { ItemImages } from "@/data/items";
 import { BlurView } from "expo-blur";
 import { FlashList } from "@shopify/flash-list";
-import { Popup } from "./Popup";
-import { Circle, CircleDot } from "lucide-react-native";
 
-type Props = {
-	handleLogin: () => void;
-};
-
-export const ItemList = ({ handleLogin }: Props) => {
+export const ItemList = () => {
 	const [sort, setSort] = useState("");
 	const [itemType, setItemType] = useState("");
 	const [settings, setSettings] = useState(false);
@@ -127,82 +121,6 @@ export const ItemList = ({ handleLogin }: Props) => {
 						</View>
 					</BlurView>
 				)}></FlashList>
-			{settings && (
-				<>
-					<Popup
-						settings={settings}
-						handlePress={() => setSettings((prev) => !prev)}>
-						<Pressable
-							onPress={handleLogin}
-							style={{
-								backgroundColor: theme.colors.font,
-								width: 165,
-								height: 30,
-								alignSelf: "center",
-								borderRadius: 12,
-								borderWidth: 1,
-								borderColor: theme.colors.font,
-								justifyContent: "center",
-							}}>
-							<CustomText
-								style={{
-									color: theme.colors.background,
-									alignSelf: "center",
-									textAlign: "center",
-									fontSize: 18,
-								}}>
-								Sign in with Steam
-							</CustomText>
-						</Pressable>
-						<View
-							style={{
-								alignSelf: "center",
-								marginTop: 10,
-								width: 200,
-								backgroundColor: theme.colors.font,
-								height: 1,
-							}}></View>
-						<View
-							style={{
-								flexDirection: "row",
-								width: 200,
-								alignSelf: "center",
-								justifyContent: "center",
-							}}>
-							<CustomText
-								style={{
-									alignSelf: "center",
-									fontSize: 22,
-									marginRight: 40,
-									color: theme.colors.font,
-								}}>
-								Dark Mode
-							</CustomText>
-							<View style={{ position: "absolute", left: 155, top: 5 }}>
-								{rt.themeName === "dark" ? (
-									<CircleDot
-										style={{ alignSelf: "center" }}
-										size={20}
-										strokeWidth={4}
-										color={theme.colors.font}
-										title={"dark mode"}
-										onPress={() => UnistylesRuntime.setTheme("light")}
-									/>
-								) : (
-									<Circle
-										style={{ alignSelf: "center" }}
-										size={20}
-										strokeWidth={4}
-										color={theme.colors.font}
-										title={"dark mode"}
-										onPress={() => UnistylesRuntime.setTheme("dark")}
-									/>
-								)}
-							</View>
-						</View>
-					</Popup>
-				</>
-			)}
 		</View>
 	);
 };
@@ -238,10 +156,6 @@ const styles = StyleSheet.create((theme) => ({
 		alignSelf: "center",
 		opacity: 0.6,
 	},
-	sortButton: {
-		color: theme.colors.accent,
-		alignSelf: "center",
-		margin: 10,
-	},
+
 	primaryView: { height: "94.3%" },
 }));
