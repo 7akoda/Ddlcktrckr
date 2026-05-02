@@ -44,11 +44,11 @@ export const Popup = ({ settings, children, handlePress }: props) => {
 					style={[
 						{
 							backgroundColor: theme.colors.background,
-							width: 300,
-							height: 180,
+							width: 200,
+							height: 100,
 							zIndex: 16,
 							alignSelf: "center",
-							borderRadius: 4,
+							borderRadius: 12,
 							borderWidth: 2,
 							borderColor: theme.colors.secondary,
 						},
