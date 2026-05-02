@@ -1,14 +1,13 @@
 import { router } from "expo-router";
-import { ArrowLeft, Moon, Settings, Sun } from "lucide-react-native";
+import { ArrowLeft, Moon, Sun } from "lucide-react-native";
 
 import { View } from "react-native";
-import { UnistylesRuntime, useUnistyles } from "react-native-unistyles";
+import { useUnistyles } from "react-native-unistyles";
 import { CustomText } from "./CustomText";
 import { SpiritSvg } from "./svgComponents/SpiritSvg";
 import { VitalitySvg } from "./svgComponents/VitalitySvg";
 import { WeaponSvg } from "./svgComponents/WeaponSvg";
 import { PulsingPressable } from "./PulsingPressable";
-import { Dispatch, SetStateAction } from "react";
 
 type SortableHeader = {
 	back: boolean;
