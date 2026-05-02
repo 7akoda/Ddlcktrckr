@@ -7,22 +7,20 @@ import React from "react";
 import { BottomNavBar } from "@/components/BottomNavBar";
 import { BackgroundImage } from "@/components/BackgroundImage";
 import { MainContent } from "@/components/MainContent";
-import { useUnistyles } from "react-native-unistyles";
-import { ItemIcon } from "@/components/ItemIcon";
-import { View } from "react-native";
+import { IntroIcon } from "@/components/IntroIcon";
+import { LoadingIcon } from "@/components/LoadingIcon";
 
 export default function Index() {
 	const [data, setData] = useState<string>("");
 	const [settings, setSettings] = useState(false);
 	const [selected, setSelected] = useState("World");
 	const [ready, setReady] = useState(false);
-	const { theme, rt } = useUnistyles();
 
 	if (data == null && selected == "User") {
-		() => setSettings(true);
+		setSettings(true);
 	}
 
-	const RES = async (): Promise<string | null> => {
+	const res = async (): Promise<string | null> => {
 		try {
 			const result = await WebBrowser.openAuthSessionAsync(
 				"http://192.168.1.90:3000/auth/steam",
@@ -44,7 +42,7 @@ export default function Index() {
 	};
 
 	const handleLogin = async () => {
-		const id = await RES();
+		const id = await res();
 		if (id) {
 			setData(id);
 			console.log(id);
@@ -61,13 +59,18 @@ export default function Index() {
 	}, []);
 
 	return (
-		<SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }}>
+		<SafeAreaView
+			style={{
+				flex: 1,
+			}}>
+			<Shader1 />
+			<BackgroundImage />
 			{ready == false ? (
-				<ItemIcon />
+				<>
+					<IntroIcon />
+				</>
 			) : (
 				<>
-					<Shader1 />
-					<BackgroundImage />
 					<MainContent
 						data={data}
 						handleLogin={handleLogin}
