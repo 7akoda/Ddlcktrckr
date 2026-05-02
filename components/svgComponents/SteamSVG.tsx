@@ -11,10 +11,8 @@ export const SteamSvg = ({ fill }: Props) => {
 			viewBox="8.78 12 423.221 102"
 			style={{
 				zIndex: 2,
-				width: 70,
+				width: 90,
 				height: 20,
-				right: 12,
-				top: 2,
 			}}>
 			<Defs></Defs>
 			<Path
