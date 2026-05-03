@@ -1,6 +1,6 @@
 import { HeroProfile } from "@/components/HeroProfile";
 import { Shader1 } from "@/components/Shader";
-import { Link, useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import { View, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useUnistyles } from "react-native-unistyles";
@@ -12,8 +12,9 @@ export default function Id() {
 	const { id } = useLocalSearchParams();
 	const { rt } = useUnistyles();
 
-	const { heroDataById, itemDataById, isIdError, isIdLoading, idError } =
-		useHeroDataById(String(id));
+	const { heroDataById, isIdError, isIdLoading, idError } = useHeroDataById(
+		String(id),
+	);
 
 	if (isIdLoading) return <LoadingIcon />;
 
