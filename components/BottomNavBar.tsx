@@ -2,7 +2,7 @@ import { useUnistyles } from "react-native-unistyles";
 import { Pressable } from "react-native";
 import { BlurView } from "expo-blur";
 import { Book, BookOpen, Globe, SquareUserRound } from "lucide-react-native";
-import { Dispatch, memo, SetStateAction, useCallback, useState } from "react";
+import { Dispatch, memo, SetStateAction, useCallback } from "react";
 
 type BottomNavBarType = {
 	setSelected: Dispatch<SetStateAction<string>>;
@@ -17,7 +17,7 @@ export const BottomNavBar = memo(
 		const handleNoAuth = useCallback(() => {
 			setSelected("User");
 			setSettings(true);
-		}, []);
+		}, [setSelected, setSettings]);
 
 		return (
 			<BlurView
@@ -39,13 +39,15 @@ export const BottomNavBar = memo(
 						marginHorizontal: "4.3%",
 						justifyContent: "center",
 						borderTopColor:
-							selected == "User" ? theme.colors.accent : "#000000",
-						borderTopWidth: selected == "User" ? 1 : 0,
+							selected === "User" ? theme.colors.accent : "#000000",
+						borderTopWidth: selected === "User" ? 1 : 0,
 					}}>
 					<SquareUserRound
 						style={{ alignSelf: "center" }}
 						strokeWidth={1}
-						color={selected == "User" ? theme.colors.accent : theme.colors.font}
+						color={
+							selected === "User" ? theme.colors.accent : theme.colors.font
+						}
 						size={34}
 					/>
 				</Pressable>
@@ -57,13 +59,13 @@ export const BottomNavBar = memo(
 
 						justifyContent: "center",
 						borderTopColor:
-							selected == "World" ? theme.colors.accent : "#000000",
-						borderTopWidth: selected == "World" ? 1 : 0,
+							selected === "World" ? theme.colors.accent : "#000000",
+						borderTopWidth: selected === "World" ? 1 : 0,
 					}}>
 					<Globe
 						style={{ alignSelf: "center" }}
 						color={
-							selected == "World" ? theme.colors.accent : theme.colors.font
+							selected === "World" ? theme.colors.accent : theme.colors.font
 						}
 						strokeWidth={1}
 						size={32}
@@ -77,14 +79,14 @@ export const BottomNavBar = memo(
 
 						justifyContent: "center",
 						borderTopColor:
-							selected == "Items" ? theme.colors.accent : "#000000",
-						borderTopWidth: selected == "Items" ? 1 : 0,
+							selected === "Items" ? theme.colors.accent : "#000000",
+						borderTopWidth: selected === "Items" ? 1 : 0,
 					}}>
 					{selected === "Items" ? (
 						<BookOpen
 							style={{ alignSelf: "center" }}
 							color={
-								selected == "Items" ? theme.colors.accent : theme.colors.font
+								selected === "Items" ? theme.colors.accent : theme.colors.font
 							}
 							strokeWidth={1}
 							size={33}
@@ -93,7 +95,7 @@ export const BottomNavBar = memo(
 						<Book
 							style={{ alignSelf: "center" }}
 							color={
-								selected == "Items" ? theme.colors.accent : theme.colors.font
+								selected === "Items" ? theme.colors.accent : theme.colors.font
 							}
 							strokeWidth={1}
 							size={30}
@@ -104,3 +106,4 @@ export const BottomNavBar = memo(
 		);
 	},
 );
+BottomNavBar.displayName = "BottomNavBar";
