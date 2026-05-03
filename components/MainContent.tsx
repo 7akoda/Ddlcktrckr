@@ -1,4 +1,4 @@
-import { Button, Pressable, View } from "react-native";
+import { Pressable, View } from "react-native";
 import { CustomText } from "./CustomText";
 import { HeroList } from "./HeroList";
 import { Popup } from "./Popup";
@@ -25,9 +25,10 @@ export const MainContent = ({
 	handleNoAuth,
 }: MainType) => {
 	const { theme } = useUnistyles();
+
 	return (
 		<>
-			{data.length < 1 && selected == "User" ? (
+			{data.length < 1 && selected === "User" ? (
 				<View style={{ height: "100%" }}>
 					<Popup settings={settings} handlePress={handleNoAuth}>
 						<View>
