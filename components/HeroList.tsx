@@ -1,7 +1,11 @@
-import { View, Image, Pressable, Button } from "react-native";
-import { useMemo, useState } from "react";
-import { StyleSheet, UnistylesRuntime } from "react-native-unistyles";
-import { useUnistyles } from "react-native-unistyles";
+import { View, Image, Pressable } from "react-native";
+import { useState } from "react";
+import {
+	StyleSheet,
+	UnistylesRuntime,
+	useUnistyles,
+} from "react-native-unistyles";
+
 import { Link } from "expo-router";
 import { Header } from "./Header";
 import { CustomText } from "./CustomText";
@@ -11,20 +15,20 @@ import { BlurView } from "expo-blur";
 import { FlashList } from "@shopify/flash-list";
 import { ProgressBar } from "./ProgressBar";
 type sort = "Winrate" | "Pickrate";
+
 export const HeroList = () => {
 	const [sort, setSort] = useState<sort>("Winrate");
-	const { theme, rt } = useUnistyles();
+	const { rt } = useUnistyles();
 	const { heroData, error, isLoading, isError } = useHeroData();
+
 	const heroList = Array.isArray(heroData) ? heroData : [];
 
 	const sortMap = {
 		Winrate: (a: any, b: any) => b.winRate - a.winRate,
 		Pickrate: (a: any, b: any) => b.matches - a.matches,
 	};
-	const sorted = useMemo(
-		() => (sort ? [...heroList].sort(sortMap[sort]) : heroList),
-		[sort, heroList],
-	);
+
+	const sorted = sort ? [...heroList].sort(sortMap[sort]) : heroList;
 
 	const handleSort = () => {
 		setSort(sort === "Winrate" ? "Pickrate" : "Winrate");
@@ -68,6 +72,7 @@ export const HeroList = () => {
 				maintainVisibleContentPosition={{ disabled: true }}
 				data={sorted}
 				keyExtractor={(item) => item.id.toString()}
+				extraData={rt.themeName}
 				renderItem={({ item, index }) => (
 					<BlurView
 						intensity={0}
@@ -75,14 +80,7 @@ export const HeroList = () => {
 						style={styles.heroListItem}>
 						<Image
 							source={{ uri: item.images.icon_hero_card_webp }}
-							style={{
-								width: 30,
-								height: 30,
-								alignSelf: "center",
-								borderRadius: 4,
-								borderWidth: 2,
-								borderColor: theme.colors.primary,
-							}}
+							style={styles.heroImage}
 						/>
 						<Link
 							href={{
@@ -101,22 +99,21 @@ export const HeroList = () => {
 							</Pressable>
 						</Link>
 						<View style={{ flex: 1 }} />
-						{sort == "Winrate" ? (
+						{sort === "Winrate" ? (
 							<View
 								style={{
 									marginTop: 9.5,
 									height: 15,
 									alignSelf: "center",
 								}}>
-								<ProgressBar percent={-(index / (sorted.length - 1)) * 100} />
-
+								<ProgressBar percent={100 - index * (100 / sorted.length)} />
 								<CustomText style={styles.percentText}>
 									{item.winRate}%
 								</CustomText>
 							</View>
 						) : (
 							<View style={{ marginTop: 9.5, height: 15, alignSelf: "center" }}>
-								<ProgressBar percent={-(index / (sorted.length - 1)) * 100} />
+								<ProgressBar percent={100 - index * (100 / sorted.length)} />
 								<CustomText style={styles.percentText}>
 									{item.popularity}%
 								</CustomText>
@@ -160,5 +157,13 @@ const styles = StyleSheet.create((theme) => ({
 	},
 	primaryView: {
 		height: "94.3%",
+	},
+	heroImage: {
+		width: 30,
+		height: 30,
+		alignSelf: "center",
+		borderRadius: 4,
+		borderWidth: 2,
+		borderColor: theme.colors.primary,
 	},
 }));
