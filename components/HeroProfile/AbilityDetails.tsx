@@ -1,5 +1,4 @@
 import { View, Image } from "react-native";
-import { useUnistyles } from "react-native-unistyles";
 import { CustomText } from "../CustomText";
 import { StyleSheet } from "react-native-unistyles";
 import {
@@ -20,12 +19,12 @@ export const AbilityDetails = ({ match, upgrade }: Props) => {
 	const abilityChargesCooldown = match.properties.AbilityCooldownBetweenCharge;
 
 	let Radius =
-		match.name == "Disengaging Sigil"
+		match.name === "Disengaging Sigil"
 			? match.properties.SigilRadius
 			: match.properties.Radius;
 
 	const foundUpgrade = (detail: any) => {
-		return upgrade?.find((u: any) => u.name == detail);
+		return upgrade?.find((u: any) => u.name === detail);
 	};
 
 	return (
