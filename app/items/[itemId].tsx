@@ -1,12 +1,11 @@
-import { ActiveData } from "@/api/itemActive";
 import { ItemProfile } from "@/components/ItemProfile";
 import { Shader1 } from "@/components/Shader";
-import { Link, useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import { View, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useUnistyles } from "react-native-unistyles";
 
-export default function itemId() {
+export default function ItemId() {
 	const { itemId } = useLocalSearchParams();
 	const { rt } = useUnistyles();
 	return (
@@ -30,7 +29,7 @@ export default function itemId() {
 							source={require("../../images/Background_Buildings.png")}></Image>
 					) : null}
 				</View>
-				<ItemProfile itemId={itemId} />
+				{itemId && <ItemProfile itemId={itemId} />}
 			</SafeAreaView>
 		</>
 	);
