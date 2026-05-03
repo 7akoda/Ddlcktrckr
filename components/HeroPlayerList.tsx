@@ -1,7 +1,11 @@
 import { View, Image, Pressable } from "react-native";
 import type { PlayerHeroStats } from "@/types/playerHeroStats";
-import { StyleSheet, UnistylesRuntime } from "react-native-unistyles";
-import { useUnistyles } from "react-native-unistyles";
+import {
+	StyleSheet,
+	UnistylesRuntime,
+	useUnistyles,
+} from "react-native-unistyles";
+
 import { useState } from "react";
 import { Link } from "expo-router";
 import { Header } from "@/components/Header";
@@ -18,12 +22,12 @@ type HeroPlayerListType = {
 
 export const HeroPlayerList = ({ id }: HeroPlayerListType) => {
 	const [sort, setSort] = useState("Winrate");
-	const { theme, rt } = useUnistyles();
+	const { rt } = useUnistyles();
 	const { playerStats, isIdError, isIdLoading, idError } =
 		usePlayerHeroData(id);
 	const { heroData, isError, error, isLoading } = useHeroData();
 
-	if (isLoading) {
+	if (isLoading || isIdLoading) {
 		return <LoadingIcon />;
 	}
 
@@ -62,7 +66,11 @@ export const HeroPlayerList = ({ id }: HeroPlayerListType) => {
 		sorted = sortedByMostPlayed;
 	}
 	const handleSort = (value: string) => {
-		sort == value ? setSort("") : setSort(value);
+		if (sort === value) {
+			setSort("");
+		} else {
+			setSort(value);
+		}
 	};
 
 	const handleThemeChangeDark = () => {
@@ -89,6 +97,7 @@ export const HeroPlayerList = ({ id }: HeroPlayerListType) => {
 			<FlashList
 				maintainVisibleContentPosition={{ disabled: true }}
 				data={sorted}
+				extraData={rt.themeName}
 				keyExtractor={(item) => item.hero_id.toString()}
 				renderItem={({ item, index }) => (
 					<BlurView
@@ -97,14 +106,7 @@ export const HeroPlayerList = ({ id }: HeroPlayerListType) => {
 						style={styles.heroListItem}>
 						<Image
 							source={{ uri: item.profilePicture }}
-							style={{
-								width: 30,
-								height: 30,
-								alignSelf: "center",
-								borderRadius: 4,
-								borderWidth: 2,
-								borderColor: theme.colors.primary,
-							}}
+							style={styles.heroImage}
 						/>
 						<Link
 							href={{
@@ -123,9 +125,9 @@ export const HeroPlayerList = ({ id }: HeroPlayerListType) => {
 							</Pressable>
 						</Link>
 						<View style={{ flex: 1 }} />
-						{sort == "Winrate" ? (
+						{sort === "Winrate" ? (
 							<View style={{ height: 15, marginTop: 9.5, alignSelf: "center" }}>
-								<ProgressBar percent={-(index / (sorted.length - 1)) * 100} />
+								<ProgressBar percent={100 - index * (100 / sorted.length)} />
 
 								<CustomText style={styles.percentText}>
 									{item.winRate}%
@@ -137,7 +139,7 @@ export const HeroPlayerList = ({ id }: HeroPlayerListType) => {
 								<CustomText style={styles.infoText}>
 									Matches played: {item.matches_played}
 								</CustomText>
-								<ProgressBar percent={-(index / (sorted.length - 1)) * 100} />
+								<ProgressBar percent={100 - index * (100 / sorted.length)} />
 
 								<CustomText style={styles.percentText}>
 									{item.pickRate}%
@@ -188,5 +190,13 @@ const styles = StyleSheet.create((theme) => ({
 	},
 	primaryView: {
 		height: "94.3%",
+	},
+	heroImage: {
+		width: 30,
+		height: 30,
+		alignSelf: "center",
+		borderRadius: 4,
+		borderWidth: 2,
+		borderColor: theme.colors.primary,
 	},
 }));
