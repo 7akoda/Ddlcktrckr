@@ -2,11 +2,11 @@ import { CustomText } from "@/components/CustomText";
 import { Image } from "react-native";
 import { cleanDecimals } from "./decimaldescriptionTransform";
 import { useUnistyles } from "react-native-unistyles";
-export const getScaleType = (scale: number, scaleType: string) => {
+export const GetScaleType = (scale: number, scaleType: string) => {
 	const { theme } = useUnistyles();
 	return (
 		<>
-			{scaleType == "ETechPower" ? (
+			{scaleType === "ETechPower" ? (
 				<CustomText
 					style={{
 						color: "#CE90FF",
@@ -20,7 +20,7 @@ export const getScaleType = (scale: number, scaleType: string) => {
 					/>
 					x{cleanDecimals(scale)}
 				</CustomText>
-			) : scaleType == "ELevelUpBoons" ? (
+			) : scaleType === "ELevelUpBoons" ? (
 				<CustomText
 					style={{
 						color: "#00FF99",
