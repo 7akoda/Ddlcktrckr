@@ -3,20 +3,22 @@ import { useEffect, useState } from "react";
 import { Shader1 } from "@/components/Shader";
 import * as WebBrowser from "expo-web-browser";
 import * as Linking from "expo-linking";
-import React from "react";
 import { BottomNavBar } from "@/components/BottomNavBar";
 import { BackgroundImage } from "@/components/BackgroundImage";
 import { MainContent } from "@/components/MainContent";
 import { IntroIcon } from "@/components/IntroIcon";
-import { LoadingIcon } from "@/components/LoadingIcon";
+import { useUnistyles } from "react-native-unistyles";
+import { useHeroData } from "@/hooks/useHeroData";
 
 export default function Index() {
 	const [data, setData] = useState<string>("");
 	const [settings, setSettings] = useState(false);
 	const [selected, setSelected] = useState("World");
 	const [ready, setReady] = useState(false);
+	const { theme } = useUnistyles();
+	const { isLoading } = useHeroData();
 
-	if (data == null && selected == "User") {
+	if (data == null && selected === "User") {
 		setSettings(true);
 	}
 
@@ -52,6 +54,7 @@ export default function Index() {
 		setSettings((prev) => !prev);
 		setSelected("World");
 	};
+
 	useEffect(() => {
 		setTimeout(() => {
 			setReady(true);
@@ -62,14 +65,12 @@ export default function Index() {
 		<SafeAreaView
 			style={{
 				flex: 1,
+				backgroundColor: theme.colors.background,
 			}}>
 			<Shader1 />
 			<BackgroundImage />
-			{ready == false ? (
-				<>
-					<IntroIcon />
-				</>
-			) : (
+			{!ready && <IntroIcon />}
+			{ready && !isLoading && (
 				<>
 					<MainContent
 						data={data}
