@@ -1,10 +1,8 @@
 import { useHeroDataById } from "@/hooks/useHeroDataById";
 import { LoadingIcon } from "../LoadingIcon";
 import { CustomText } from "../CustomText";
-import { View } from "react-native";
-import { useUnistyles } from "react-native-unistyles";
-import { Image } from "react-native";
-import { StyleSheet } from "react-native-unistyles";
+import { View, Image } from "react-native";
+import { useUnistyles, StyleSheet } from "react-native-unistyles";
 import { AbilityDetails } from "./AbilityDetails";
 import { useState } from "react";
 import {
@@ -38,7 +36,7 @@ export const HeroAbilitiesInspect = ({ id, match }: Props) => {
 	const numbers = [1, 2, 5];
 
 	const foundUpgrade = (detail: any): any => {
-		return upgrade?.find((u: any) => u.name == detail);
+		return upgrade?.find((u: any) => u.name === detail);
 	};
 
 	const sinclairUltUpgrade = [
@@ -55,7 +53,9 @@ export const HeroAbilitiesInspect = ({ id, match }: Props) => {
 	});
 
 	if (
-		(upgrades[0].length == 0, upgrades[1].length == 0, upgrades[2].length == 0)
+		(upgrades[0].length === 0,
+		upgrades[1].length === 0,
+		upgrades[2].length === 0)
 	) {
 		upgrades = sinclairUltUpgrade;
 	}
@@ -94,7 +94,7 @@ export const HeroAbilitiesInspect = ({ id, match }: Props) => {
 	importantProperties = importantProperties.concat(impPropsArray);
 
 	importantProperties = importantProperties.map((importantProperty: any) => {
-		return importantProperty.important_property.slice(0, 12) == "StatusEffect"
+		return importantProperty.important_property.slice(0, 12) === "StatusEffect"
 			? { important_property: importantProperty.status_effect_value }
 			: importantProperty;
 	});
@@ -104,11 +104,11 @@ export const HeroAbilitiesInspect = ({ id, match }: Props) => {
 	});
 
 	propertyArray = propertyArray.filter((p: any) =>
-		importantProperties.some((m: any) => p[0] == m && p[0] !== "SigilRadius"),
+		importantProperties.some((m: any) => p[0] === m && p[0] !== "SigilRadius"),
 	);
 
 	propertyArray.map((p: any) => {
-		return p[1].scale_function?.specific_stat_scale_type == "ELightMeleeDamage"
+		return p[1].scale_function?.specific_stat_scale_type === "ELightMeleeDamage"
 			? (p[1].value =
 					heroDataById.starting_stats.light_melee_damage.value *
 					p[1].scale_function.stat_scale)
@@ -121,7 +121,7 @@ export const HeroAbilitiesInspect = ({ id, match }: Props) => {
 	);
 
 	const upgradeRelationArray = upgrades.map((up: any) => {
-		return rawProperties.find((u: any) => up[0].name == u[0]);
+		return rawProperties.find((u: any) => up[0].name === u[0]);
 	});
 	return (
 		<View
@@ -204,13 +204,13 @@ export const HeroAbilitiesInspect = ({ id, match }: Props) => {
 											? styles.upgradedPropertyText
 											: styles.propertyText
 									}>
-									{ability[1].prefix == "{s:sign}" ? "+" : ability[1].prefix}
+									{ability[1].prefix === "{s:sign}" ? "+" : ability[1].prefix}
 									{foundUpgrade(ability[0]) !== undefined &&
 									ability[1] !== undefined
 										? cleanDecimals(valueNumberizer(ability[1].value)) +
 											valueNumberizer(foundUpgrade(ability[0]).bonus)
 										: cleanDecimals(valueNumberizer(ability[1].value))}
-									{ability[1]?.postfix == " m" ? "m" : ability[1]?.postfix}
+									{ability[1]?.postfix === " m" ? "m" : ability[1]?.postfix}
 								</CustomText>
 							</View>
 						);

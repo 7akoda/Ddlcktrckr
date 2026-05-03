@@ -67,15 +67,15 @@ export const AbilityPress = ({
 				<Pressable
 					style={{ width: 110, height: 70, alignContent: "center" }}
 					onPress={() => handlePress(index)}>
-					{match.description.t1_desc && index + 1 == 1 ? (
+					{match.description.t1_desc && index + 1 === 1 ? (
 						<CustomText style={styles.inspectAbilityText}>
 							{cleanUpgrade(match.description.t1_desc)}
 						</CustomText>
-					) : match.description.t2_desc && index + 1 == 2 ? (
+					) : match.description.t2_desc && index + 1 === 2 ? (
 						<CustomText style={styles.inspectAbilityText}>
 							{cleanUpgrade(match.description.t2_desc)}
 						</CustomText>
-					) : match.description.t3_desc && index + 1 == 3 ? (
+					) : match.description.t3_desc && index + 1 === 3 ? (
 						<CustomText style={styles.inspectAbilityText}>
 							{cleanUpgrade(match.description.t3_desc)}
 						</CustomText>
@@ -84,7 +84,7 @@ export const AbilityPress = ({
 							return (
 								<CustomText style={styles.inspectAbilityText} key={index1}>
 									{valueNumberizer(u.bonus)}
-									{upgradeRelationArray[index][1].postfix == " m"
+									{upgradeRelationArray[index][1].postfix === " m"
 										? "m"
 										: upgradeRelationArray[index][1].postfix}{" "}
 									{upgradeRelationArray[index][1].label}
