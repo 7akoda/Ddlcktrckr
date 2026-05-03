@@ -63,7 +63,7 @@ export const Header = (props: HeaderProps) => {
 					onPress={() => router.back()}
 				/>
 			)}
-			{props.variant == "sortableItem" ? (
+			{props.variant === "sortableItem" ? (
 				<View
 					style={{
 						alignSelf: "center",
@@ -78,7 +78,7 @@ export const Header = (props: HeaderProps) => {
 							alignItems: "center",
 							justifyContent: "center",
 						}}
-						pulsing={props.itemType == "Spirit" ? true : false}
+						pulsing={props.itemType === "Spirit" ? true : false}
 						onPress={() => props.typeFunc("Spirit")}>
 						<SpiritSvg fill={"#CE90FF"} />
 					</PulsingPressable>
@@ -90,7 +90,7 @@ export const Header = (props: HeaderProps) => {
 							alignItems: "center",
 							justifyContent: "center",
 						}}
-						pulsing={props.itemType == "Vitality" ? true : false}
+						pulsing={props.itemType === "Vitality" ? true : false}
 						onPress={() => props.typeFunc("Vitality")}>
 						<VitalitySvg fill={"#00FF99"} />
 					</PulsingPressable>
@@ -102,7 +102,7 @@ export const Header = (props: HeaderProps) => {
 							alignItems: "center",
 							justifyContent: "center",
 						}}
-						pulsing={props.itemType == "Weapon" ? true : false}
+						pulsing={props.itemType === "Weapon" ? true : false}
 						onPress={() => props.typeFunc("Weapon")}>
 						<WeaponSvg fill={"#FF9900"} />
 					</PulsingPressable>
