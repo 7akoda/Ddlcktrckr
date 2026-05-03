@@ -4,8 +4,8 @@ import { CustomText } from "@/components/CustomText";
 import { LoadingIcon } from "@/components/LoadingIcon";
 import React from "react";
 import { useUnistyles } from "react-native-unistyles";
-import { getStatusEffect } from "./getStatusEffect";
-import { getScaleType } from "./getScaleType";
+import { GetStatusEffect } from "./getStatusEffect";
+import { GetScaleType } from "./getScaleType";
 import { getValue } from "./getValue";
 import { getPostfix, getPrefix } from "./getFix";
 
@@ -39,7 +39,7 @@ export const PassiveData = (props: SingleArray | MultipleArrays) => {
 
 	const foundItem = itemData?.find((item: any) => item.name === props.itemId);
 	const passiveSection = foundItem.tooltip_sections.filter(
-		(section: any) => section.section_type == "passive",
+		(section: any) => section.section_type === "passive",
 	);
 	const passiveSectionFound = foundItem.tooltip_sections.find(
 		(section: any) => section.section_type === "passive",
@@ -116,24 +116,25 @@ export const PassiveData = (props: SingleArray | MultipleArrays) => {
 		if (!props.passiveArrays) {
 			passiveStats = uniqueProps.map((key, index: number) => {
 				if (
-					key == "StatusEffectEMP" ||
-					key == "StatusEffectDisarmed" ||
-					key == "StatusEffectStun" ||
-					key == "StatusEffectInvisible"
+					key === "StatusEffectEMP" ||
+					key === "StatusEffectDisarmed" ||
+					key === "StatusEffectStun" ||
+					key === "StatusEffectInvisible"
 				) {
-					return getStatusEffect(key);
+					return GetStatusEffect(key);
 				} else {
 					const prop = foundItem.properties[key];
 					const value = String(prop.value);
-					const postfix = prop.postfix == undefined ? "" : String(prop.postfix);
+					const postfix =
+						prop.postfix === undefined ? "" : String(prop.postfix);
 					const scale = prop?.scale_function?.stat_scale;
 					const scaleType = prop?.scale_function?.specific_stat_scale_type;
 					const label = String(prop.label);
-					const prefix = prop.prefix == undefined ? "" : prop.prefix;
+					const prefix = prop.prefix === undefined ? "" : prop.prefix;
 					const valueData = getValue(value, postfix);
 					const pfixData = getPostfix(postfix, value, property);
 					const prfixData = getPrefix(prefix, value);
-					const scaleData = getScaleType(scale, scaleType);
+					const scaleData = GetScaleType(scale, scaleType);
 
 					return (
 						<React.Fragment key={key}>
@@ -157,25 +158,25 @@ export const PassiveData = (props: SingleArray | MultipleArrays) => {
 			passiveStats = uniqueProps[props.arrayIndex].map(
 				(key: any, index: number) => {
 					if (
-						key == "StatusEffectEMP" ||
-						key == "StatusEffectDisarmed" ||
-						key == "StatusEffectStun" ||
-						key == "StatusEffectInvisible"
+						key === "StatusEffectEMP" ||
+						key === "StatusEffectDisarmed" ||
+						key === "StatusEffectStun" ||
+						key === "StatusEffectInvisible"
 					) {
-						return getStatusEffect(key);
+						return GetStatusEffect(key);
 					} else {
 						const prop = foundItem.properties[key];
 						const value = String(prop.value);
 						const postfix =
-							prop.postfix == undefined ? "" : String(prop.postfix);
+							prop.postfix === undefined ? "" : String(prop.postfix);
 						const scale = prop?.scale_function?.stat_scale;
 						const scaleType = prop?.scale_function?.specific_stat_scale_type;
 						const label = String(prop.label);
-						const prefix = prop.prefix == undefined ? "" : prop.prefix;
+						const prefix = prop.prefix === undefined ? "" : prop.prefix;
 						const valueData = getValue(value, postfix);
 						const pfixData = getPostfix(postfix, value, property);
 						const prfixData = getPrefix(prefix, value);
-						const scaleData = getScaleType(scale, scaleType);
+						const scaleData = GetScaleType(scale, scaleType);
 
 						return (
 							<React.Fragment key={key}>
