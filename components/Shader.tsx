@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
 	Canvas,
 	Fill,
@@ -9,10 +9,7 @@ import {
 	Skia,
 	Shader,
 } from "@shopify/react-native-skia";
-import Animated, {
-	useDerivedValue,
-	useSharedValue,
-} from "react-native-reanimated";
+import { useDerivedValue, useSharedValue } from "react-native-reanimated";
 import { Dimensions } from "react-native";
 import cdt2d from "cdt2d";
 import { createNoise2D } from "simplex-noise";
@@ -51,7 +48,7 @@ const grainShader = Skia.RuntimeEffect.Make(`
 
 export const Shader1 = () => {
 	const t = useClock();
-
+	const [visible, setVisible] = useState(false);
 	const uniforms = useDerivedValue(
 		() => ({
 			time: t.value,
@@ -61,18 +58,19 @@ export const Shader1 = () => {
 	);
 	const vertices = useSharedValue(defaultVertices);
 	const { rt } = useUnistyles();
-	const newArray = [0, 1, 2];
-	const mix = (colour1: Vec3, colour2: Vec3, y: number) => {
+	const mix = useCallback((colour1: Vec3, colour2: Vec3, y: number) => {
+		const newArray = [0, 1, 2];
+
 		const colour1Math = colour1.map((colour) => colour * (1 - y));
 		const colour2Math = colour2.map((colour) => colour * y);
 		const whatIReallyWant = newArray.map(
 			(i) => colour1Math[i]! + colour2Math[i]!,
 		);
 		return `rgb(${whatIReallyWant})`;
-	};
+	}, []);
 
 	const colors: string[] =
-		rt.themeName == "dark"
+		rt.themeName === "dark"
 			? [mix([63, 65, 64], [31, 33, 32], 0.5)]
 			: [mix([230, 232, 226], [165, 168, 160], 0.5)];
 
@@ -111,13 +109,14 @@ export const Shader1 = () => {
 
 			frameId = requestAnimationFrame(animate);
 		};
-
+		setTimeout(() => setVisible(true), 1);
 		frameId = requestAnimationFrame(animate);
 		return () => cancelAnimationFrame(frameId);
-	}, [rt.themeName]);
+	}, [mix, rt.themeName, vertexColour, vertices]);
 	return (
 		<Canvas
 			style={{
+				display: visible ? "flex" : "none",
 				width,
 				height,
 				position: "absolute",
