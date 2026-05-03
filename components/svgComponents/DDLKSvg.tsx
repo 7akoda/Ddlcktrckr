@@ -9,7 +9,7 @@ export const DDLKSvg = () => {
 		<Svg
 			id="Layer_1"
 			viewBox="0 0 963.69 963.69"
-			style={{ zIndex: 2, position: "absolute", opacity: 0.25 }}>
+			style={{ zIndex: 2, opacity: 0.25 }}>
 			<Defs></Defs>
 			<Path
 				fill={theme.colors.accent}
