@@ -29,7 +29,7 @@ export const Popup = ({ settings, children, handlePress }: props) => {
 	useEffect(() => {
 		opacity.value = withTiming(settings ? 0.8 : 0, { duration: 300 });
 		scale.value = withTiming(settings ? 1 : 0.8, { duration: 300 });
-	}, [settings]);
+	}, [opacity, scale, settings]);
 
 	return (
 		<View
