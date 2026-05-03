@@ -43,7 +43,7 @@ export const ItemProfile = ({ itemId }: Props) => {
 	);
 
 	const passiveSection = foundItem.tooltip_sections.filter(
-		(section: any) => section.section_type == "passive",
+		(section: any) => section.section_type === "passive",
 	);
 	let passiveLengthBoolean = false;
 	if (passiveSection) {
@@ -69,14 +69,14 @@ export const ItemProfile = ({ itemId }: Props) => {
 	});
 
 	const passiveSectionFound = foundItem.tooltip_sections.find(
-		(section: any) => section.section_type == "passive",
+		(section: any) => section.section_type === "passive",
 	);
 
 	const hasUnNamed = !!unNamedSection;
 	const hasPassive = !!passiveSectionFound;
 	const hasActive = !!activeSection;
 	const hasInnate = !!innateSection;
-	console.log(foundItem.id);
+
 	const description = {
 		desc: foundItem?.description?.desc
 			? cleanDescription(foundItem.description.desc)
@@ -296,7 +296,9 @@ export const ItemProfile = ({ itemId }: Props) => {
 											? description.desc
 											: !description.passive && description.active
 												? description.active
-												: null}
+												: !description.desc && description.unNamed
+													? description.unNamed
+													: null}
 							</CustomText>
 						</BlurView>
 					) : null}
