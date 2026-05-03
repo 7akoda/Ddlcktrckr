@@ -1,3 +1,5 @@
+import { decode } from "he";
+
 export const cleanDescription = (desc: string) => {
 	if (!desc) return "";
 
@@ -7,23 +9,22 @@ export const cleanDescription = (desc: string) => {
 
 	superCleaned = superCleaned.replace(
 		/{g:citadel_binding:'Ability3'}/,
-		"Ability 3 button"
+		"Ability 3 button",
 	);
 
 	superCleaned = superCleaned.replace(
 		/{g:citadel_binding:'MoveForward'}/,
-		" forward "
+		" forward ",
 	);
 
 	superCleaned = superCleaned.replace(
 		/{g:citadel_binding:'AltCast'}/,
-		" Alt cast "
+		" Alt cast ",
 	);
 	superCleaned = superCleaned.replace(/[.]/g, ".\n");
 	superCleaned = superCleaned.replace(/<[^>]+>/g, "");
 
 	try {
-		const { decode } = require("he");
 		superCleaned = decode(superCleaned);
 	} catch {}
 
@@ -43,7 +44,6 @@ export const cleanUpgrade = (desc: string) => {
 	superCleaned = superCleaned.replace(/<[^>]+>/g, "");
 
 	try {
-		const { decode } = require("he");
 		superCleaned = decode(superCleaned);
 	} catch {}
 
@@ -69,22 +69,22 @@ export const cleanDecimals = (scale: number) => {
 
 	if (
 		filterScale.length <= 3 ||
-		(filterScale.length == 4 && filterScale[3] == "0")
+		(filterScale.length === 4 && filterScale[3] === "0")
 	) {
 		return Number(scale);
 	} else if (
 		filterScale.length > 10 &&
-		filterScale[4] == "0" &&
-		filterScale[5] == "0" &&
-		filterScale[6] == "0" &&
-		filterScale[7] == "0" &&
-		filterScale[8] == "0" &&
-		filterScale[9] == "0"
+		filterScale[4] === "0" &&
+		filterScale[5] === "0" &&
+		filterScale[6] === "0" &&
+		filterScale[7] === "0" &&
+		filterScale[8] === "0" &&
+		filterScale[9] === "0"
 	) {
 		return Number(scale.toFixed(0));
 	} else {
 		for (let i = 2; i < filterScale.length; i++) {
-			if (filterScale[i + 1] == "9") {
+			if (filterScale[i + 1] === "9") {
 				return Number(scale.toFixed(i - 1));
 			} else if (filterScale[i + 1] !== "0" && filterScale[i + 1] !== "9") {
 				return Number(scale.toFixed(i));
