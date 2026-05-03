@@ -11,7 +11,7 @@ export const SteamSvg = ({ fill }: Props) => {
 			viewBox="8.78 12 423.221 102"
 			style={{
 				zIndex: 2,
-				width: 90,
+				width: 50,
 				height: 20,
 			}}>
 			<Defs></Defs>
