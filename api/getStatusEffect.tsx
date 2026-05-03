@@ -1,8 +1,8 @@
 import { CustomText } from "@/components/CustomText";
 import { useUnistyles } from "react-native-unistyles";
-export const getStatusEffect = (key: string) => {
+export const GetStatusEffect = (key: string) => {
 	const { theme } = useUnistyles();
-	return key == "StatusEffectEMP" ? (
+	return key === "StatusEffectEMP" ? (
 		<CustomText
 			key={key}
 			style={{
@@ -12,7 +12,7 @@ export const getStatusEffect = (key: string) => {
 			}}>
 			Silenced Status Effect
 		</CustomText>
-	) : key == "StatusEffectDisarmed" ? (
+	) : key === "StatusEffectDisarmed" ? (
 		<CustomText
 			key={key}
 			style={{
@@ -22,7 +22,7 @@ export const getStatusEffect = (key: string) => {
 			}}>
 			Disarmed Status Effect
 		</CustomText>
-	) : key == "StatusEffectStun" ? (
+	) : key === "StatusEffectStun" ? (
 		<CustomText
 			key={key}
 			style={{
@@ -32,7 +32,7 @@ export const getStatusEffect = (key: string) => {
 			}}>
 			Stun Status Effect
 		</CustomText>
-	) : key == "StatusEffectInvisible" ? (
+	) : key === "StatusEffectInvisible" ? (
 		<CustomText
 			key={key}
 			style={{
