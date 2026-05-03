@@ -17,7 +17,7 @@ export const HeroLore = ({ id }: Props) => {
 	};
 
 	const { heroDataById, isIdError, isIdLoading, idError } = useHeroDataById(
-		String(id)
+		String(id),
 	);
 
 	if (isIdLoading) return <LoadingIcon />;
@@ -38,7 +38,6 @@ export const HeroLore = ({ id }: Props) => {
 						ellipsizeMode="clip"
 						numberOfLines={isLoreExpanded ? undefined : 10}
 						onLayout={(e) => {
-							const { height } = e.nativeEvent.layout;
 							if (heroDataById.description.lore.length > 588) {
 								setIsOverflowing(true);
 							} else {
