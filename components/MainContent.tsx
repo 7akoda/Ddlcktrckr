@@ -60,20 +60,21 @@ export const MainContent = ({
 						<Pressable
 							onPress={handleLogin}
 							style={{
-								width: 150,
-								height: 40,
+								width: 100,
+								height: 30,
 								flexDirection: "row",
-								borderRadius: 24,
+								borderRadius: 12,
 								borderColor: theme.colors.font,
 								borderWidth: 1,
 								alignSelf: "center",
 							}}>
 							<CustomText
 								style={{
-									fontSize: 19,
+									left: 4,
+									fontSize: 15,
 									fontFamily: theme.fontFamily.extraBold,
 									color: theme.colors.font,
-									top: 7,
+									top: 4,
 									marginHorizontal: 5,
 								}}>
 								Sign in
@@ -81,16 +82,11 @@ export const MainContent = ({
 							<View style={{ flex: 1 }} />
 							<View
 								style={{
-									backgroundColor: theme.colors.background,
-									width: 55,
-									overflow: "hidden",
-									height: 30,
+									width: 50,
+									left: 5,
+									top: 1,
 									alignSelf: "center",
-									borderRadius: 24,
-									borderWidth: 1,
-									borderColor: theme.colors.font,
 									justifyContent: "center",
-									marginRight: 5,
 								}}>
 								<SteamSvg fill={theme.colors.font} />
 							</View>
