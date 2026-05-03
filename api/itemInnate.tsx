@@ -6,8 +6,8 @@ import React from "react";
 import { useUnistyles } from "react-native-unistyles";
 import { getValue } from "./getValue";
 import { getPostfix, getPrefix } from "./getFix";
-import { getScaleType } from "./getScaleType";
-import { getStatusEffect } from "./getStatusEffect";
+import { GetScaleType } from "./getScaleType";
+import { GetStatusEffect } from "./getStatusEffect";
 
 type Props = {
 	itemId: string | string[];
@@ -61,25 +61,25 @@ export const InnateData = ({ itemId }: Props) => {
 	const getInnateStats = () => {
 		const innateStats = uniqueProps.map((key, index: number) => {
 			if (
-				key == "StatusEffectEMP" ||
-				key == "StatusEffectDisarmed" ||
-				key == "StatusEffectStun" ||
-				key == "StatusEffectInvisible"
+				key === "StatusEffectEMP" ||
+				key === "StatusEffectDisarmed" ||
+				key === "StatusEffectStun" ||
+				key === "StatusEffectInvisible"
 			) {
-				return getStatusEffect(key);
+				return GetStatusEffect(key);
 			} else {
 				const prop = foundItem.properties[key];
 				const value = String(prop.value);
-				const postfix = prop.postfix == undefined ? "" : String(prop.postfix);
+				const postfix = prop.postfix === undefined ? "" : String(prop.postfix);
 				const scale = prop?.scale_function?.stat_scale;
 				const scaleType = prop?.scale_function?.specific_stat_scale_type;
 				const label = String(prop.label);
-				const prefix = prop.prefix == undefined ? "" : prop.prefix;
+				const prefix = prop.prefix === undefined ? "" : prop.prefix;
 
 				const valueData = getValue(value, postfix);
 				const pfixData = getPostfix(postfix, value, prop);
 				const prfixData = getPrefix(prefix, value);
-				const scaleData = getScaleType(scale, scaleType);
+				const scaleData = GetScaleType(scale, scaleType);
 
 				return (
 					<React.Fragment key={key}>
