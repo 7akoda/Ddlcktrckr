@@ -18,7 +18,7 @@ export const IntroIcon = () => {
 	const [size, setSize] = useState({ width: 0, height: 0 });
 
 	const scale = (size.width / 963.69) * 0.97;
-	const { theme, rt } = useUnistyles();
+	const { theme } = useUnistyles();
 	const progressEye = useSharedValue(0);
 	const progressSpin = useSharedValue(0);
 	const pathDraw = useSharedValue(1);
@@ -60,9 +60,9 @@ export const IntroIcon = () => {
 		);
 		opacity.value = withDelay(
 			1500,
-			withTiming(0.3, { duration: 5000, easing: Easing.in(Easing.ease) }),
+			withTiming(0.3, { duration: 4500, easing: Easing.in(Easing.ease) }),
 		);
-	}, [progressSpin]);
+	}, [opacity, pathDraw, progressEye, progressSpin]);
 
 	return (
 		<View
