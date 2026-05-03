@@ -1,7 +1,11 @@
 import { View, Image, Pressable } from "react-native";
-import { useMemo, useState } from "react";
-import { StyleSheet, UnistylesRuntime } from "react-native-unistyles";
-import { useUnistyles } from "react-native-unistyles";
+import { useState } from "react";
+import {
+	StyleSheet,
+	UnistylesRuntime,
+	useUnistyles,
+} from "react-native-unistyles";
+
 import { Link } from "expo-router";
 import { Header } from "./Header";
 import { CustomText } from "./CustomText";
@@ -12,7 +16,6 @@ import { FlashList } from "@shopify/flash-list";
 export const ItemList = () => {
 	const [sort, setSort] = useState("");
 	const [itemType, setItemType] = useState("");
-	const [settings, setSettings] = useState(false);
 
 	const { theme, rt } = useUnistyles();
 
@@ -29,29 +32,28 @@ export const ItemList = () => {
 		"6400": ["tier4"],
 	} as const;
 
-	const activeTypes = useMemo(
-		() => (itemType === "" ? types : [itemTypeIndex]),
-		[itemType],
-	);
+	const activeTypes = itemType === "" ? types : [itemTypeIndex];
 
-	const activeTiers = useMemo(
-		() => tierMap[sort as keyof typeof tierMap] ?? [],
-		[sort],
-	);
-	const sorted = useMemo(
-		() =>
-			activeTypes.flatMap((type) =>
-				activeTiers.flatMap((tier) => ItemImages[type][tier]),
-			),
-		[activeTypes, activeTiers],
+	const activeTiers = tierMap[sort as keyof typeof tierMap] ?? [];
+
+	const sorted = activeTypes.flatMap((type) =>
+		activeTiers.flatMap((tier) => ItemImages[type][tier]),
 	);
 
 	const handleSort = (value: string) => {
-		sort == value ? setSort("") : setSort(value);
+		if (sort === value) {
+			setSort("");
+		} else {
+			setSort(value);
+		}
 	};
 
 	const handleTypePress = (value: string) => {
-		itemType !== value ? setItemType(value) : setItemType("");
+		if (itemType !== value) {
+			setItemType(value);
+		} else {
+			setItemType("");
+		}
 	};
 
 	const handleThemeChangeDark = () => {
