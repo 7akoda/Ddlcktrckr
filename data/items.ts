@@ -704,6 +704,23 @@ export const ItemImages: ItemGroups = {
 				],
 			},
 			{
+				Name: "Indomitable",
+				Image: require("../images/Vitality/6400/Indomitable.png"),
+				Flat: ["+20% Spirit Resist", "+14 Spirit Power"],
+				Clock: true,
+				Timer: "1s",
+				Type: "Passive",
+				Description:
+					"Taking heavy hits of spirit damage from an enemy reduces a random ability cooldown.",
+				ActiveDescription: [
+					"4s Cooldown Reduction per Hit",
+					"75 Damage Threshold",
+				],
+				Nuance: null,
+				Upgrades: [],
+				Downgrades: ["Reactive Barrier"],
+			},
+			{
 				Name: "Infuser",
 				Image: require("../images/Vitality/6400/Infuser.png"),
 				Flat: [
