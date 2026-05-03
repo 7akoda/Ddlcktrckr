@@ -1,5 +1,4 @@
-import { useSharedValue, useDerivedValue } from "react-native-reanimated";
-import { Fill, Canvas, Rect } from "@shopify/react-native-skia";
+import { View } from "react-native";
 import { useUnistyles } from "react-native-unistyles";
 
 type ProgressType = {
@@ -7,16 +6,27 @@ type ProgressType = {
 };
 
 export const ProgressBar = ({ percent }: ProgressType) => {
-	const { theme, rt } = useUnistyles();
+	const { theme } = useUnistyles();
 
-	const size = useSharedValue({ width: 0, height: 0 });
-	const rect = useDerivedValue(() => {
-		const { width, height } = size.value;
-		return { x: percent, y: 0, width, height };
-	});
 	return (
-		<Canvas style={{ flex: 1, width: 100 }} onSize={size}>
-			<Rect opacity={0.8} color={theme.colors.accent} rect={rect} />
-		</Canvas>
+		<View
+			style={{
+				width: 100,
+				height: 10,
+				backgroundColor: theme.colors.accent + "33",
+				borderRadius: 2,
+
+				borderColor: theme.colors.font,
+			}}>
+			<View
+				style={{
+					width: percent,
+					height: 10,
+					opacity: 0.8,
+					backgroundColor: theme.colors.accent,
+					borderRadius: 2,
+				}}
+			/>
+		</View>
 	);
 };
