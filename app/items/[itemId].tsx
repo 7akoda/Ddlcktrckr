@@ -7,10 +7,11 @@ import { useUnistyles } from "react-native-unistyles";
 
 export default function ItemId() {
 	const { itemId } = useLocalSearchParams();
-	const { rt } = useUnistyles();
+	const { rt, theme } = useUnistyles();
 	return (
 		<>
-			<SafeAreaView style={{ flex: 1 }}>
+			<SafeAreaView
+				style={{ flex: 1, backgroundColor: theme.colors.background }}>
 				<Shader1 />
 				<View style={{ position: "absolute" }}>
 					{rt.themeName === "dark" ? (

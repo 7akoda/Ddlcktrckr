@@ -10,7 +10,7 @@ import { useHeroDataById } from "@/hooks/useHeroDataById";
 
 export default function Id() {
 	const { id } = useLocalSearchParams();
-	const { rt } = useUnistyles();
+	const { rt, theme } = useUnistyles();
 
 	const { heroDataById, isIdError, isIdLoading, idError } = useHeroDataById(
 		String(id),
@@ -23,7 +23,8 @@ export default function Id() {
 
 	return (
 		<>
-			<SafeAreaView style={{ flex: 1 }}>
+			<SafeAreaView
+				style={{ flex: 1, backgroundColor: theme.colors.background }}>
 				<Shader1 />
 				<View style={{ position: "absolute" }}>
 					{rt.themeName === "dark" ? (
