@@ -26,14 +26,7 @@ export const HeroLore = ({ id }: Props) => {
 	return (
 		<>
 			{heroDataById.description?.lore && (
-				<View
-					style={[
-						styles.loreContainer,
-						{
-							backgroundColor: theme.colors.background,
-							borderColor: theme.colors.accent,
-						},
-					]}>
+				<View style={[styles.loreContainer]}>
 					<CustomText
 						ellipsizeMode="clip"
 						numberOfLines={isLoreExpanded ? undefined : 10}
@@ -79,10 +72,13 @@ const styles = StyleSheet.create((theme) => ({
 		marginTop: 40,
 		marginHorizontal: 10,
 		zIndex: 2,
-		borderRadius: 4,
+		borderRadius: 16,
+		borderCurve: "continuous",
 		borderWidth: 2,
+		borderColor: theme.colors.accent,
 		overflow: "hidden",
 		marginBottom: 100,
+		backgroundColor: theme.colors.background,
 	},
 	expandIndicator: {
 		alignItems: "center",
