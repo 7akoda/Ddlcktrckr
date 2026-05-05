@@ -1,6 +1,5 @@
 import { router } from "expo-router";
-import { ArrowLeft, Moon, Sun } from "lucide-react-native";
-
+import { ChevronLeft, Moon, Sun } from "lucide-react-native";
 import { View } from "react-native";
 import { useUnistyles } from "react-native-unistyles";
 import { CustomText } from "./CustomText";
@@ -8,6 +7,7 @@ import { SpiritSvg } from "./svgComponents/SpiritSvg";
 import { VitalitySvg } from "./svgComponents/VitalitySvg";
 import { WeaponSvg } from "./svgComponents/WeaponSvg";
 import { PulsingPressable } from "./PulsingPressable";
+import { HeroProfileBar } from "./HeroProfile/HeroProfileBar";
 
 type SortableHeader = {
 	back: boolean;
@@ -41,7 +41,18 @@ type NonSortableHeader = {
 	sortable: false;
 };
 
-type HeaderProps = SortableHeader | NonSortableHeader | SortableItemHeader;
+type HeroHeader = {
+	back: boolean;
+	sortable: false;
+	variant: "heroBar";
+	id: number;
+};
+
+type HeaderProps =
+	| SortableHeader
+	| NonSortableHeader
+	| SortableItemHeader
+	| HeroHeader;
 
 export const Header = (props: HeaderProps) => {
 	const { theme, rt } = useUnistyles();
@@ -56,13 +67,15 @@ export const Header = (props: HeaderProps) => {
 				justifyContent: "center",
 			}}>
 			{props.back && (
-				<ArrowLeft
-					size={20}
-					color={theme.colors.accent}
+				<ChevronLeft
+					size={40}
+					color="#FFFFFF"
 					style={{ alignSelf: "center", paddingLeft: 30, paddingVertical: 5 }}
 					onPress={() => router.back()}
 				/>
 			)}
+
+			{props.variant === "heroBar" && <HeroProfileBar id={props.id} />}
 			{props.variant === "sortableItem" ? (
 				<View
 					style={{
@@ -109,7 +122,7 @@ export const Header = (props: HeaderProps) => {
 				</View>
 			) : null}
 			<View style={{ flex: 1 }}></View>
-			{props.variant !== "nonSortable"
+			{props.variant !== "nonSortable" && props.variant !== "heroBar"
 				? props.sortText.map((text, i) => (
 						<CustomText
 							suppressHighlighting
@@ -122,9 +135,10 @@ export const Header = (props: HeaderProps) => {
 								fontSize: 9.5,
 								alignSelf: "center",
 								lineHeight: 20,
-								width: 40,
+								width: 50,
 								height: 23,
-								borderRadius: 4,
+								borderRadius: 16,
+								borderCurve: "continuous",
 								borderColor:
 									props.sort === text
 										? theme.colors.selected
@@ -136,7 +150,7 @@ export const Header = (props: HeaderProps) => {
 					))
 				: null}
 
-			{props.variant !== "nonSortable" ? (
+			{props.variant !== "nonSortable" && props.variant !== "heroBar" ? (
 				<>
 					{rt.themeName === "light" ? (
 						<Moon
