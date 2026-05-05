@@ -64,14 +64,13 @@ export const HeroProfile = ({ id }: Props) => {
 
 	return (
 		<View>
-			<Header variant="nonSortable" back={true} sortable={false} />
+			<Header variant="heroBar" id={id} back={true} sortable={false} />
 			<ScrollView
 				showsVerticalScrollIndicator={false}
 				style={{
 					height: screenHeight,
 					zIndex: 3,
 				}}>
-				<HeroProfileBar id={id} />
 				<View style={styles.itemView}>
 					{heroMoves.map((moves, index) => {
 						const matchedItem = itemDataById.find(
