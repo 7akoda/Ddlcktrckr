@@ -15,7 +15,7 @@ const lightTheme = {
 	colors: {
 		primary: "#dadcd6",
 		background: "#b9bbb4",
-		font: "#13100e",
+		font: "#000000",
 		accent: "#754043",
 		selected: "#754043",
 		secondary: "#dadcd6",
@@ -33,7 +33,7 @@ const darkTheme = {
 	colors: {
 		primary: "#201E1F",
 		background: "#201E1F",
-		font: "#FFF0DD",
+		font: "#FFFFFF",
 		accent: "#367C62",
 		selected: "#367C62",
 		secondary: "#302D2F",
