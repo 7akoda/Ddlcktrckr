@@ -135,6 +135,7 @@ const styles = StyleSheet.create((theme) => ({
 		alignSelf: "center",
 		flexDirection: "row",
 		borderRadius: 4,
+		borderCurve: "continuous",
 		width: 330,
 		height: 40.25,
 		paddingHorizontal: 8,
