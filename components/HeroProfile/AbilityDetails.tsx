@@ -264,6 +264,7 @@ const styles = StyleSheet.create((theme) => ({
 		alignSelf: "center",
 		borderBottomColor: theme.colors.accent,
 		borderWidth: 0.5,
+
 		borderColor: theme.colors.background,
 	},
 	groupDetails: {
