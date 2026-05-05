@@ -3,6 +3,8 @@ import { LoadingIcon } from "../LoadingIcon";
 import { CustomText } from "../CustomText";
 import { useHeroDataById } from "@/hooks/useHeroDataById";
 import { SvgUri } from "react-native-svg";
+import { getSpacing } from "@/api/getProfileBarSpacing";
+import { useUnistyles } from "react-native-unistyles";
 
 type Props = {
 	id: number;
@@ -12,23 +14,28 @@ export const HeroProfileBar = ({ id }: Props) => {
 	const { heroDataById, isIdError, isIdLoading, idError } = useHeroDataById(
 		String(id),
 	);
+	const { theme } = useUnistyles();
 
 	if (isIdLoading) return <LoadingIcon />;
 
 	if (isIdError) return <CustomText>{String(idError)}</CustomText>;
+
+	let space = getSpacing(id);
+
 	return (
 		<>
 			<View
 				style={{
 					flexDirection: "row",
-					width: "100%",
-					paddingTop: 10,
+					justifyContent: "flex-start",
+					overflow: "visible",
 				}}>
 				<SvgUri
 					uri={String(heroDataById.images.name_image)}
-					width="100%"
-					height="40"
-					color={"theme.colors.accent"}
+					width="50%"
+					height="100%"
+					preserveAspectRatio="xMidYMid meet"
+					style={space}
 				/>
 			</View>
 		</>
