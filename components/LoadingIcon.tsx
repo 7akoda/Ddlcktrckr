@@ -31,6 +31,7 @@ export const LoadingIcon = () => {
 		<SafeAreaView
 			style={{
 				flex: 1,
+				backgroundColor: theme.colors.background,
 			}}
 			onLayout={(e) =>
 				setSize({
