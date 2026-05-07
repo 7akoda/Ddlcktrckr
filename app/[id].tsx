@@ -1,16 +1,17 @@
 import { HeroProfile } from "@/components/HeroProfile";
 import { Shader1 } from "@/components/Shader";
 import { useLocalSearchParams } from "expo-router";
-import { View, Image } from "react-native";
+import { Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useUnistyles } from "react-native-unistyles";
 import { CustomText } from "@/components/CustomText";
 import { LoadingIcon } from "@/components/LoadingIcon";
 import { useHeroDataById } from "@/hooks/useHeroDataById";
+import { BackgroundImage } from "@/components/BackgroundImage";
 
 export default function Id() {
 	const { id } = useLocalSearchParams();
-	const { rt, theme } = useUnistyles();
+	const { theme } = useUnistyles();
 
 	const { heroDataById, isIdError, isIdLoading, idError } = useHeroDataById(
 		String(id),
@@ -26,23 +27,8 @@ export default function Id() {
 			<SafeAreaView
 				style={{ flex: 1, backgroundColor: theme.colors.background }}>
 				<Shader1 />
-				<View style={{ position: "absolute" }}>
-					{rt.themeName === "dark" ? (
-						<>
-							<Image
-								style={{ width: 1390, height: 900, opacity: 0.2 }}
-								source={require("../images/Background_Buildings.png")}></Image>
-						</>
-					) : rt.themeName === "light" ? (
-						<Image
-							style={{
-								width: 1390,
-								height: 900,
-								opacity: 0.3,
-							}}
-							source={require("../images/Background_Buildings.png")}></Image>
-					) : null}
-				</View>
+				<BackgroundImage />
+
 				<Image
 					style={{
 						width: "115%",
