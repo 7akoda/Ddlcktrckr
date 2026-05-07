@@ -8,7 +8,6 @@ import Animated, {
 	withTiming,
 } from "react-native-reanimated";
 import { HeroAbilities } from "./HeroProfile/HeroAbilities";
-import { HeroProfileBar } from "./HeroProfile/HeroProfileBar";
 import { HeroLore } from "./HeroProfile/HeroLore";
 import { HeroAbilitiesInspect } from "./HeroProfile/HeroAbilitiesInspect";
 import { useHeroDataById } from "@/hooks/useHeroDataById";
@@ -24,7 +23,6 @@ export const HeroProfile = ({ id }: Props) => {
 	const screenHeight = Dimensions.get("window").height;
 	const [abilityPressed, setAbilityPressed] = useState(false);
 	const [selectedAbilityIndex, setSelectedAbilityIndex] = useState<any>();
-	const [settings, setSettings] = useState(false);
 	const opacity = useSharedValue(0);
 	const scale = useSharedValue(0.8);
 	const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
@@ -117,18 +115,6 @@ export const HeroProfile = ({ id }: Props) => {
 						]}></AnimatedPressable>
 				</View>
 			) : null}
-			{settings && (
-				<>
-					<Pressable
-						onPress={() => setSettings((prev) => !prev)}
-						style={{
-							position: "absolute",
-							width: "100%",
-							height: "120%",
-							zIndex: 15,
-						}}></Pressable>
-				</>
-			)}
 		</View>
 	);
 };
