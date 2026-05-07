@@ -2,12 +2,13 @@ import { router } from "expo-router";
 import { ChevronLeft, Moon, Sun } from "lucide-react-native";
 import { View } from "react-native";
 import { useUnistyles } from "react-native-unistyles";
-import { CustomText } from "./CustomText";
+
 import { SpiritSvg } from "./svgComponents/SpiritSvg";
 import { VitalitySvg } from "./svgComponents/VitalitySvg";
 import { WeaponSvg } from "./svgComponents/WeaponSvg";
 import { PulsingPressable } from "./PulsingPressable";
 import { HeroProfileBar } from "./HeroProfile/HeroProfileBar";
+import { HeaderButton } from "./HeaderButton";
 
 type SortableHeader = {
 	back: boolean;
@@ -81,72 +82,55 @@ export const Header = (props: HeaderProps) => {
 					style={{
 						alignSelf: "center",
 						flexDirection: "row",
-						justifyContent: "space-evenly",
 					}}>
+					<View style={{ width: 28, height: 28 }} />
 					<PulsingPressable
 						style={{
-							height: 40,
-							width: 40,
-							alignSelf: "center",
+							height: 35,
+							width: 35,
 							alignItems: "center",
 							justifyContent: "center",
 						}}
 						pulsing={props.itemType === "Spirit" ? true : false}
-						onPress={() => props.typeFunc("Spirit")}>
+						type="Spirit"
+						typeFunc={props.typeFunc}>
 						<SpiritSvg fill={"#CE90FF"} />
 					</PulsingPressable>
 					<PulsingPressable
 						style={{
-							height: 40,
-							width: 40,
-							alignSelf: "center",
+							height: 35,
+							width: 35,
 							alignItems: "center",
 							justifyContent: "center",
 						}}
 						pulsing={props.itemType === "Vitality" ? true : false}
-						onPress={() => props.typeFunc("Vitality")}>
+						type="Vitality"
+						typeFunc={props.typeFunc}>
 						<VitalitySvg fill={"#00FF99"} />
 					</PulsingPressable>
 					<PulsingPressable
 						style={{
-							height: 40,
-							width: 40,
-							alignSelf: "center",
+							height: 35,
+							width: 35,
 							alignItems: "center",
 							justifyContent: "center",
 						}}
-						pulsing={props.itemType === "Weapon" ? true : false}
-						onPress={() => props.typeFunc("Weapon")}>
+						type="Weapon"
+						typeFunc={props.typeFunc}
+						pulsing={props.itemType === "Weapon" ? true : false}>
 						<WeaponSvg fill={"#FF9900"} />
 					</PulsingPressable>
 				</View>
 			) : null}
-			<View style={{ flex: 1 }}></View>
+			<View style={{ flex: 1 }} />
 			{props.variant !== "nonSortable" && props.variant !== "heroBar"
 				? props.sortText.map((text, i) => (
-						<CustomText
-							suppressHighlighting
-							onPress={() => props.sortFunc(text)}
+						<HeaderButton
+							text={text}
+							sort={props.sort}
+							sortFunc={() => props.sortFunc(text)}
 							key={i}
-							style={{
-								color: theme.colors.font,
-								textAlign: "center",
-								marginHorizontal: 5,
-								fontSize: 9.5,
-								alignSelf: "center",
-								lineHeight: 20,
-								width: 50,
-								height: 23,
-								borderRadius: 16,
-								borderCurve: "continuous",
-								borderColor:
-									props.sort === text
-										? theme.colors.selected
-										: theme.colors.primary,
-								borderWidth: 1,
-							}}>
-							{text}
-						</CustomText>
+						/>
 					))
 				: null}
 
