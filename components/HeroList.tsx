@@ -74,10 +74,7 @@ export const HeroList = () => {
 				keyExtractor={(item) => item.id.toString()}
 				extraData={rt.themeName}
 				renderItem={({ item, index }) => (
-					<BlurView
-						intensity={0}
-						tint={rt.themeName === "dark" ? "dark" : "light"}
-						style={styles.heroListItem}>
+					<View style={styles.heroListItem}>
 						<Image
 							source={{ uri: item.images.icon_hero_card_webp }}
 							style={styles.heroImage}
@@ -102,8 +99,8 @@ export const HeroList = () => {
 						{sort === "Winrate" ? (
 							<View
 								style={{
-									marginTop: 9.5,
-									height: 15,
+									height: "100%",
+									justifyContent: "center",
 									alignSelf: "center",
 								}}>
 								<ProgressBar percent={100 - index * (100 / sorted.length)} />
@@ -112,14 +109,19 @@ export const HeroList = () => {
 								</CustomText>
 							</View>
 						) : (
-							<View style={{ marginTop: 9.5, height: 15, alignSelf: "center" }}>
+							<View
+								style={{
+									height: "100%",
+									justifyContent: "center",
+									alignSelf: "center",
+								}}>
 								<ProgressBar percent={100 - index * (100 / sorted.length)} />
 								<CustomText style={styles.percentText}>
 									{item.popularity}%
 								</CustomText>
 							</View>
 						)}
-					</BlurView>
+					</View>
 				)}></FlashList>
 		</View>
 	);
@@ -129,19 +131,21 @@ const styles = StyleSheet.create((theme) => ({
 	percentText: {
 		alignSelf: "center",
 		color: theme.colors.font,
-		fontSize: 9,
+		fontSize: 8,
+		fontFamily: "none",
+		position: "absolute",
 	},
 	heroListItem: {
 		alignSelf: "center",
 		flexDirection: "row",
-		borderRadius: 4,
+		borderRadius: 8,
 		borderCurve: "continuous",
 		width: 330,
-		height: 40.25,
+		height: 40.9,
 		paddingHorizontal: 8,
-		marginVertical: 1,
+		marginVertical: 2,
 		overflow: "hidden",
-		borderWidth: 1,
+		backgroundColor: theme.colors.background,
 	},
 	heroText: {
 		color: theme.colors.font,
@@ -163,8 +167,6 @@ const styles = StyleSheet.create((theme) => ({
 		width: 30,
 		height: 30,
 		alignSelf: "center",
-		borderRadius: 4,
-		borderWidth: 2,
-		borderColor: theme.colors.primary,
+		borderRadius: 8,
 	},
 }));
