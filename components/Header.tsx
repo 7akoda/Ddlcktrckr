@@ -85,36 +85,18 @@ export const Header = (props: HeaderProps) => {
 					}}>
 					<View style={{ width: 28, height: 28 }} />
 					<PulsingPressable
-						style={{
-							height: 35,
-							width: 35,
-							alignItems: "center",
-							justifyContent: "center",
-						}}
 						pulsing={props.itemType === "Spirit" ? true : false}
 						type="Spirit"
 						typeFunc={props.typeFunc}>
 						<SpiritSvg fill={"#CE90FF"} />
 					</PulsingPressable>
 					<PulsingPressable
-						style={{
-							height: 35,
-							width: 35,
-							alignItems: "center",
-							justifyContent: "center",
-						}}
 						pulsing={props.itemType === "Vitality" ? true : false}
 						type="Vitality"
 						typeFunc={props.typeFunc}>
 						<VitalitySvg fill={"#00FF99"} />
 					</PulsingPressable>
 					<PulsingPressable
-						style={{
-							height: 35,
-							width: 35,
-							alignItems: "center",
-							justifyContent: "center",
-						}}
 						type="Weapon"
 						typeFunc={props.typeFunc}
 						pulsing={props.itemType === "Weapon" ? true : false}>
