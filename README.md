@@ -8,9 +8,7 @@ Built with React Native + Expo, featuring real-time hero stats, match tracking, 
 
 ---
 
-![Wraith Hero Page](images/mdImages/mdWraith.png) ![Victor Hero Page](images/mdImages/mdVictor.png)
-
----
+## ![Reel](images/reel.mov)
 
 ## Tech Stack
 
