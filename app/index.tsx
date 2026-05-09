@@ -9,6 +9,18 @@ import { MainContent } from "@/components/MainContent";
 import { IntroIcon } from "@/components/IntroIcon";
 import { useUnistyles } from "react-native-unistyles";
 import { useHeroData } from "@/hooks/useHeroData";
+import { useFonts } from "@expo-google-fonts/eb-garamond/useFonts";
+import { EBGaramond_400Regular } from "@expo-google-fonts/eb-garamond/400Regular";
+import { EBGaramond_500Medium } from "@expo-google-fonts/eb-garamond/500Medium";
+import { EBGaramond_600SemiBold } from "@expo-google-fonts/eb-garamond/600SemiBold";
+import { EBGaramond_700Bold } from "@expo-google-fonts/eb-garamond/700Bold";
+import { EBGaramond_800ExtraBold } from "@expo-google-fonts/eb-garamond/800ExtraBold";
+import { EBGaramond_400Regular_Italic } from "@expo-google-fonts/eb-garamond/400Regular_Italic";
+import { EBGaramond_500Medium_Italic } from "@expo-google-fonts/eb-garamond/500Medium_Italic";
+import { EBGaramond_600SemiBold_Italic } from "@expo-google-fonts/eb-garamond/600SemiBold_Italic";
+import { EBGaramond_700Bold_Italic } from "@expo-google-fonts/eb-garamond/700Bold_Italic";
+import { EBGaramond_800ExtraBold_Italic } from "@expo-google-fonts/eb-garamond/800ExtraBold_Italic";
+import { Smythe_400Regular } from "@expo-google-fonts/smythe/400Regular";
 
 export default function Index() {
 	const [data, setData] = useState<string>("");
@@ -17,6 +29,20 @@ export default function Index() {
 	const [ready, setReady] = useState(false);
 	const { theme } = useUnistyles();
 	const { isLoading } = useHeroData();
+
+	let [fontsLoaded] = useFonts({
+		EBGaramond_400Regular,
+		EBGaramond_500Medium,
+		EBGaramond_600SemiBold,
+		EBGaramond_700Bold,
+		EBGaramond_800ExtraBold,
+		EBGaramond_400Regular_Italic,
+		EBGaramond_500Medium_Italic,
+		EBGaramond_600SemiBold_Italic,
+		EBGaramond_700Bold_Italic,
+		EBGaramond_800ExtraBold_Italic,
+		Smythe_400Regular,
+	});
 
 	if (data == null && selected === "User") {
 		setSettings(true);
@@ -60,6 +86,8 @@ export default function Index() {
 			setReady(true);
 		}, 7000);
 	}, []);
+
+	if (!fontsLoaded) return null;
 
 	return (
 		<SafeAreaView
