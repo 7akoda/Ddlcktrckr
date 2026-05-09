@@ -85,19 +85,14 @@ export const ItemList = () => {
 				data={sorted}
 				keyExtractor={(item) => item.Name}
 				renderItem={({ item }) => (
-					<BlurView
-						style={styles.heroListItem}
-						intensity={0}
-						tint={rt.themeName === "dark" ? "dark" : "light"}>
+					<View style={styles.heroListItem}>
 						<Image
 							source={item.Image}
 							style={{
 								width: 30,
 								height: 30,
 								alignSelf: "center",
-								borderRadius: 4,
-								borderWidth: 2,
-								borderColor: theme.colors.primary,
+								borderRadius: 8,
 							}}
 						/>
 						<Link
@@ -116,12 +111,7 @@ export const ItemList = () => {
 								)}
 							</Pressable>
 						</Link>
-						<View style={{ flex: 1 }} />
-
-						<View style={{ height: 10, alignSelf: "center" }}>
-							<CustomText style={styles.percentText}></CustomText>
-						</View>
-					</BlurView>
+					</View>
 				)}></FlashList>
 		</View>
 	);
@@ -137,13 +127,14 @@ const styles = StyleSheet.create((theme) => ({
 	heroListItem: {
 		alignSelf: "center",
 		flexDirection: "row",
-		borderRadius: 4,
+		borderRadius: 8,
+		borderCurve: "continuous",
 		width: 330,
-		height: 40.25,
+		height: 40.9,
 		paddingHorizontal: 8,
-		marginVertical: 1,
+		marginVertical: 2,
 		overflow: "hidden",
-		borderWidth: 1,
+		backgroundColor: theme.colors.background,
 	},
 	heroText: {
 		color: theme.colors.font,
