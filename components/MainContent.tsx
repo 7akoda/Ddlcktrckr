@@ -35,7 +35,7 @@ export const MainContent = ({
 							<CustomText
 								style={{
 									fontSize: 10,
-									fontFamily: theme.fontFamily.extraBold,
+									fontFamily: "none",
 									color: theme.colors.font,
 									top: 7,
 									marginHorizontal: 5,
@@ -47,7 +47,7 @@ export const MainContent = ({
 							<CustomText
 								style={{
 									fontSize: 10,
-									fontFamily: theme.fontFamily.extraBold,
+									fontFamily: "none",
 									color: theme.colors.font,
 									top: 7,
 									marginHorizontal: 5,
@@ -72,7 +72,7 @@ export const MainContent = ({
 								style={{
 									left: 4,
 									fontSize: 15,
-									fontFamily: theme.fontFamily.extraBold,
+									fontFamily: "none",
 									color: theme.colors.font,
 									top: 4,
 									marginHorizontal: 5,
