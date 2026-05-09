@@ -17,6 +17,7 @@ import { CustomText } from "./CustomText";
 type Props = {
 	id: number;
 };
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 export const HeroProfile = ({ id }: Props) => {
 	const { theme } = useUnistyles();
@@ -25,7 +26,6 @@ export const HeroProfile = ({ id }: Props) => {
 	const [selectedAbilityIndex, setSelectedAbilityIndex] = useState<any>();
 	const opacity = useSharedValue(0);
 	const scale = useSharedValue(0.8);
-	const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 	const animatedOverlayStyle = useAnimatedStyle(() => ({
 		opacity: opacity.value,
 	}));
@@ -79,7 +79,6 @@ export const HeroProfile = ({ id }: Props) => {
 								setSelectedAbilityIndex={setSelectedAbilityIndex}
 								key={index}
 								matchedItem={matchedItem}
-								id={id}
 								handleShade={handleShade}
 							/>
 						);
