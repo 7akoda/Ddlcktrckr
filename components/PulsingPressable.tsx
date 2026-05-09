@@ -1,3 +1,4 @@
+import { BouncePress } from "@/animations/Bounce";
 import React, { useEffect } from "react";
 import { Pressable, PressableProps } from "react-native";
 import Animated, {
@@ -41,31 +42,26 @@ export const PulsingPressable = ({
 		}
 	}, [pulsing, opacity]);
 
-	const handlePress = () => {
-		size.value = withSequence(
-			withTiming(1.2, {
-				duration: 100,
-				easing: Easing.in(Easing.elastic(2)),
-			}),
-
-			withTiming(1, {
-				duration: 100,
-				easing: Easing.in(Easing.elastic(2)),
-			}),
-		);
-	};
-
 	const animatedStyle = useAnimatedStyle(() => ({
 		opacity: opacity.value,
 		transform: [{ scale: size.value }],
 	}));
 
 	return (
-		<Animated.View style={animatedStyle}>
+		<Animated.View
+			style={[
+				{
+					height: 35,
+					width: 35,
+					alignItems: "center",
+					justifyContent: "center",
+				},
+				animatedStyle,
+			]}>
 			<Pressable
 				onPress={() => {
 					props.typeFunc(props.type);
-					handlePress();
+					BouncePress(size, 35);
 				}}
 				{...props}>
 				{children}
