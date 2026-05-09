@@ -24,7 +24,7 @@ export const BottomNavBar = memo(
 				intensity={25}
 				style={{
 					bottom: 0,
-					height: "9%",
+					height: 75,
 					width: "100%",
 					position: "absolute",
 					borderTopWidth: 1,
