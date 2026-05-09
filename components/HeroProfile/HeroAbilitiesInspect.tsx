@@ -4,7 +4,7 @@ import { CustomText } from "../CustomText";
 import { View, Image } from "react-native";
 import { useUnistyles, StyleSheet } from "react-native-unistyles";
 import { AbilityDetails } from "./AbilityDetails";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
 	cleanDecimals,
 	cleanDescription,
@@ -12,15 +12,57 @@ import {
 } from "@/api/decimaldescriptionTransform";
 import { getProperties } from "@/api/getHeroAbilityInspectInfo";
 import { AbilityPress } from "./AbilityPress";
+import Animated, {
+	Easing,
+	interpolateColor,
+	useAnimatedStyle,
+	useSharedValue,
+	withDelay,
+	withSequence,
+	withTiming,
+} from "react-native-reanimated";
 type Props = {
 	id: number;
 	match: any;
 };
-
+const AnimatedCustomText = Animated.createAnimatedComponent(CustomText);
 export const HeroAbilitiesInspect = ({ id, match }: Props) => {
 	const { theme } = useUnistyles();
 	const [upgrade, setUpgrade] = useState([]);
 	const [upgradeSelected, setUpgradeSelected] = useState(-1);
+
+	const textColor = useSharedValue(0);
+
+	useEffect(() => {
+		textColor.value = withSequence(
+			withTiming(1, {
+				duration: 150,
+				easing: Easing.in(Easing.ease),
+			}),
+			withDelay(
+				150,
+				withTiming(0, {
+					duration: 150,
+					easing: Easing.in(Easing.ease),
+				}),
+			),
+		);
+	}, [upgrade, textColor]);
+
+	const animatedStyles = useAnimatedStyle(() => ({
+		color: interpolateColor(
+			textColor.value,
+			[0, 1],
+			[theme.colors.font, theme.colors.ability],
+		),
+	}));
+	const cheapTrick = useAnimatedStyle(() => ({
+		color: interpolateColor(
+			textColor.value,
+			[0, 1],
+			[theme.colors.font, theme.colors.font],
+		),
+	}));
 
 	const { heroDataById, isIdError, isIdLoading, idError } = useHeroDataById(
 		String(id),
@@ -62,6 +104,7 @@ export const HeroAbilitiesInspect = ({ id, match }: Props) => {
 
 	const upgradesIndexOne = upgrades[0].concat(upgrades[1]);
 	const upgradesIndexTwo = upgrades[0].concat(upgrades[1], upgrades[2]);
+
 	let propertyArray = Object.entries(match?.properties).map(([key, value]) => {
 		return [key, value];
 	});
@@ -201,11 +244,11 @@ export const HeroAbilitiesInspect = ({ id, match }: Props) => {
 									}}>
 									{ability[1].label}
 								</CustomText>
-								<CustomText
+								<AnimatedCustomText
 									style={
-										foundUpgrade([ability[0]]) !== undefined
-											? styles.upgradedPropertyText
-											: styles.propertyText
+										foundUpgrade(ability[0]) !== undefined
+											? [animatedStyles, styles.propertyText]
+											: [styles.propertyText, cheapTrick]
 									}>
 									{ability[1].prefix === "{s:sign}" ? "+" : ability[1].prefix}
 									{foundUpgrade(ability[0]) !== undefined &&
@@ -214,7 +257,7 @@ export const HeroAbilitiesInspect = ({ id, match }: Props) => {
 											valueNumberizer(foundUpgrade(ability[0]).bonus)
 										: cleanDecimals(valueNumberizer(ability[1].value))}
 									{ability[1]?.postfix === " m" ? "m" : ability[1]?.postfix}
-								</CustomText>
+								</AnimatedCustomText>
 							</View>
 						);
 					})}
@@ -299,7 +342,6 @@ const styles = StyleSheet.create((theme) => ({
 		borderRadius: 16,
 		borderCurve: "continuous",
 		borderColor: theme.colors.primary,
-		fontFamily: theme.fontFamily.regular,
 	},
 	inspectAbilitySelected: {
 		zIndex: 6,
@@ -315,7 +357,6 @@ const styles = StyleSheet.create((theme) => ({
 		borderRadius: 16,
 		borderCurve: "continuous",
 		borderColor: theme.colors.accent,
-		fontFamily: theme.fontFamily.regular,
 	},
 	inspectAbilityText: {
 		zIndex: 6,
@@ -323,7 +364,7 @@ const styles = StyleSheet.create((theme) => ({
 		textAlign: "center",
 		flexDirection: "column",
 		color: theme.colors.font,
-		fontSize: 9,
+		fontSize: 8,
 		fontFamily: theme.fontFamily.regular,
 		marginHorizontal: 5,
 	},
@@ -332,16 +373,5 @@ const styles = StyleSheet.create((theme) => ({
 		fontSize: 9,
 		fontFamily: theme.fontFamily.regular,
 		textAlign: "center",
-		padding: 0.5,
-	},
-	upgradedPropertyText: {
-		color: theme.colors.font,
-		fontSize: 9,
-		fontFamily: theme.fontFamily.regular,
-		textAlign: "center",
-		borderBottomColor: theme.colors.accent,
-		borderBottomWidth: 0.5,
-		borderColor: theme.colors.background,
-		alignSelf: "center",
 	},
 }));
