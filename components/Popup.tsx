@@ -45,12 +45,11 @@ export const Popup = ({ settings, children, handlePress }: props) => {
 						{
 							backgroundColor: theme.colors.background,
 							width: 200,
-							height: 100,
+							height: 120,
 							zIndex: 16,
 							alignSelf: "center",
-							borderRadius: 12,
-							borderWidth: 2,
-							borderColor: theme.colors.secondary,
+							borderRadius: 16,
+							borderCurve: "continuous",
 						},
 						animatedOverlayStyle,
 					]}>
