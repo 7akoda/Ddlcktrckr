@@ -1,22 +1,72 @@
 import { View, Image } from "react-native";
 import { CustomText } from "../CustomText";
-import { StyleSheet } from "react-native-unistyles";
+import { StyleSheet, useUnistyles } from "react-native-unistyles";
 import {
 	cleanDetailDecimals,
 	detailsBonusNumberizer,
 	detailsValueNumberizer,
 } from "@/api/decimaldescriptionTransform";
+import Animated, {
+	cancelAnimation,
+	Easing,
+	interpolateColor,
+	useAnimatedStyle,
+	useSharedValue,
+	withDelay,
+	withSequence,
+	withTiming,
+} from "react-native-reanimated";
+import { useEffect } from "react";
 
 type Props = {
 	match: any;
 	upgrade: any;
 };
+const AnimatedCustomText = Animated.createAnimatedComponent(CustomText);
+
 export const AbilityDetails = ({ match, upgrade }: Props) => {
+	const { theme } = useUnistyles();
 	const Cooldown = match.properties.AbilityCooldown;
 	const duration = match.properties.AbilityDuration;
 	const castRange = match.properties.AbilityCastRange;
 	const abilityCharges = match.properties.AbilityCharges;
 	const abilityChargesCooldown = match.properties.AbilityCooldownBetweenCharge;
+	const textColor = useSharedValue(0);
+
+	useEffect(() => {
+		textColor.value = withSequence(
+			withTiming(1, {
+				duration: 150,
+				easing: Easing.in(Easing.ease),
+			}),
+			withDelay(
+				150,
+				withTiming(0, {
+					duration: 150,
+					easing: Easing.in(Easing.ease),
+				}),
+			),
+		);
+		return () => {
+			cancelAnimation(textColor);
+		};
+	}, [upgrade, textColor]);
+
+	const animatedStyles = useAnimatedStyle(() => ({
+		color: interpolateColor(
+			textColor.value,
+			[0, 1],
+			[theme.colors.font, theme.colors.ability],
+		),
+	}));
+
+	const cheapTrick = useAnimatedStyle(() => ({
+		color: interpolateColor(
+			textColor.value,
+			[0, 1],
+			[theme.colors.font, theme.colors.font],
+		),
+	}));
 
 	let Radius =
 		match.name === "Disengaging Sigil"
@@ -52,11 +102,11 @@ export const AbilityDetails = ({ match, upgrade }: Props) => {
 								}}
 								source={require("../../images/abilityDetails/20pxCastRange.png")}
 							/>
-							<CustomText
+							<AnimatedCustomText
 								style={
 									foundUpgrade("AbilityCastRange") !== undefined
-										? styles.textSelected
-										: styles.text
+										? [styles.text, animatedStyles]
+										: [cheapTrick, styles.text]
 								}>
 								{foundUpgrade("AbilityCastRange") !== undefined
 									? detailsValueNumberizer(castRange.value) +
@@ -65,7 +115,7 @@ export const AbilityDetails = ({ match, upgrade }: Props) => {
 										) +
 										castRange.postfix
 									: castRange.value}
-							</CustomText>
+							</AnimatedCustomText>
 						</View>
 					) : null}
 					{detailsValueNumberizer(Radius?.value) > 0 &&
@@ -80,18 +130,18 @@ export const AbilityDetails = ({ match, upgrade }: Props) => {
 								}}
 								source={require("../../images/abilityDetails/20pxRadius.png")}
 							/>
-							<CustomText
+							<AnimatedCustomText
 								style={
 									foundUpgrade("Radius") !== undefined
-										? styles.textSelected
-										: styles.text
+										? [styles.text, animatedStyles]
+										: [cheapTrick, styles.text]
 								}>
 								{foundUpgrade("Radius") !== undefined
 									? detailsValueNumberizer(Radius.value) +
 										detailsValueNumberizer(foundUpgrade("Radius").bonus) +
 										Radius.postfix
 									: Radius.value}
-							</CustomText>
+							</AnimatedCustomText>
 						</View>
 					) : null}
 				</View>
@@ -119,17 +169,17 @@ export const AbilityDetails = ({ match, upgrade }: Props) => {
 								}}
 								source={require("../../images/abilityDetails/20pxCharges.png")}
 							/>
-							<CustomText
+							<AnimatedCustomText
 								style={
 									foundUpgrade("AbilityCharges") !== undefined
-										? styles.textSelected
-										: styles.text
+										? [styles.text, animatedStyles]
+										: [cheapTrick, styles.text]
 								}>
 								{foundUpgrade("AbilityCharges") !== undefined
 									? detailsValueNumberizer(abilityCharges.value) +
 										detailsValueNumberizer(foundUpgrade("AbilityCharges").bonus)
 									: abilityCharges.value}
-							</CustomText>
+							</AnimatedCustomText>
 						</View>
 					) : null}
 					{detailsValueNumberizer(abilityChargesCooldown?.value) > 0 &&
@@ -144,11 +194,11 @@ export const AbilityDetails = ({ match, upgrade }: Props) => {
 								}}
 								source={require("../../images/abilityDetails/16pxCooldownCharges.png")}
 							/>
-							<CustomText
+							<AnimatedCustomText
 								style={
 									foundUpgrade("AbilityChargesCooldown") !== undefined
-										? styles.textSelected
-										: styles.text
+										? [styles.text, animatedStyles]
+										: [cheapTrick, styles.text]
 								}>
 								{foundUpgrade("AbilityChargesCooldown") !== undefined
 									? detailsValueNumberizer(abilityChargesCooldown.value) +
@@ -158,7 +208,7 @@ export const AbilityDetails = ({ match, upgrade }: Props) => {
 										)
 									: abilityChargesCooldown.value +
 										abilityChargesCooldown.postfix}
-							</CustomText>
+							</AnimatedCustomText>
 						</View>
 					) : null}
 				</View>
@@ -186,11 +236,11 @@ export const AbilityDetails = ({ match, upgrade }: Props) => {
 								}}
 								source={require("../../images/abilityDetails/20pxDuration.png")}
 							/>
-							<CustomText
+							<AnimatedCustomText
 								style={
 									foundUpgrade("AbilityDuration") !== undefined
-										? styles.textSelected
-										: styles.text
+										? [styles.text, animatedStyles]
+										: [cheapTrick, styles.text]
 								}>
 								{foundUpgrade("AbilityDuration") !== undefined
 									? detailsValueNumberizer(
@@ -201,7 +251,7 @@ export const AbilityDetails = ({ match, upgrade }: Props) => {
 										) +
 										duration.postfix
 									: duration.value + duration.postfix}
-							</CustomText>
+							</AnimatedCustomText>
 						</View>
 					) : null}
 					{detailsValueNumberizer(Cooldown?.value) > 0 &&
@@ -221,11 +271,11 @@ export const AbilityDetails = ({ match, upgrade }: Props) => {
 								}}
 								source={require("../../images/abilityDetails/20pxCooldown.png")}
 							/>
-							<CustomText
+							<AnimatedCustomText
 								style={
 									foundUpgrade("AbilityCooldown") !== undefined
-										? styles.textSelected
-										: styles.text
+										? [styles.text, animatedStyles]
+										: [styles.text, cheapTrick]
 								}>
 								{foundUpgrade("AbilityCooldown") !== undefined
 									? detailsValueNumberizer(
@@ -238,7 +288,7 @@ export const AbilityDetails = ({ match, upgrade }: Props) => {
 									: detailsValueNumberizer(
 											cleanDetailDecimals(Cooldown?.value),
 										) + Cooldown?.postfix}
-							</CustomText>
+							</AnimatedCustomText>
 						</View>
 					) : null}
 				</View>
@@ -254,18 +304,6 @@ const styles = StyleSheet.create((theme) => ({
 		color: theme.colors.font,
 		fontSize: 8,
 		alignSelf: "center",
-		padding: 0.5,
-	},
-	textSelected: {
-		height: 11,
-		fontFamily: theme.fontFamily.regular,
-		color: theme.colors.font,
-		fontSize: 8,
-		alignSelf: "center",
-		borderBottomColor: theme.colors.accent,
-		borderWidth: 0.5,
-
-		borderColor: theme.colors.background,
 	},
 	groupDetails: {
 		width: 115,
