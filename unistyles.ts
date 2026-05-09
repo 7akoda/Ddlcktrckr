@@ -1,5 +1,4 @@
 import { StyleSheet } from "react-native-unistyles";
-
 type AppThemes = typeof appThemes;
 
 declare module "react-native-unistyles" {
@@ -11,15 +10,17 @@ const lightTheme = {
 		regular: "EBGaramond_400Regular",
 		semiBold: "EBGaramond_600SemiBold",
 		extraBold: "EBGaramond_800ExtraBold",
+		serif: "EBGaramond_400Regular_Italic",
 	},
 	colors: {
-		primary: "#dadcd6",
+		primary: "#b9bbb4",
 		background: "#b9bbb4",
 		font: "#000000",
 		accent: "#754043",
 		selected: "#754043",
 		secondary: "#dadcd6",
 		souls: "#98ffde",
+		ability: "#AA3678",
 	},
 	gap: (v: number) => v * 8,
 };
@@ -29,6 +30,7 @@ const darkTheme = {
 		regular: "EBGaramond_400Regular",
 		semiBold: "EBGaramond_600SemiBold",
 		extraBold: "EBGaramond_800ExtraBold",
+		serif: "EBGaramond_400Regular_Italic",
 	},
 	colors: {
 		primary: "#201E1F",
@@ -38,6 +40,7 @@ const darkTheme = {
 		selected: "#367C62",
 		secondary: "#302D2F",
 		souls: "#98ffde",
+		ability: "#F2DD6E",
 	},
 	gap: (v: number) => v * 8,
 };
