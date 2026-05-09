@@ -91,7 +91,7 @@ export const HeroPlayerList = ({ id }: HeroPlayerListType) => {
 				sort={sort}
 				sortable={true}
 				sortFunc={(value) => handleSort(value)}
-				sortText={["Winrate", "Pickrate"]}
+				sortText={["Pickrate", "Winrate"]}
 				variant="sortable"
 			/>
 			<FlashList
@@ -100,10 +100,7 @@ export const HeroPlayerList = ({ id }: HeroPlayerListType) => {
 				extraData={rt.themeName}
 				keyExtractor={(item) => item.hero_id.toString()}
 				renderItem={({ item, index }) => (
-					<BlurView
-						intensity={0}
-						tint={rt.themeName === "dark" ? "dark" : "light"}
-						style={styles.heroListItem}>
+					<View style={styles.heroListItem}>
 						<Image
 							source={{ uri: item.profilePicture }}
 							style={styles.heroImage}
@@ -126,7 +123,12 @@ export const HeroPlayerList = ({ id }: HeroPlayerListType) => {
 						</Link>
 						<View style={{ flex: 1 }} />
 						{sort === "Winrate" ? (
-							<View style={{ height: 15, marginTop: 9.5, alignSelf: "center" }}>
+							<View
+								style={{
+									height: "100%",
+									justifyContent: "center",
+									alignSelf: "center",
+								}}>
 								<ProgressBar percent={100 - index * (100 / sorted.length)} />
 
 								<CustomText style={styles.percentText}>
@@ -135,10 +137,11 @@ export const HeroPlayerList = ({ id }: HeroPlayerListType) => {
 							</View>
 						) : (
 							<View
-								style={{ height: 15, alignSelf: "flex-start", marginTop: 6.5 }}>
-								<CustomText style={styles.infoText}>
-									Matches played: {item.matches_played}
-								</CustomText>
+								style={{
+									height: "100%",
+									justifyContent: "center",
+									alignSelf: "center",
+								}}>
 								<ProgressBar percent={100 - index * (100 / sorted.length)} />
 
 								<CustomText style={styles.percentText}>
@@ -146,7 +149,7 @@ export const HeroPlayerList = ({ id }: HeroPlayerListType) => {
 								</CustomText>
 							</View>
 						)}
-					</BlurView>
+					</View>
 				)}></FlashList>
 		</View>
 	);
@@ -156,35 +159,32 @@ const styles = StyleSheet.create((theme) => ({
 	percentText: {
 		alignSelf: "center",
 		color: theme.colors.font,
-		fontSize: 9,
-	},
-	infoText: {
-		alignSelf: "center",
-		color: theme.colors.font,
 		fontSize: 8,
-		fontFamily: theme.fontFamily.regular,
+		fontFamily: "none",
+		position: "absolute",
 	},
 	heroListItem: {
 		alignSelf: "center",
 		flexDirection: "row",
-		borderRadius: 4,
+		borderRadius: 8,
+		borderCurve: "continuous",
 		width: 330,
-		height: 40.25,
+		height: 40.9,
 		paddingHorizontal: 8,
-		marginVertical: 1,
+		marginVertical: 2,
 		overflow: "hidden",
-		borderWidth: 1,
+		backgroundColor: theme.colors.background,
 	},
 	heroText: {
 		color: theme.colors.font,
 		paddingLeft: 7,
-		fontSize: 12,
+		fontSize: 14,
 		alignSelf: "center",
 	},
 	heroTextFade: {
 		color: theme.colors.font,
 		paddingLeft: 7,
-		fontSize: 12,
+		fontSize: 14,
 		alignSelf: "center",
 		opacity: 0.6,
 	},
@@ -195,8 +195,6 @@ const styles = StyleSheet.create((theme) => ({
 		width: 30,
 		height: 30,
 		alignSelf: "center",
-		borderRadius: 4,
-		borderWidth: 2,
-		borderColor: theme.colors.primary,
+		borderRadius: 8,
 	},
 }));
