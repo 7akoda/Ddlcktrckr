@@ -129,18 +129,17 @@ export const ItemProfile = ({ itemId }: Props) => {
 			</View>
 			<View style={styles.itemViewPAPA}>
 				<View style={styles.itemView}>
-					<BlurView
-						tint={rt.themeName === "dark" ? "dark" : "light"}
-						intensity={0}
+					<View
 						style={{
 							flexDirection: "row",
 							alignSelf: "center",
-							borderRadius: 4,
+							borderRadius: 16,
+							borderCurve: "continuous",
+							backgroundColor: theme.colors.background,
 							overflow: "hidden",
 							width: 300,
 							padding: 6,
 							marginTop: 20,
-							borderWidth: 1,
 						}}>
 						<Image
 							source={foundItemForImages.Image}
@@ -148,8 +147,8 @@ export const ItemProfile = ({ itemId }: Props) => {
 								width: 100,
 								height: 100,
 								alignSelf: "center",
-								borderRadius: 4,
-								borderWidth: 1,
+								borderRadius: 16,
+								backgroundColor: theme.colors.background,
 							}}
 						/>
 						<View style={{ marginLeft: 10, justifyContent: "center", flex: 1 }}>
@@ -183,17 +182,16 @@ export const ItemProfile = ({ itemId }: Props) => {
 								</CustomText>
 							</View>
 						</View>
-					</BlurView>
+					</View>
 					{foundItem.properties.AbilityCooldown.value > 0 ? (
-						<BlurView
-							intensity={0}
-							tint={rt.themeName === "dark" ? "dark" : "light"}
+						<View
 							style={{
-								borderWidth: 1,
 								height: 25,
 								width: 300,
 								alignSelf: "center",
-								borderRadius: 4,
+								borderRadius: 16,
+								borderCurve: "continuous",
+								backgroundColor: theme.colors.background,
 								overflow: "hidden",
 								margin: 4,
 								alignContent: "center",
@@ -227,7 +225,7 @@ export const ItemProfile = ({ itemId }: Props) => {
 									{foundItem.properties.AbilityCooldown.postfix}
 								</CustomText>
 							</>
-						</BlurView>
+						</View>
 					) : null}
 
 					{hasInnate ? (
@@ -264,14 +262,13 @@ export const ItemProfile = ({ itemId }: Props) => {
 					) : null}
 
 					{hasDescription ? (
-						<BlurView
-							tint={rt.themeName === "dark" ? "dark" : "light"}
-							intensity={0}
+						<View
 							style={{
-								borderWidth: 1,
 								flexWrap: "wrap",
-								width: 350,
-								borderRadius: 4,
+								width: 360,
+								borderRadius: 16,
+								borderCurve: "continuous",
+								backgroundColor: theme.colors.background,
 								overflow: "hidden",
 								margin: 4,
 								alignContent: "center",
@@ -282,8 +279,8 @@ export const ItemProfile = ({ itemId }: Props) => {
 								style={{
 									color: theme.colors.font,
 									flexDirection: "column",
-									marginHorizontal: 6,
-									marginVertical: 4,
+									paddingHorizontal: 11,
+									paddingVertical: 6,
 									lineHeight: 15,
 									fontSize: 12,
 									fontFamily: theme.fontFamily.regular,
@@ -300,20 +297,19 @@ export const ItemProfile = ({ itemId }: Props) => {
 													? description.unNamed
 													: null}
 							</CustomText>
-						</BlurView>
+						</View>
 					) : null}
 					{hasPassive ||
 					hasActive ||
 					(!hasActive && !hasPassive && hasUnNamed) ? (
 						<>
-							<BlurView
-								intensity={0}
-								tint={rt.themeName === "dark" ? "dark" : "light"}
+							<View
 								style={{
-									borderWidth: 1,
-									borderRadius: 4,
+									borderRadius: 16,
+									borderCurve: "continuous",
+									backgroundColor: theme.colors.background,
 									overflow: "hidden",
-									width: 350,
+									width: 360,
 									alignSelf: "center",
 									marginHorizontal: 24,
 									alignContent: "center",
@@ -324,8 +320,8 @@ export const ItemProfile = ({ itemId }: Props) => {
 									style={{
 										color: theme.colors.font,
 										flexDirection: "column",
-										marginHorizontal: 6,
-										marginVertical: 6,
+										paddingHorizontal: 11,
+										paddingVertical: 6,
 										lineHeight: 15,
 										fontSize: 12,
 										fontFamily: theme.fontFamily.regular,
@@ -340,7 +336,7 @@ export const ItemProfile = ({ itemId }: Props) => {
 										<UnNamedData itemId={itemId} />
 									)}
 								</CustomText>
-							</BlurView>
+							</View>
 						</>
 					) : null}
 					{passiveLengthBoolean ||
@@ -349,14 +345,13 @@ export const ItemProfile = ({ itemId }: Props) => {
 					(hasActive && hasUnNamed) ||
 					(hasPassive && hasUnNamed) ? (
 						<>
-							<BlurView
-								tint={rt.themeName === "dark" ? "dark" : "light"}
-								intensity={0}
+							<View
 								style={{
-									borderWidth: 1,
+									borderRadius: 16,
+									borderCurve: "continuous",
+									backgroundColor: theme.colors.background,
 									flexWrap: "wrap",
-									width: 350,
-									borderRadius: 4,
+									width: 360,
 									overflow: "hidden",
 									margin: 4,
 									alignContent: "center",
@@ -367,8 +362,8 @@ export const ItemProfile = ({ itemId }: Props) => {
 									style={{
 										color: theme.colors.font,
 										flexDirection: "column",
-										marginHorizontal: 6,
-										marginVertical: 4,
+										paddingHorizontal: 11,
+										paddingVertical: 6,
 										lineHeight: 15,
 										fontSize: 12,
 										fontFamily: theme.fontFamily.regular,
@@ -383,15 +378,14 @@ export const ItemProfile = ({ itemId }: Props) => {
 													? description.desc
 													: description.unNamed}
 								</CustomText>
-							</BlurView>
-							<BlurView
-								intensity={0}
-								tint={rt.themeName === "dark" ? "dark" : "light"}
+							</View>
+							<View
 								style={{
-									borderWidth: 1,
-									borderRadius: 4,
+									borderRadius: 16,
+									borderCurve: "continuous",
+									backgroundColor: theme.colors.background,
 									overflow: "hidden",
-									width: 350,
+									width: 360,
 									alignSelf: "center",
 									marginHorizontal: 24,
 									alignContent: "center",
@@ -402,8 +396,8 @@ export const ItemProfile = ({ itemId }: Props) => {
 									style={{
 										color: theme.colors.font,
 										flexDirection: "column",
-										marginHorizontal: 6,
-										marginVertical: 6,
+										paddingHorizontal: 11,
+										paddingVertical: 6,
 										lineHeight: 15,
 										fontSize: 12,
 										fontFamily: theme.fontFamily.regular,
@@ -422,19 +416,17 @@ export const ItemProfile = ({ itemId }: Props) => {
 										<UnNamedData itemId={itemId} />
 									)}
 								</CustomText>
-							</BlurView>
+							</View>
 						</>
 					) : null}
 					{foundItemForImages.Upgrades.length > 0 ? (
-						<BlurView
-							intensity={0}
-							tint={rt.themeName === "dark" ? "dark" : "light"}
+						<View
 							style={{
-								borderWidth: 1,
-								height: 30,
-								borderRadius: 4,
+								borderRadius: 16,
+								borderCurve: "continuous",
+								backgroundColor: theme.colors.background,
 								overflow: "hidden",
-								width: 350,
+								width: 360,
 								alignSelf: "center",
 								marginHorizontal: 4,
 								alignContent: "center",
@@ -442,13 +434,14 @@ export const ItemProfile = ({ itemId }: Props) => {
 							}}>
 							<CustomText
 								style={{
+									paddingLeft: 11,
+									paddingVertical: 6,
 									color: theme.colors.font,
 									fontSize: 12,
-									marginLeft: 6,
 									alignSelf: "center",
 									fontFamily: theme.fontFamily.regular,
 								}}>
-								Upgrades to: {""}
+								Upgrades to:{" "}
 							</CustomText>
 							{foundItemForImages.Upgrades.map(
 								(upgrade: string, index: number) => {
@@ -475,7 +468,7 @@ export const ItemProfile = ({ itemId }: Props) => {
 													)}
 												</Pressable>
 											</Link>
-											{index < foundItemForImages.Upgrades.length - 1 ? (
+											{index < foundItemForImages.Upgrades.length - 1 && (
 												<CustomText
 													style={{
 														color: theme.colors.font,
@@ -484,19 +477,12 @@ export const ItemProfile = ({ itemId }: Props) => {
 													}}>
 													,{" "}
 												</CustomText>
-											) : (
-												<CustomText
-													style={{
-														color: theme.colors.font,
-														fontSize: 12,
-														alignSelf: "center",
-													}}></CustomText>
 											)}
 										</View>
 									);
 								},
 							)}
-						</BlurView>
+						</View>
 					) : null}
 				</View>
 			</View>
