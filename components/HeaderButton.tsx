@@ -1,12 +1,10 @@
 import { useUnistyles } from "react-native-unistyles";
 import { CustomText } from "./CustomText";
 import Animated, {
-	Easing,
 	useAnimatedStyle,
 	useSharedValue,
-	withSequence,
-	withTiming,
 } from "react-native-reanimated";
+import { BouncePress } from "@/animations/Bounce";
 
 type HeaderButtonType = {
 	sortFunc: (text: string) => void;
@@ -19,20 +17,6 @@ export const HeaderButton = ({ sortFunc, text, sort }: HeaderButtonType) => {
 	const { theme } = useUnistyles();
 	const size = useSharedValue(1);
 
-	const handlePress = () => {
-		size.value = withSequence(
-			withTiming(1.2, {
-				duration: 100,
-				easing: Easing.in(Easing.elastic(2)),
-			}),
-
-			withTiming(1, {
-				duration: 100,
-				easing: Easing.in(Easing.elastic(2)),
-			}),
-		);
-	};
-
 	const animatedStyles = useAnimatedStyle(() => {
 		return {
 			transform: [{ scale: size.value }],
@@ -43,13 +27,14 @@ export const HeaderButton = ({ sortFunc, text, sort }: HeaderButtonType) => {
 			suppressHighlighting
 			onPress={() => {
 				sortFunc(text);
-				handlePress();
+				BouncePress(size, 33);
 			}}
 			style={[
 				{
 					color: theme.colors.font,
 					textAlign: "center",
 					marginHorizontal: 5,
+
 					fontSize: 9.5,
 					alignSelf: "center",
 					lineHeight: 20,
