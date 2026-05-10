@@ -8,7 +8,9 @@ Built with React Native + Expo, featuring real-time hero stats, match tracking, 
 
 ---
 
-## ![Reel](images/reel.mov)
+![Dark mode Kelvin Hero Page](images/mdKel.png) ![Light mode Apollo Hero Page](images/mdApo.png)
+
+---
 
 ## Tech Stack
 
