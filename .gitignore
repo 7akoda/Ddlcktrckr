@@ -42,4 +42,4 @@ app-example
 .expo
 dist/
 web-build/
-credentials.json
+/credentials.json
