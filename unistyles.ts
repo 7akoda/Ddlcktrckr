@@ -11,6 +11,7 @@ const lightTheme = {
 		semiBold: "EBGaramond_600SemiBold",
 		extraBold: "EBGaramond_800ExtraBold",
 		serif: "EBGaramond_400Regular_Italic",
+		extraBoldSerif: "EBGaramond_800ExtraBold_Italic",
 	},
 	colors: {
 		primary: "#b9bbb4",
@@ -31,6 +32,7 @@ const darkTheme = {
 		semiBold: "EBGaramond_600SemiBold",
 		extraBold: "EBGaramond_800ExtraBold",
 		serif: "EBGaramond_400Regular_Italic",
+		extraBoldSerif: "EBGaramond_800ExtraBold_Italic",
 	},
 	colors: {
 		primary: "#201E1F",
