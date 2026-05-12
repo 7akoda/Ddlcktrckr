@@ -31,7 +31,7 @@ export const HeroAbilities = ({
 	const abilitySplit = matchedItem.name.split(" ");
 
 	return (
-		<Animated.View style={animatedStyles}>
+		<Animated.View style={[, { marginBottom: 12 }, animatedStyles]}>
 			<AnimatedPressable
 				onPress={() => {
 					{
