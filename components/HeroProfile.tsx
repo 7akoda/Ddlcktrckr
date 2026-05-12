@@ -13,8 +13,6 @@ import { HeroAbilitiesInspect } from "./HeroProfile/HeroAbilitiesInspect";
 import { useHeroDataById } from "@/hooks/useHeroDataById";
 import { LoadingIcon } from "./LoadingIcon";
 import { CustomText } from "./CustomText";
-import { heroWeapons } from "@/data/weapons";
-import { useColourData } from "@/hooks/useHeroColours";
 
 type Props = {
 	id: number;
@@ -161,7 +159,7 @@ const styles = StyleSheet.create((theme) => ({
 		marginTop: 12,
 		width: "100%",
 		flexDirection: "row",
-		zIndex: 4,
+		zIndex: 3,
 		justifyContent: "space-evenly",
 	},
 }));
