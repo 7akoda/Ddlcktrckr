@@ -1,4 +1,4 @@
-import { Pressable, View } from "react-native";
+import { Pressable, ScrollView, View } from "react-native";
 import { useUnistyles, StyleSheet } from "react-native-unistyles";
 import { CustomText } from "../CustomText";
 import { useState } from "react";
@@ -23,21 +23,21 @@ export const HeroLore = ({ id }: Props) => {
 	if (isIdLoading) return <LoadingIcon />;
 
 	if (isIdError) return <CustomText>{String(idError)}</CustomText>;
-
 	console.log(heroDataById.description.lore.length);
 	return (
 		<>
 			{heroDataById.description?.lore && (
-				<View style={[styles.loreContainer]}>
+				<ScrollView
+					scrollsToTop
+					scrollIndicatorInsets={{ top: 20, left: 0, bottom: 20, right: 0 }}
+					scrollEnabled={isOverflowing}
+					style={styles.loreContainer}>
 					<CustomText
-						ellipsizeMode="clip"
-						numberOfLines={isLoreExpanded ? undefined : 11}
 						onLayout={() => {
 							if (
-								heroDataById.description.lore.length > 534 &&
-								id !== 1 &&
-								id !== 11 &&
-								id !== 50
+								heroDataById.description.lore.length > 1240 ||
+								id === 27 ||
+								id === 81
 							) {
 								setIsOverflowing(true);
 							} else {
@@ -48,18 +48,7 @@ export const HeroLore = ({ id }: Props) => {
 						style={[styles.loreText]}>
 						{heroDataById.description.lore}
 					</CustomText>
-
-					{isOverflowing && (
-						<Pressable
-							onPress={toggleLoreExpansion}
-							style={styles.expandIndicator}>
-							<CustomText
-								style={[styles.expandText, { color: theme.colors.accent }]}>
-								{isLoreExpanded ? "▲ Collapse" : "▼ Read More"}
-							</CustomText>
-						</Pressable>
-					)}
-				</View>
+				</ScrollView>
 			)}
 		</>
 	);
@@ -76,14 +65,14 @@ const styles = StyleSheet.create((theme) => ({
 	},
 
 	loreContainer: {
-		marginTop: 40,
+		maxHeight: 350,
 		marginHorizontal: 10,
 		zIndex: 2,
 		borderRadius: 16,
 		borderCurve: "continuous",
 		borderWidth: 1,
 		borderColor: theme.colors.secondary,
-		overflow: "hidden",
+
 		marginBottom: 100,
 		backgroundColor: theme.colors.background,
 	},
