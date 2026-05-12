@@ -8,7 +8,7 @@ Built with React Native + Expo, featuring real-time hero stats, match tracking, 
 
 ---
 
-![Dark mode Kelvin Hero Page](images/mdKel.png) ![Light mode Apollo Hero Page](images/mdApo.png)
+![Light mode Warden Hero Page](images/mdWarden.png) ![Dark mode Venator Hero Page](images/mdVenator.png)
 
 ---
 
