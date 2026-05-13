@@ -8,7 +8,6 @@ import { ItemImages } from "../data/items";
 import { CooldownSvg } from "./svgComponents/CooldownSvg";
 import { useItemData } from "@/hooks/useItemData";
 import { Link } from "expo-router";
-import { BlurView } from "expo-blur";
 import React from "react";
 import { cleanDescription } from "@/api/decimaldescriptionTransform";
 import { ActiveData } from "@/api/itemActive";
@@ -21,7 +20,7 @@ type Props = {
 };
 
 export const ItemProfile = ({ itemId }: Props) => {
-	const { theme, rt } = useUnistyles();
+	const { theme } = useUnistyles();
 	const { itemData, isError, isLoading, error } = useItemData();
 	const foundItem = itemData?.find((item: any) => item.name === itemId);
 	const screenHeight = Dimensions.get("window").height;

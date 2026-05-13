@@ -6,7 +6,6 @@ import { SvgUri } from "react-native-svg";
 import { getSpacing } from "@/api/getProfileBarSpacing";
 import { useUnistyles, StyleSheet } from "react-native-unistyles";
 import { useEffect, useState } from "react";
-import { LinearGradient } from "expo-linear-gradient";
 
 type Props = {
 	id: number;
@@ -42,6 +41,7 @@ export const HeroProfileBar = ({ id }: Props) => {
 		1, 8, 13, 25, 4, 58, 52, 72, 17, 10, 79, 65, 14, 35, 60, 15,
 	];
 	const middleLight = [11, 64, 76, 16, 80];
+
 	return (
 		<>
 			<View
@@ -61,7 +61,6 @@ export const HeroProfileBar = ({ id }: Props) => {
 					style={space}
 				/>
 				<View style={{ flex: 1 }} />
-
 				<View
 					style={[
 						{
@@ -83,7 +82,10 @@ export const HeroProfileBar = ({ id }: Props) => {
 							borderWidth: 1,
 							borderRadius: 32,
 							borderColor: `rgb(${heroDataById.colors.style.join()})`,
-							backgroundColor: `rgb(${heroDataById.colors.ui.join()})`,
+							backgroundColor:
+								id === 77
+									? theme.colors.background
+									: `rgb(${heroDataById.colors.ui.join()})`,
 						}}
 						source={{ uri: heroDataById.images.icon_hero_card_webp }}
 					/>

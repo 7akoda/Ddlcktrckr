@@ -1,4 +1,4 @@
-import { View, Pressable, Dimensions, Image, ScrollView } from "react-native";
+import { View, Pressable, Dimensions } from "react-native";
 import { useUnistyles, StyleSheet } from "react-native-unistyles";
 import { Header } from "./Header";
 import { useState } from "react";
@@ -13,6 +13,7 @@ import { HeroAbilitiesInspect } from "./HeroProfile/HeroAbilitiesInspect";
 import { useHeroDataById } from "@/hooks/useHeroDataById";
 import { LoadingIcon } from "./LoadingIcon";
 import { CustomText } from "./CustomText";
+import { HeroStatsBar } from "./HeroProfile/HeroStatsBar";
 
 type Props = {
 	id: number;
@@ -64,22 +65,10 @@ export const HeroProfile = ({ id }: Props) => {
 		heroDataById.items.signature4,
 	];
 
-	const heroBaseStats = {
-		vitality: {
-			health: heroDataById.starting_stats.max_health,
-			stamina: heroDataById.starting_stats.stamina,
-			moveSpeed: heroDataById.starting_stats.max_move_speed,
-			sprintSpeed: heroDataById.starting_stats.sprint_speed,
-			lightMelee: heroDataById.starting_stats.light_melee_damage,
-			heavyMelee: heroDataById.starting_stats.heavy_melee_damage,
-			healthRegen: heroDataById.starting_stats.base_health_regen,
-			staminaRegen: heroDataById.starting_stats.stamina_regen_per_second,
-		},
-	};
-
 	return (
 		<View>
 			<Header variant="heroBar" id={id} back={true} sortable={false} />
+
 			<View
 				style={{
 					height: 115,
@@ -106,6 +95,8 @@ export const HeroProfile = ({ id }: Props) => {
 					);
 				})}
 			</View>
+
+			<HeroStatsBar id={id} />
 			<View style={styles.itemView}>
 				{heroMoves.map((moves, index) => {
 					const matchedItem = itemDataById.find(
@@ -122,7 +113,6 @@ export const HeroProfile = ({ id }: Props) => {
 				})}
 			</View>
 			<HeroLore id={id} />
-
 			{abilityPressed ? (
 				<View
 					style={{
