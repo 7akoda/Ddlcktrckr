@@ -37,7 +37,7 @@ export const HeroStatsBar = ({ id }: statType) => {
 					<HealthIcon />
 					<CustomText
 						style={{
-							color: theme.colors.font,
+							color: "#FFFFFF",
 							fontSize: 9,
 							alignSelf: "center",
 						}}>
@@ -48,11 +48,11 @@ export const HeroStatsBar = ({ id }: statType) => {
 					<HealthRegenIcon />
 					<CustomText
 						style={{
-							color: theme.colors.font,
+							color: "#FFFFFF",
 							fontSize: 9,
 							alignSelf: "center",
 						}}>
-						{heroDataById.starting_stats.base_health_regen.value}hp/s
+						{heroDataById.starting_stats.base_health_regen.value}
 					</CustomText>
 				</View>
 			</View>
@@ -61,7 +61,7 @@ export const HeroStatsBar = ({ id }: statType) => {
 					<StaminaIcon />
 					<CustomText
 						style={{
-							color: theme.colors.font,
+							color: "#FFFFFF",
 							fontSize: 9,
 							alignSelf: "center",
 						}}>
@@ -72,7 +72,8 @@ export const HeroStatsBar = ({ id }: statType) => {
 					<MoveIcon />
 					<CustomText
 						style={{
-							color: theme.colors.font,
+							color: "#FFFFFF",
+
 							fontSize: 9,
 							alignSelf: "center",
 						}}>
@@ -83,7 +84,7 @@ export const HeroStatsBar = ({ id }: statType) => {
 					<SprintIcon />
 					<CustomText
 						style={{
-							color: theme.colors.font,
+							color: "#FFFFFF",
 							fontSize: 9,
 							alignSelf: "center",
 						}}>
@@ -99,7 +100,7 @@ export const HeroStatsBar = ({ id }: statType) => {
 					<LightMeleeIcon />
 					<CustomText
 						style={{
-							color: theme.colors.font,
+							color: "#FFFFFF",
 							fontSize: 9,
 							alignSelf: "center",
 						}}>
@@ -110,7 +111,7 @@ export const HeroStatsBar = ({ id }: statType) => {
 					<HeavyMeleeIcon />
 					<CustomText
 						style={{
-							color: theme.colors.font,
+							color: "#FFFFFF",
 							fontSize: 9,
 							alignSelf: "center",
 						}}>
