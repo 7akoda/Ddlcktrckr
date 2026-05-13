@@ -13,7 +13,6 @@ import { CustomText } from "./CustomText";
 import { LoadingIcon } from "./LoadingIcon";
 import { useHeroData } from "@/hooks/useHeroData";
 import { usePlayerHeroData } from "@/hooks/usePlayerHeroData";
-import { BlurView } from "expo-blur";
 import { FlashList } from "@shopify/flash-list";
 import { ProgressBar } from "./ProgressBar";
 type HeroPlayerListType = {
@@ -155,10 +154,10 @@ export const HeroPlayerList = ({ id }: HeroPlayerListType) => {
 	);
 };
 
-const styles = StyleSheet.create((theme) => ({
+const styles = StyleSheet.create((theme, rt) => ({
 	percentText: {
 		alignSelf: "center",
-		color: theme.colors.font,
+		color: rt.themeName === "dark" ? theme.colors.font : "#ffffff",
 		fontSize: 8,
 		fontFamily: "none",
 		position: "absolute",
