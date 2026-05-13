@@ -11,7 +11,7 @@ import { Header } from "./Header";
 import { CustomText } from "./CustomText";
 import { LoadingIcon } from "./LoadingIcon";
 import { useHeroData } from "@/hooks/useHeroData";
-import { BlurView } from "expo-blur";
+
 import { FlashList } from "@shopify/flash-list";
 import { ProgressBar } from "./ProgressBar";
 type sort = "Winrate" | "Pickrate";
@@ -104,7 +104,7 @@ export const HeroList = () => {
 									alignSelf: "center",
 								}}>
 								<ProgressBar percent={100 - index * (100 / sorted.length)} />
-								<CustomText style={styles.percentText}>
+								<CustomText style={[styles.percentText]}>
 									{item.winRate}%
 								</CustomText>
 							</View>
@@ -127,10 +127,10 @@ export const HeroList = () => {
 	);
 };
 
-const styles = StyleSheet.create((theme) => ({
+const styles = StyleSheet.create((theme, rt) => ({
 	percentText: {
 		alignSelf: "center",
-		color: theme.colors.font,
+		color: rt.themeName === "dark" ? theme.colors.font : "#ffffff",
 		fontSize: 8,
 		fontFamily: "none",
 		position: "absolute",
