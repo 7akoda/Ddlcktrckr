@@ -15,7 +15,6 @@ export default function ItemId() {
 				style={{ flex: 1, backgroundColor: theme.colors.background }}>
 				<Shader1 />
 				<BackgroundImage />
-
 				{itemId && <ItemProfile itemId={itemId} />}
 			</SafeAreaView>
 		</>
